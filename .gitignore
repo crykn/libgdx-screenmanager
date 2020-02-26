@@ -1,0 +1,25 @@
+# Java
+*.class
+
+# Gradle
+/bin
+/.gradle/
+.gradle/
+/build/
+/dist/
+/local.properties
+gradle-app.setting
+
+# IDE
+.idea/
+.classpath
+.project
+.metadata/
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project
+*.log
