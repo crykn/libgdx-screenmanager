@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 /**
  * This class is the base class for all game tests. It takes care of starting
- * the game headlessly.
+ * the game headlessly and mocking {@linkplain Gdx#gl20 open gl}.
  */
 public abstract class LibgdxUnitTest {
 

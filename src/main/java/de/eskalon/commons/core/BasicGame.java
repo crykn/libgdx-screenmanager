@@ -15,8 +15,9 @@ import de.eskalon.commons.screen.transition.BasicScreenTransition;
  * uses a screen manager. Furthermore, adds an
  * {@linkplain #getInputMultiplexer() input multiplexer}.
  * 
- * @see BasicScreenManager How to register screens and tranistions.
  * @author damios
+ * 
+ * @see BasicScreenManager How to register screens and tranistions.
  */
 public class BasicGame extends ManagedGame<BasicScreen, BasicScreenTransition> {
 

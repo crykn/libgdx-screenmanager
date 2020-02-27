@@ -30,42 +30,12 @@ import de.eskalon.commons.screen.transition.BasicScreenTransition;
  * game and their transitions.
  * <p>
  * Uses {@link BasicScreen}s and {@link BasicScreenTransition}s.
- * <p>
- * <u>How it works in detail:</u> If the screen manager {@code sm} is currently
- * displaying screen {@code a} and transitioning to screen {@code b} via the
- * transition {@code t}, the methods of the respective classes are called in the
- * following order:
- * <ul>
- * <li>{@code sm.pushScreen("b", "t");}</li>
- * <li>First render pass: {@code sm.render(1F);}</li>
- * <ul>
- * <li>unregister the input handlers of {@code a}</li>
- * <li>{@code b.show();}</li>
- * <li>{@code t.reset()}</li>
- * <li>{@code t.render(1F, ...)} + {@code a.render(1F)} +
- * {@code b.render(1F)}</li>
- * </ul>
- * <li>Second render pass: {@code sm.render(1F);}</li>
- * <ul>
- * <li>{@code t.render(1F, ...)} + {@code a.render(1F)} +
- * {@code b.render(1F)}</li>
- * </ul>
- * <li>...until the transition is done:</li>
- * <li>{@code sm.render(1F);}</li>
- * <ul>
- * <li>{@code a.hide()}</li>
- * <li>register the input handlers of {@code b}</li>
- * <li>poll new transition</li>
- * <li>if there is none: {@code b.render(1F);}</li>
- * </ul>
- * <li>And from then on:</li>
- * <li>{@code sm.render(1F);}</li>
- * <ul>
- * <li>{@code b.render(1F);}</li>
- * </ul>
- * </ul>
- * 
+ *
  * @author damios
+ * 
+ * @see <a href=
+ *      "https://github.com/crykn/libgdx-screenmanager/wiki/How-the-library-works-in-detail">The
+ *      wiki entry detailing the inner workings</a>
  */
 public class BasicScreenManager implements
 		IScreenManager<BasicScreen, BasicScreenTransition>, Disposable {

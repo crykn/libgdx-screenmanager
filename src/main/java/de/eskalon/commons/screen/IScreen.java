@@ -11,9 +11,9 @@ import com.badlogic.gdx.Screen;
  * Is a more streamlined version of the {@linkplain Screen libgdx screen
  * interface}.
  * 
- * @see IScreenManager
- * 
  * @author damios
+ * 
+ * @see IScreenManager
  */
 public interface IScreen extends Screen {
 

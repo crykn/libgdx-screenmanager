@@ -52,24 +52,4 @@ public class MyGdxGame extends BasicGame {
 
 ## How the library works in detail
 
-<details>
-  <summary><b><i>Click to expand</i></b></summary>
-
-Imagine the game `game` is currently displaying `screenA`. Then, `screenB` is pushed using the transition `transition`. While this is happening, the following is going on internally:
-* `game.getScreenManager().pushScreen("b", "t")`
-* In the first render pass (`game.render(1F)`) after that:
-	* the input handlers of `screenA` are unregistered
-	* `screenB.show()`
-	* `transition.reset()`
-	* `transition.render(1F, ...)` - the transition is rendered (and is given textures of `screenA.render(1F)` and `screenB.render(1F)`)
-* From then on in every render pass  (`game.render(1F)`) the transition is rendered:
-	* `transition.render(1F, ...)`  (textures of `screenA.render(1F)` and `screenB.render(1F)` are given to the transition)
-* ...until the transition is done:
-	* `screenA.hide()`
-	* the input handlers of `screenB` are registered
-	* a new transition is polled (it is checked whether there was another call to `pushScreen()` while the transition was going on)
-	* if there is no new transition queued: `screenB.render(1F)`
-* And from then on, in every render pass (`game.render(1F)`) the new screen is rendered:
-	* `screenB.render(1F)`
-	
-</details>
+The inner workings are detailed [here](https://github.com/crykn/libgdx-screenmanager/wiki/How-the-library-works-in-detail).

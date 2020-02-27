@@ -7,9 +7,9 @@ import de.eskalon.commons.screen.IScreenManager;
 /**
  * The transition effect between two screens.
  * 
- * @see IScreenManager#pushScreen(String, String)
- * 
  * @author damios
+ * 
+ * @see IScreenManager#pushScreen(String, String)
  */
 public interface IScreenTransition {
 
