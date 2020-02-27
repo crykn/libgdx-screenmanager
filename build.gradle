@@ -17,12 +17,12 @@ repositories {
         jcenter()
 }
 
-//test {
-//    testLogging {
-//        events "failed"
-//        exceptionFormat "full"
-//    }
-//}
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
 
 ext {
 	gdxVersion = "1.9.10"
@@ -53,4 +53,7 @@ check.dependsOn jacocoTestReport
 
 tasks.eclipse.doLast {
     delete ".project"
+}
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
 }
