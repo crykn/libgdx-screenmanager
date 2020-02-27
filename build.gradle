@@ -22,6 +22,8 @@ test {
         events "failed"
         exceptionFormat "full"
     }
+    
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 ext {
@@ -53,7 +55,4 @@ check.dependsOn jacocoTestReport
 
 tasks.eclipse.doLast {
     delete ".project"
-}
-tasks.test {
-    finalizedBy(tasks.jacocoTestReport)
 }
