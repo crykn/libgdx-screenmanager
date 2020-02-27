@@ -27,25 +27,25 @@ public abstract class TimedScreenTransition extends BasicScreenTransition {
 	}
 
 	@Override
-	public final void render(float delta, Texture currScreen,
-			Texture nextScreen) {
+	public final void render(float delta, Texture lastScreen,
+			Texture currScreen) {
 		this.timePassed = this.timePassed + delta;
 
 		float progress = this.timePassed / duration;
 
-		render(delta, currScreen, nextScreen, progress > 1F ? 1F : progress);
+		render(delta, lastScreen, currScreen, progress > 1F ? 1F : progress);
 	}
 
 	/**
 	 * @param delta
+	 * @param lastScreen
 	 * @param currScreen
-	 * @param nextScreen
 	 * @param progress
 	 *            the progress of the transition; from {@code 0} (excl.) to
 	 *            {@code 1} (incl.)
 	 */
-	public abstract void render(float delta, Texture currScreen,
-			Texture nextScreen, float progress);
+	public abstract void render(float delta, Texture lastScreen,
+			Texture currScreen, float progress);
 
 	@Override
 	public boolean isDone() {

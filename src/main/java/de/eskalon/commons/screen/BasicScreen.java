@@ -27,8 +27,6 @@ public abstract class BasicScreen implements IScreen {
 
 	private boolean initialized = false;
 
-	protected abstract BasicGame getGame();
-
 	public boolean isInitialized() {
 		return initialized;
 	}

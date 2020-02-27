@@ -99,11 +99,6 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 			public boolean equals(Object obj) {
 				return this == obj;
 			}
-
-			@Override
-			protected BasicGame getGame() {
-				return null;
-			}
 		};
 
 		BasicScreen test2Screen = new BasicScreen() {
@@ -156,11 +151,6 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 			@Override
 			public boolean equals(Object obj) {
 				return this == obj;
-			}
-
-			@Override
-			protected BasicGame getGame() {
-				return null;
 			}
 		};
 

@@ -24,6 +24,8 @@ public class BasicScreenManagerTest extends LibgdxUnitTest {
 	private boolean firstRenderPassScreen2 = true;
 	private BasicScreen testScreen;
 
+	private static int width = 123, height = 234;
+
 	/**
 	 * Tests whether create(), show(), hide() and dispose() are called at the
 	 * right time and the input listeners are registered/unregistered.
@@ -84,16 +86,13 @@ public class BasicScreenManagerTest extends LibgdxUnitTest {
 
 			@Override
 			public void resize(int width, int height) {
+				assertEquals(BasicScreenManagerTest.width, width);
+				assertEquals(BasicScreenManagerTest.height, height);
 			}
 
 			@Override
 			public boolean equals(Object obj) {
 				return this == obj;
-			}
-
-			@Override
-			protected BasicGame getGame() {
-				return null;
 			}
 		};
 
@@ -142,11 +141,6 @@ public class BasicScreenManagerTest extends LibgdxUnitTest {
 			@Override
 			public boolean equals(Object obj) {
 				return this == obj;
-			}
-
-			@Override
-			protected BasicGame getGame() {
-				return null;
 			}
 		};
 
@@ -230,6 +224,8 @@ public class BasicScreenManagerTest extends LibgdxUnitTest {
 		assertThrows(NoSuchElementException.class, () -> {
 			sm.getScreenTransition("123");
 		});
+
+		sm.resize(width, height);
 
 		// Dispose everything
 		sm.dispose();

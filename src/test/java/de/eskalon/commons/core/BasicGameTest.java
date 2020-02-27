@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 
 import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.screen.BasicScreenManager;
@@ -35,7 +36,16 @@ public class BasicGameTest extends de.eskalon.commons.LibgdxUnitTest {
 		game.create();
 
 		assertNotNull(game.getInputMultiplexer());
-		assertEquals(game.getInputMultiplexer(), Gdx.input.getInputProcessor());
+
+		game.getInputMultiplexer().addProcessor(new InputAdapter() {
+			@Override
+			public boolean keyDown(int keycode) {
+				assertEquals(3, keycode);
+				;
+				return true;
+			}
+		});
+		Gdx.input.getInputProcessor().keyDown(3);
 
 		// Resize
 		game.resize(123, 456);

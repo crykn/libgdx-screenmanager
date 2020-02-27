@@ -1,10 +1,27 @@
-apply plugin: 'java-library'
+apply plugin: "java-library"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "jacoco"
+
+version '0.1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
-	mavenLocal()
-	mavenCentral()
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	jcenter()
+        //mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+        jcenter()
+}
+
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
 }
 
 ext {
@@ -22,5 +39,18 @@ dependencies {
 	testImplementation "org.mockito:mockito-core:$mockitoVersion"
 	testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-	//testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+tasks.eclipse.doLast {
+    delete ".project"
 }
