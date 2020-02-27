@@ -17,12 +17,12 @@ repositories {
         jcenter()
 }
 
-test {
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
-    }
-}
+//test {
+//    testLogging {
+//        events "failed"
+//        exceptionFormat "full"
+//    }
+//}
 
 ext {
 	gdxVersion = "1.9.10"
