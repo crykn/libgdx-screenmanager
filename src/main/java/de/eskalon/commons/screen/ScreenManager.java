@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 damios
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.eskalon.commons.screen;
 
 import java.util.Collection;
@@ -21,7 +36,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.base.Preconditions;
 
-import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.misc.Tuple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
@@ -304,7 +318,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * @see ManagedGame#resize(int, int)
+	 * @see ManagedScreen#resize(int, int)
 	 */
 	public void resize(int width, int height) {
 		if (currentWidth != width || currentHeight != height) {
@@ -322,7 +336,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * @see ManagedGame#pause()
+	 * @see ManagedScreen#pause()
 	 */
 	public void pause() {
 		if (inTransition() && lastScreen != null)
@@ -333,7 +347,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * @see ManagedGame#resume()
+	 * @see ManagedScreen#resume()
 	 */
 	public void resume() {
 		if (inTransition() && lastScreen != null)
@@ -371,14 +385,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * {@linkplain FrameBuffer frame buffer object}.
 	 * 
 	 * @param delta
-	 *            time delta
+	 *            the time delta
 	 * @param screen
-	 *            the {@linkplain ManagedScreen screen} that gets rendered
+	 *            the screen to be rendered
 	 * @param FBO
-	 *            The {@linkplain FrameBuffer frame buffer object} the
-	 *            {@linkplain ManagedScreen screen} gets rendered into.
-	 * @return a texture which contains the rendered {@linkplain ManagedScreen
-	 *         screen}
+	 *            the frame buffer object the screen gets rendered into
+	 * @return a texture which contains the rendered screen
 	 */
 	Texture screenToTexture(float delta, S screen, FrameBuffer FBO) {
 		FBO.begin();
