@@ -1,68 +1,64 @@
 package de.eskalon.commons.core;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.google.common.base.Preconditions;
 
-import de.eskalon.commons.screen.IScreen;
-import de.eskalon.commons.screen.IScreenManager;
-import de.eskalon.commons.screen.transition.IScreenTransition;
+import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.ScreenManager;
+import de.eskalon.commons.screen.transition.ScreenTransition;
 
 /**
- * A basic game class that utilizes a {@linkplain IScreenManager screen
- * manager}.
- * <p>
- * The {@linkplain #screenManager used screen manager} has to be set in
- * {@link #create()}!
+ * A game class that utilizes a {@linkplain ScreenManager screen manager}.
  * 
  * @author damios
+ * 
+ * @see ScreenManager How to register screens and tranistions.
  */
-abstract class ManagedGame<S extends IScreen, T extends IScreenTransition>
-		extends ApplicationAdapter {
+public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
+		extends BasicGame {
 
-	protected IScreenManager<S, T> screenManager;
-	private boolean isFocused = true;
+	protected ScreenManager<S, T> screenManager;
+
+	public ManagedGame() {
+		super();
+		this.screenManager = new ScreenManager<S, T>(getInputMultiplexer(),
+				getWidth(), getHeight());
+	}
 
 	@Override
-	public abstract void create();
+	public void create() {
+		super.create();
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-
-		Preconditions.checkState(screenManager != null,
-				"A screen manager has to be set first");
-		screenManager.resize(width, height);
+		screenManager.initBuffers();
 	}
 
 	@Override
 	public void render() {
-		Preconditions.checkState(screenManager != null,
-				"A screen manager has to be set first");
 		screenManager.render(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		screenManager.resize(width, height);
+	}
+
+	@Override
 	public void pause() {
-		isFocused = false;
+		screenManager.pause();
 	}
 
 	@Override
 	public void resume() {
-		isFocused = true;
+		screenManager.resume();
 	}
 
-	/**
-	 * @return whether the game is currently focused.
-	 * @see ApplicationListener#pause()
-	 */
-	public boolean isFocused() {
-		return isFocused;
-	}
-
-	public IScreenManager<S, T> getScreenManager() {
+	public ScreenManager<S, T> getScreenManager() {
 		return screenManager;
+	}
+
+	@Override
+	public void dispose() {
+		screenManager.dispose();
 	}
 
 }

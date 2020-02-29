@@ -1,17 +1,18 @@
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-import de.eskalon.commons.screen.BasicScreen;
+import de.eskalon.commons.screen.ManagedScreen;
 
-public class RedScreen extends BasicScreen {
+public class RedScreen extends ManagedScreen {
 
 	private MyGdxGame game;
 	private ShapeRenderer shapeRenderer;
 
-	public RedScreen(MyGdxGame game) {
-		this.game = game;
+	public RedScreen() {
+		this.game = (MyGdxGame) Gdx.app.getApplicationListener();
 	}
 
 	@Override
@@ -31,18 +32,23 @@ public class RedScreen extends BasicScreen {
 		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
 		shapeRenderer.begin(ShapeType.Line);
 		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.rect(100, 100, game.getViewportWidth() - 100, game.getViewportHeight() - 100);
+		shapeRenderer.rect(100, 100, game.getWidth() - 100, game.getHeight() - 100);
 		shapeRenderer.end();
-	}
-
-	@Override
-	public void hide() {
-		// not needed
 	}
 
 	@Override
 	public void dispose() {
 		shapeRenderer.dispose();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// not needed
+	}
+
+	@Override
+	public void hide() {
+		// not needed
 	}
 
 }

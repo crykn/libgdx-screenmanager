@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
  * 
  * @author damios
  */
-public abstract class TimedScreenTransition extends BasicScreenTransition {
+public abstract class TimedScreenTransition extends ScreenTransition {
 
 	private float duration;
 	private float timePassed;
@@ -37,6 +37,8 @@ public abstract class TimedScreenTransition extends BasicScreenTransition {
 	}
 
 	/**
+	 * The render method to use in the timed transition.
+	 * 
 	 * @param delta
 	 * @param lastScreen
 	 * @param currScreen

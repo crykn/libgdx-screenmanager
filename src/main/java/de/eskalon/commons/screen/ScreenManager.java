@@ -21,24 +21,28 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.base.Preconditions;
 
+import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.misc.Tuple;
-import de.eskalon.commons.screen.transition.BasicScreenTransition;
+import de.eskalon.commons.screen.transition.ScreenTransition;
 
 /**
- * Basic implementation of a screen manager. Handles the different screens of a
- * game and their transitions.
+ * A screen manager that handles the different screens of a game and their
+ * transitions.
  * <p>
- * Uses {@link BasicScreen}s and {@link BasicScreenTransition}s.
- *
+ * Screens and transitions can be added via
+ * {@link #addScreen(String, ManagedScreen)} and
+ * {@link #addScreenTransition(String, ScreenTransition)}. To actually show a
+ * screen, push it via {@link #pushScreen(String, String)}.
+ * 
  * @author damios
  * 
  * @see <a href=
- *      "https://github.com/crykn/libgdx-screenmanager/wiki/How-the-library-works-in-detail">The
- *      wiki entry detailing the inner workings</a>
+ *      "https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle">The
+ *      wiki entry detailing a screen's life-cycle</a>
  */
-public class BasicScreenManager implements
-		IScreenManager<BasicScreen, BasicScreenTransition>, Disposable {
+public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
+		implements Disposable {
 
 	/**
 	 * The background color for all screens.
@@ -62,63 +66,87 @@ public class BasicScreenManager implements
 	 * screen}.
 	 */
 	@Nullable
-	private BasicScreen lastScreen;
+	private S lastScreen;
 
 	/**
 	 * The current screen.
 	 */
 	@Nullable
-	private BasicScreen currScreen;
+	private S currScreen;
 
 	/**
 	 * The transition effect currently rendered.
 	 */
 	@Nullable
-	private BasicScreenTransition transition;
+	private T transition;
 
 	/**
 	 * A map with all initialized screens.
 	 */
-	private final Map<String, BasicScreen> screens = new ConcurrentHashMap<>();
+	private final Map<String, S> screens = new ConcurrentHashMap<>();
 
 	/**
 	 * A map with all screen transitions.
 	 */
-	private final Map<String, BasicScreenTransition> transitions = new ConcurrentHashMap<>();
+	private final Map<String, T> transitions = new ConcurrentHashMap<>();
 
-	private final Queue<Tuple<BasicScreenTransition, BasicScreen>> transitionQueue = new ConcurrentLinkedQueue<>();
+	private final Queue<Tuple<T, S>> transitionQueue = new ConcurrentLinkedQueue<>();
 
 	private BasicInputMultiplexer gameInputMultiplexer;
 
-	public BasicScreenManager(BasicInputMultiplexer gameInputMultiplexer) {
+	private int currentWidth, currentHeight;
+
+	public ScreenManager(BasicInputMultiplexer gameInputMultiplexer, int width,
+			int height) {
 		this.gameInputMultiplexer = gameInputMultiplexer;
+		this.currentWidth = width;
+		this.currentHeight = height;
 	}
 
-	public void initBuffers(int width, int height) {
-		lastFBO = new FrameBuffer(Format.RGBA8888, width, height, false);
-		currFBO = new FrameBuffer(Format.RGBA8888, width, height, false);
+	public void initBuffers() {
+		if (lastFBO != null)
+			lastFBO.dispose();
+		lastFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
+				false);
+		if (currFBO != null)
+			currFBO.dispose();
+		currFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
+				false);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Adds a screen. If a screen with the same name was added before it is
+	 * replaced.
+	 *
+	 * @param name
+	 *            the name of the screen
+	 * @param screen
+	 *            the screen
 	 */
-	@Override
-	public void addScreen(String name, BasicScreen screen) {
+	public void addScreen(String name, S screen) {
 		Preconditions.checkNotNull(screen, "screen cannot be null");
 		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
 
 		screens.put(name, screen);
 	}
 
-	@Override
-	public BasicScreen getScreen(String name) {
+	/**
+	 * Retrieves a screen.
+	 *
+	 * @param name
+	 *            the name of the screen
+	 * @return the screen
+	 * @throws NoSuchElementException
+	 *             when the screen isn't found
+	 */
+	public S getScreen(String name) {
 		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
 
-		BasicScreen screen = this.screens.get(name);
+		S screen = this.screens.get(name);
 
 		if (screen == null) {
 			throw new NoSuchElementException(String.format(
-					"No screen with the name '%s' could be found. Add the screen via #addScreen(String, BasicScreen) first.",
+					"No screen with the name '%s' could be found. Add the screen via #addScreen(String, ManagedScreen) first.",
 					name));
 		}
 
@@ -126,16 +154,22 @@ public class BasicScreenManager implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * @return all registered screens.
 	 */
-	@Override
-	public Collection<BasicScreen> getScreens() {
+	public Collection<S> getScreens() {
 		return screens.values();
 	}
 
-	@Override
-	public void addScreenTransition(String name,
-			BasicScreenTransition transition) {
+	/**
+	 * Adds a transition. If a transition with the same name was added before it
+	 * is replaced.
+	 *
+	 * @param name
+	 *            the name of the transition
+	 * @param transition
+	 *            the transition
+	 */
+	public void addScreenTransition(String name, T transition) {
 		Preconditions.checkNotNull(transition, "screen cannot be null");
 		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
 
@@ -143,68 +177,65 @@ public class BasicScreenManager implements
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Retrieves a transition.
+	 *
+	 * @param name
+	 *            the name of the transition
+	 * @return the transition
+	 * @throws NoSuchElementException
+	 *             when the transition isn't found
 	 */
-	@Override
-	public BasicScreenTransition getScreenTransition(String name) {
+	public T getScreenTransition(String name) {
 		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
 
-		BasicScreenTransition transition = this.transitions.get(name);
+		T transition = this.transitions.get(name);
 
 		if (transition == null) {
 			throw new NoSuchElementException(String.format(
-					"No transition with the name '%s' could be found. Add the transition via #addScreenTransition(String, BasicScreenTransition) first.",
+					"No transition with the name '%s' could be found. Add the transition via #addScreenTransition(String, ScreenTransition) first.",
 					name));
 		}
 
 		return transition;
 	}
 
-	@Override
-	public Collection<BasicScreenTransition> getScreenTransitions() {
+	/**
+	 * @return all registered transitions.
+	 */
+	public Collection<T> getScreenTransitions() {
 		return transitions.values();
 	}
 
 	/**
-	 * Pushes a screen to be the active screen. The screen has to be added to
-	 * the manager beforehand via {@link #addScreen(String, BasicScreen)}.
+	 * Pushes a screen to be the active screen. If there is still a transition
+	 * is ongoing, the pushed one is queued. The screen has to be added to the
+	 * manager beforehand via {@link #addScreen(String, ManagedScreen)}.
 	 * <p>
 	 * {@link Screen#show()} is called on the pushed screen and
 	 * {@link Screen#hide()} is called on the previously
 	 * {@linkplain #getLastScreen() active screen}, as soon as the transition is
 	 * finished. This is always done on the rendering thread (in
 	 * {@link #render(float)}).
+	 * <p>
+	 * The given transition is ignored if this is the first screen to be pushed,
+	 * as there is no screen to transition from.
 	 *
 	 * @param name
 	 *            the name of screen to be pushed
 	 * @param transitionName
 	 *            the transition effect; can be {@code null}
 	 */
-	@Override
 	public final void pushScreen(String name, @Nullable String transitionName) {
 		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
 			Gdx.app.debug("ScreenManager", String.format(
 					"Screen '%s' was pushed, using the transition '%s'", name,
 					transitionName == null ? "null" : transitionName));
-		transitionQueue.add(new Tuple<BasicScreenTransition, BasicScreen>(
+		transitionQueue.add(new Tuple<T, S>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
 				getScreen(name)));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void resize(int width, int height) {
-		for (BasicScreen s : screens.values()) {
-			if (s.isInitialized()) {
-				s.resize(width, height);
-			}
-		}
-	}
-
-	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
 				backgroundColor.b, backgroundColor.a);
@@ -215,8 +246,7 @@ public class BasicScreenManager implements
 				/*
 				 * Start the queued transition
 				 */
-				Tuple<BasicScreenTransition, BasicScreen> nextTransition = transitionQueue
-						.poll();
+				Tuple<T, S> nextTransition = transitionQueue.poll();
 
 				if (this.currScreen != null) {
 					this.gameInputMultiplexer.removeProcessors(
@@ -230,7 +260,7 @@ public class BasicScreenManager implements
 
 				if (this.transition != null) {
 					this.transition.reset();
-				} else {
+				} else { // a screen was pushed without transition
 					if (this.lastScreen != null)
 						this.lastScreen.hide();
 
@@ -241,15 +271,18 @@ public class BasicScreenManager implements
 				// render again so no frame is skipped
 				render(delta);
 			} else {
+				Preconditions.checkState(this.currScreen != null,
+						"A screen has to be pushed before the rendering can begin!");
 				/*
 				 * Render current screen; no transition is going on
 				 */
 				this.currScreen.render(delta);
 			}
 		} else {
-			if (!this.transition.isDone()) {
+			if (!this.transition.isDone() && this.lastScreen != null) {
 				/*
-				 * render the current transition
+				 * render the current transition; skip this step if there was no
+				 * lastScreen (i.e. this is the first pushed screen)
 				 */
 				this.transition.render(delta,
 						screenToTexture(delta, this.lastScreen, this.lastFBO),
@@ -259,7 +292,8 @@ public class BasicScreenManager implements
 				 * the current transition is finished; remove it
 				 */
 				this.transition = null;
-				this.lastScreen.hide();
+				if (lastScreen != null)
+					this.lastScreen.hide();
 				this.gameInputMultiplexer.addProcessors(
 						new Array<>(this.currScreen.getInputProcessors()));
 
@@ -269,42 +303,84 @@ public class BasicScreenManager implements
 		}
 	}
 
+	/**
+	 * @see ManagedGame#resize(int, int)
+	 */
+	public void resize(int width, int height) {
+		if (currentWidth != width || currentHeight != height) {
+			this.currentWidth = width;
+			this.currentHeight = height;
+
+			for (S s : screens.values()) {
+				if (s.isInitialized()) {
+					s.resize(width, height);
+				}
+			}
+
+			initBuffers();
+		}
+	}
+
+	/**
+	 * @see ManagedGame#pause()
+	 */
+	public void pause() {
+		if (inTransition() && lastScreen != null)
+			lastScreen.pause();
+
+		if (currScreen != null)
+			currScreen.pause();
+	}
+
+	/**
+	 * @see ManagedGame#resume()
+	 */
+	public void resume() {
+		if (inTransition() && lastScreen != null)
+			lastScreen.resume();
+
+		if (currScreen != null)
+			currScreen.resume();
+	}
+
+	/**
+	 * Disposes the screens, the transitions and the internally used frame
+	 * buffer objects.
+	 */
 	@Override
 	public void dispose() {
 		this.lastScreen = null;
 		this.currScreen = null;
 
-		lastFBO.dispose();
-		currFBO.dispose();
+		if (lastFBO != null)
+			lastFBO.dispose();
+		if (currFBO != null)
+			currFBO.dispose();
 
-		for (BasicScreen s : screens.values()) {
-			if (s.isInitialized()) {
-				s.dispose();
-			}
+		for (S s : screens.values()) {
+			s.dispose();
 		}
 
-		for (BasicScreenTransition t : transitions.values()) {
-			if (t instanceof Disposable) {
-				((Disposable) t).dispose();
-			}
+		for (T t : transitions.values()) {
+			t.dispose();
 		}
 	}
 
 	/**
-	 * Renders a {@linkplain BasicScreen screen} into a {@linkplain FrameBuffer
-	 * frame buffer object}.
+	 * Renders a {@linkplain ManagedScreen screen} into a
+	 * {@linkplain FrameBuffer frame buffer object}.
 	 * 
 	 * @param delta
 	 *            time delta
 	 * @param screen
-	 *            the {@linkplain BasicScreen screen} that gets rendered
+	 *            the {@linkplain ManagedScreen screen} that gets rendered
 	 * @param FBO
 	 *            The {@linkplain FrameBuffer frame buffer object} the
-	 *            {@linkplain BasicScreen screen} gets rendered into.
-	 * @return a texture which contains the rendered {@linkplain BasicScreen
+	 *            {@linkplain ManagedScreen screen} gets rendered into.
+	 * @return a texture which contains the rendered {@linkplain ManagedScreen
 	 *         screen}
 	 */
-	Texture screenToTexture(float delta, BasicScreen screen, FrameBuffer FBO) {
+	Texture screenToTexture(float delta, S screen, FrameBuffer FBO) {
 		FBO.begin();
 		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
 				backgroundColor.b, backgroundColor.a);
@@ -315,11 +391,11 @@ public class BasicScreenManager implements
 	}
 
 	/**
-	 * @return the {@linkplain BasicScreen screen} that was shown before the
+	 * @return the {@linkplain ManagedScreen screen} that was shown before the
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
 	@Nullable
-	public BasicScreen getLastScreen() {
+	public S getLastScreen() {
 		return lastScreen;
 	}
 
@@ -327,8 +403,7 @@ public class BasicScreenManager implements
 	 * @return the current screen; is changed in the first render pass after
 	 *         {@link #pushScreen(String, String)} is called.
 	 */
-	@Override
-	public BasicScreen getCurrentScreen() {
+	public S getCurrentScreen() {
 		return currScreen;
 	}
 
@@ -337,7 +412,6 @@ public class BasicScreenManager implements
 	 *         {@linkplain #getLastScreen() last screen} towards the
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
-	@Override
 	public boolean inTransition() {
 		return this.transition == null ? false : true;
 	}

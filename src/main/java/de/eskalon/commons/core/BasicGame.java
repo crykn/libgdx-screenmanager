@@ -1,25 +1,20 @@
 package de.eskalon.commons.core;
 
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 import de.eskalon.commons.input.BasicInputMultiplexer;
-import de.eskalon.commons.screen.BasicScreen;
-import de.eskalon.commons.screen.BasicScreenManager;
-import de.eskalon.commons.screen.transition.BasicScreenTransition;
 
 /**
- * A basic game. Takes care of setting some convenience variables and constants;
- * uses a screen manager. Furthermore, adds an
- * {@linkplain #getInputMultiplexer() input multiplexer}.
+ * A basic game. Takes care of setting some convenience variables and constants.
+ * Furthermore, adds an {@linkplain #getInputMultiplexer() input multiplexer}.
  * 
  * @author damios
- * 
- * @see BasicScreenManager How to register screens and tranistions.
  */
-public class BasicGame extends ManagedGame<BasicScreen, BasicScreenTransition> {
+class BasicGame extends ApplicationAdapter {
 
 	/**
 	 * The version the application is running on. Set via the jar manifest. Is
@@ -44,12 +39,9 @@ public class BasicGame extends ManagedGame<BasicScreen, BasicScreenTransition> {
 	private BasicInputMultiplexer inputProcessor = new BasicInputMultiplexer();
 
 	public BasicGame() {
-		super();
 		IN_DEV_ENV = getClass().getPackage().getImplementationVersion() == null;
 		VERSION = IN_DEV_ENV ? "Development"
 				: getClass().getPackage().getImplementationVersion();
-
-		this.screenManager = new BasicScreenManager(inputProcessor);
 	}
 
 	@Override
@@ -58,22 +50,19 @@ public class BasicGame extends ManagedGame<BasicScreen, BasicScreenTransition> {
 		this.viewportHeight = Gdx.graphics.getHeight();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-
-		((BasicScreenManager) this.screenManager).initBuffers(viewportWidth,
-				viewportHeight);
 	}
 
 	/**
 	 * @return the viewport width
 	 */
-	public int getViewportWidth() {
+	public int getWidth() {
 		return this.viewportWidth;
 	}
 
 	/**
 	 * @return the viewport height
 	 */
-	public int getViewportHeight() {
+	public int getHeight() {
 		return this.viewportHeight;
 	}
 
@@ -84,18 +73,13 @@ public class BasicGame extends ManagedGame<BasicScreen, BasicScreenTransition> {
 	}
 
 	/**
-	 * Returns the input multiplexer of the game. Should be used to add input
+	 * Returns the input multiplexer of the game. Must be used to add input
 	 * listeners instead of {@link Input#setInputProcessor(InputProcessor)}.
 	 *
 	 * @return the game's input multiplexer
 	 */
 	public BasicInputMultiplexer getInputMultiplexer() {
 		return inputProcessor;
-	}
-
-	@Override
-	public void dispose() {
-		((BasicScreenManager) screenManager).dispose();
 	}
 
 }

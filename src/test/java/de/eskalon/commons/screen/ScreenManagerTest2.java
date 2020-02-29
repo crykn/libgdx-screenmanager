@@ -12,11 +12,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 
 import de.eskalon.commons.LibgdxUnitTest;
-import de.eskalon.commons.core.BasicGame;
 import de.eskalon.commons.input.BasicInputMultiplexer;
-import de.eskalon.commons.screen.transition.BasicScreenTransition;
+import de.eskalon.commons.screen.transition.ScreenTransition;
 
-public class BasicScreenTransitionTest extends LibgdxUnitTest {
+public class ScreenManagerTest2 extends LibgdxUnitTest {
 
 	private int i = 0;
 	private int k = 0;
@@ -30,13 +29,16 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 	 * transition is rendering as well as whether the input handlers are
 	 * unregistered while transitioning.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void test() throws TimeoutException, InterruptedException {
+	public void testScreenLifecycleWhileTransition()
+			throws TimeoutException, InterruptedException {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
 
-		BasicScreenManager sm = new BasicScreenManager(mult) {
+		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager(
+				mult, 5, 5) {
 			// Mock the screenToTexture method as it is using open gl stuff
-			Texture screenToTexture(float delta, BasicScreen screen,
+			Texture screenToTexture(float delta, ManagedScreen screen,
 					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO) {
 				screen.render(delta);
 
@@ -44,7 +46,7 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 			};
 		};
 
-		BasicScreen testScreen = new BasicScreen() {
+		ManagedScreen testScreen = new ManagedScreen() {
 			@Override
 			public void show() {
 				initializeScreen(); // instead of super.show();
@@ -101,7 +103,7 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 			}
 		};
 
-		BasicScreen test2Screen = new BasicScreen() {
+		ManagedScreen test2Screen = new ManagedScreen() {
 			@Override
 			public void show() {
 				initializeScreen(); // instead of super.show();
@@ -160,7 +162,7 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 		sm.addScreen(screenName, testScreen);
 		sm.addScreen(screen2Name, test2Screen);
 
-		BasicScreenTransition transition = new BasicScreenTransition() {
+		ScreenTransition transition = new ScreenTransition() {
 			@Override
 			public void reset() {
 				super.reset();
@@ -191,6 +193,10 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 			protected void create() {
 				assertEquals(0, k);
 				k = 1;
+			}
+
+			@Override
+			public void dispose() {
 			}
 
 		};
@@ -237,9 +243,13 @@ public class BasicScreenTransitionTest extends LibgdxUnitTest {
 		// In the next render pass the transition is finished
 		sm.render(1);
 		assertEquals(10, i);
+		i = 11; // end
 
 		assertEquals(3, mult.getProcessors().size);
 		assertTrue(!sm.inTransition());
+
+		// Try to initialize the transition a second time
+		transition.initializeScreenTransition();
 	}
 
 }

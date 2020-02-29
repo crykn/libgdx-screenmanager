@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import de.eskalon.commons.core.BasicGame;
+import de.eskalon.commons.core.ManagedGame;
+import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.transition.ScreenTransition;
 
-public class MyGdxGame extends BasicGame {
+public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 	private Viewport viewport;
 	private SpriteBatch batch;
@@ -22,8 +24,8 @@ public class MyGdxGame extends BasicGame {
 		this.viewport = new FitViewport(1024, 720, camera);
 
 		// Add screens
-		this.screenManager.addScreen("red", new RedScreen(this));
-		this.screenManager.addScreen("blue", new RedScreen(this));
+		this.screenManager.addScreen("red", new RedScreen());
+		this.screenManager.addScreen("blue", new RedScreen());
 
 		// Add transitions
 		TestTransition transition = new TestTransition(this);

@@ -33,4 +33,9 @@ public class TestTransition extends TimedScreenTransition {
 		game.getSpriteBatch().end();
 	}
 
+	@Override
+	public void dispose() {
+		// not needed
+	}
+
 }

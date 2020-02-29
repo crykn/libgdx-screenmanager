@@ -1,99 +1,88 @@
 package de.eskalon.commons.core;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import com.badlogic.gdx.Gdx;
 
 import de.eskalon.commons.LibgdxUnitTest;
-import de.eskalon.commons.screen.IScreen;
-import de.eskalon.commons.screen.IScreenManager;
-import de.eskalon.commons.screen.transition.IScreenTransition;
+import de.eskalon.commons.input.BasicInputMultiplexer;
+import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.ScreenManager;
+import de.eskalon.commons.screen.transition.ScreenTransition;
 
 public class ManagedGameTest extends LibgdxUnitTest {
 
-	@SuppressWarnings("rawtypes")
+	private int i = 1;
+
 	@Test
-	public void testConstructor() {
-		ManagedGame game = new ManagedGame() {
-			@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
+	public void testConstrcutor() {
+		ManagedGame game = new ManagedGame();
+
+		// Screen Manager
+		assertNotNull(game.getScreenManager());
+	}
+
+	/**
+	 * Tests whether the corresponding methods are called in the screen manager.
+	 */
+	@Test
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void testCorrespondingScreenManagerMethods() {
+		ManagedGame game = new ManagedGame();
+
+		// Mock the initBuffers method as it is using open gl stuff
+		game.screenManager = new ScreenManager<ManagedScreen, ScreenTransition>(
+				Mockito.spy(new BasicInputMultiplexer()), 5, 5) {
+
 			@Override
-			public void create() {
-				this.screenManager = new IScreenManager() {
+			public void initBuffers() {
+				assertEquals(1, i);
+				i++;
+			}
 
-					@Override
-					public void addScreen(String name, IScreen screen) {
-					}
+			@Override
+			public void render(float delta) {
+				assertEquals(Gdx.graphics.getDeltaTime(), delta);
+				assertEquals(2, i);
+				i++;
+			}
 
-					@Override
-					public IScreen getScreen(String name) {
-						return null;
-					}
+			@Override
+			public void resize(int width, int height) {
+				assertEquals(3, width);
+				assertEquals(4, height);
+			}
 
-					@Override
-					public Collection getScreens() {
-						return null;
-					}
+			@Override
+			public void pause() {
+				assertEquals(3, i);
+				i++;
+			}
 
-					@Override
-					public void addScreenTransition(String name,
-							IScreenTransition screen) {
-					}
+			@Override
+			public void resume() {
+				assertEquals(4, i);
+				i++;
+			}
 
-					@Override
-					public IScreenTransition getScreenTransition(String name) {
-						return null;
-					}
-
-					@Override
-					public Collection getScreenTransitions() {
-						return null;
-					}
-
-					@Override
-					public void pushScreen(String name, String transition) {
-					}
-
-					@Override
-					public IScreen getCurrentScreen() {
-						return null;
-					}
-
-					@Override
-					public void resize(int width, int height) {
-					}
-
-					@Override
-					public void render(float deltaTime) {
-					}
-
-					@Override
-					public boolean inTransition() {
-						return false;
-					}
-
-				};
+			@Override
+			public void dispose() {
+				assertEquals(5, i);
+				i++;
 			}
 		};
 
-		assertThrows(IllegalStateException.class, () -> {
-			game.resize(1, 1);
-		});
-		assertThrows(IllegalStateException.class, () -> {
-			game.render();
-		});
-
 		game.create();
-		game.resize(1, 1);
 		game.render();
-
-		assertTrue(game.isFocused());
+		game.resize(3, 4);
 		game.pause();
-		assertTrue(!game.isFocused());
 		game.resume();
-		assertTrue(game.isFocused());
+		game.dispose();
 	}
 
 }

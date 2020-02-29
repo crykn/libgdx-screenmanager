@@ -19,6 +19,10 @@ public class TimedScreenTransitionTest {
 			@Override
 			protected void create() {
 			}
+
+			@Override
+			public void dispose() {
+			}
 		};
 
 		t.render(1, null, null);
