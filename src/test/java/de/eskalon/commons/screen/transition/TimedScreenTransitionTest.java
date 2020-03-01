@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TimedScreenTransitionTest {
 
@@ -12,8 +12,8 @@ public class TimedScreenTransitionTest {
 	public void test() {
 		TimedScreenTransition t = new TimedScreenTransition(5) {
 			@Override
-			public void render(float delta, Texture currScreen,
-					Texture nextScreen, float progress) {
+			public void render(float delta, TextureRegion currScreen,
+					TextureRegion nextScreen, float progress) {
 			}
 
 			@Override

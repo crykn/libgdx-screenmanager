@@ -35,15 +35,15 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 
 	public ManagedGame() {
 		super();
-		this.screenManager = new ScreenManager<S, T>(getInputMultiplexer(),
-				getWidth(), getHeight());
+		this.screenManager = new ScreenManager<S, T>();
 	}
 
 	@Override
 	public void create() {
 		super.create();
 
-		screenManager.initBuffers();
+		screenManager.initialize(getInputMultiplexer(), getWidth(),
+				getHeight());
 	}
 
 	@Override

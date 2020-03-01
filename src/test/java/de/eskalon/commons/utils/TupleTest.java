@@ -1,9 +1,11 @@
-package de.eskalon.commons.misc;
+package de.eskalon.commons.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import de.eskalon.commons.utils.Tuple;
 
 public class TupleTest {
 

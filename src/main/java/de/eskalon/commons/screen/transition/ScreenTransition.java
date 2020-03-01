@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen.transition;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.eskalon.commons.screen.ScreenManager;
@@ -61,12 +61,12 @@ public abstract class ScreenTransition implements Disposable {
 	 * @param delta
 	 *            the time delta
 	 * @param lastScreen
-	 *            the old screen as a texture
+	 *            the old screen as a texture region
 	 * @param currScreen
-	 *            the screen the manager is transitioning to as a texture
+	 *            the screen the manager is transitioning to as a texture region
 	 */
-	public abstract void render(float delta, Texture lastScreen,
-			Texture currScreen);
+	public abstract void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen);
 
 	/**
 	 * @return whether the transition is done

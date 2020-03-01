@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import de.eskalon.commons.LibgdxUnitTest;
@@ -38,9 +38,12 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 	public void testScreenLifecycle() throws TimeoutException,
 			InterruptedException, NoSuchFieldException, SecurityException {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
-		ScreenManager sm = Mockito.spy(new ScreenManager(mult, 5, 5));
+		ScreenManager sm = Mockito.spy(new ScreenManager());
+		// Mock initBuffers() as it is using open gl stuff
+		Mockito.doNothing().when(sm).initBuffers();
+		sm.initialize(mult, 5, 5);
 
-		testScreen = new ManagedScreen() {
+		testScreen = new TestScreen() {
 			@Override
 			public void show() {
 				initializeScreen(); // instead of super.show();
@@ -63,17 +66,9 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			}
 
 			@Override
-			public void render(float delta) {
-			}
-
-			@Override
 			public void hide() {
 				assertEquals(6, i);
 				i = 7;
-			}
-
-			@Override
-			public void dispose() {
 			}
 
 			@Override
@@ -88,7 +83,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			}
 		};
 
-		ManagedScreen test2Screen = new ManagedScreen() {
+		ManagedScreen test2Screen = new TestScreen() {
 			@Override
 			public void show() {
 				initializeScreen(); // instead of super.show();
@@ -113,14 +108,6 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 					firstRenderPassScreen2 = false;
 				else
 					i++;
-			}
-
-			@Override
-			public void hide() {
-			}
-
-			@Override
-			public void dispose() {
 			}
 
 			@Override
@@ -181,9 +168,9 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testExceptions() {
-		ScreenManager sm = Mockito.spy(new ScreenManager(
-				Mockito.spy(new BasicInputMultiplexer()), 5, 5));
-		String screenName = "testscreenname";
+		ScreenManager sm = Mockito.spy(new ScreenManager());
+		String screenName = "s1";
+		String transitionName = "t1";
 		ManagedScreen testScreen = new TestScreen() {
 			@Override
 			public void resize(int width, int height) {
@@ -191,11 +178,43 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		};
 		sm.addScreen(screenName, testScreen);
 
-		// Check for exceptions
+		ScreenTransition testTransition = new ScreenTransition() {
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			protected void create() {
+			}
+
+			@Override
+			public void render(float delta, TextureRegion lastScreen,
+					TextureRegion currScreen) {
+			}
+
+			@Override
+			public boolean isDone() {
+				return false;
+			}
+
+		};
+		sm.addScreenTransition(transitionName, testTransition);
+
+		// Screen manager not initalized
 		assertThrows(IllegalStateException.class, () -> {
 			sm.render(1f);
 		});
+		assertThrows(IllegalStateException.class, () -> {
+			sm.pause();
+		});
+		assertThrows(IllegalStateException.class, () -> {
+			sm.resume();
+		});
+		assertThrows(IllegalStateException.class, () -> {
+			sm.resize(5, 5);
+		});
 
+		// Add screen
 		assertThrows(IllegalArgumentException.class, () -> {
 			sm.addScreen("", testScreen);
 		});
@@ -204,6 +223,16 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			sm.addScreen("", null);
 		});
 
+		// Add transition
+		assertThrows(IllegalArgumentException.class, () -> {
+			sm.addScreenTransition("", testTransition);
+		});
+
+		assertThrows(NullPointerException.class, () -> {
+			sm.addScreenTransition("", null);
+		});
+
+		// Push screen
 		assertThrows(IllegalArgumentException.class, () -> {
 			sm.pushScreen("", null);
 		});
@@ -216,6 +245,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			sm.pushScreen(screenName, "123");
 		});
 
+		// Get screen
 		assertThrows(IllegalArgumentException.class, () -> {
 			sm.getScreen("");
 		});
@@ -224,6 +254,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			sm.getScreen("123");
 		});
 
+		// Get screen transition
 		assertThrows(IllegalArgumentException.class, () -> {
 			sm.getScreenTransition("");
 		});
@@ -231,27 +262,6 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		assertThrows(NoSuchElementException.class, () -> {
 			sm.getScreenTransition("123");
 		});
-	}
-
-	/**
-	 * Implements some empty default methods to reduce boilerplate code.
-	 */
-	abstract class TestScreen extends ManagedScreen {
-		@Override
-		protected void create() {
-		}
-
-		@Override
-		public void hide() {
-		}
-
-		@Override
-		public void render(float delta) {
-		}
-
-		@Override
-		public void dispose() {
-		}
 	}
 
 	int resizeCount = 0;
@@ -267,13 +277,13 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testApplicationListenerEvents() {
-		ScreenManager sm = Mockito.spy(new ScreenManager(
-				Mockito.spy(new BasicInputMultiplexer()), 5, 5));
+		ScreenManager sm = Mockito.spy(new ScreenManager());
 		// Mock the initBuffers & the screenToTexture method as they are using
 		// open gl stuff
 		Mockito.doNothing().when(sm).initBuffers();
-		Mockito.doReturn(null).when(sm).screenToTexture(Mockito.anyFloat(),
-				Mockito.any(), Mockito.any());
+		Mockito.doReturn(null).when(sm).screenToTexture(Mockito.any(),
+				Mockito.any(), Mockito.anyFloat());
+		sm.initialize(Mockito.spy(new BasicInputMultiplexer()), 5, 5);
 
 		String screen1Name = "s1";
 		String screen2Name = "s2";
@@ -361,8 +371,8 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			}
 
 			@Override
-			public void render(float delta, Texture lastScreen,
-					Texture currScreen) {
+			public void render(float delta, TextureRegion lastScreen,
+					TextureRegion currScreen) {
 			}
 
 			@Override
@@ -417,15 +427,11 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 
 	/**
 	 * Tests the functionality of the dispose() method.
-	 * 
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
 	 */
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testDispose() throws NoSuchFieldException, SecurityException {
-		ScreenManager sm = Mockito.spy(new ScreenManager(
-				Mockito.spy(new BasicInputMultiplexer()), 5, 5));
+		ScreenManager sm = Mockito.spy(new ScreenManager());
 
 		// Mock the private fbo fields
 		FieldSetter.setField(sm,
@@ -464,8 +470,8 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			}
 
 			@Override
-			public void render(float delta, Texture lastScreen,
-					Texture currScreen) {
+			public void render(float delta, TextureRegion lastScreen,
+					TextureRegion currScreen) {
 			}
 
 			@Override
@@ -485,8 +491,8 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			}
 
 			@Override
-			public void render(float delta, Texture lastScreen,
-					Texture currScreen) {
+			public void render(float delta, TextureRegion lastScreen,
+					TextureRegion currScreen) {
 			}
 
 			@Override
@@ -506,6 +512,27 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		sm.dispose();
 
 		assertEquals(4, disposeCount);
+	}
+
+	/**
+	 * Implements some empty default methods to reduce boilerplate code.
+	 */
+	abstract class TestScreen extends ManagedScreen {
+		@Override
+		protected void create() {
+		}
+
+		@Override
+		public void hide() {
+		}
+
+		@Override
+		public void render(float delta) {
+		}
+
+		@Override
+		public void dispose() {
+		}
 	}
 
 }

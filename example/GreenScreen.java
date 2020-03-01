@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import de.eskalon.commons.screen.ManagedScreen;
 
-public class RedScreen extends ManagedScreen {
+public class GreenScreen extends ManagedScreen {
 
 	private MyGdxGame game;
 	private ShapeRenderer shapeRenderer;
 
-	public RedScreen() {
+	public GreenScreen() {
 		this.game = (MyGdxGame) Gdx.app.getApplicationListener();
 	}
 
@@ -21,7 +21,7 @@ public class RedScreen extends ManagedScreen {
 		this.addInputProcessor(new InputAdapter() {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				game.getScreenManager().pushScreen("blue", "test_transition");
+				game.getScreenManager().pushScreen("blue", "blending_transition");
 				return true;
 			}
 		});
@@ -29,10 +29,12 @@ public class RedScreen extends ManagedScreen {
 
 	@Override
 	public void render(float delta) {
-		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.rect(100, 100, game.getWidth() - 100, game.getHeight() - 100);
+		/*
+		 * Render a green circle.
+		 */
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.GREEN);
+		shapeRenderer.circle(game.getWidth() / 2, game.getHeight() / 2, game.getHeight() / 2 - 40);
 		shapeRenderer.end();
 	}
 

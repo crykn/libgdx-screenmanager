@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen.transition;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * A screen transition that lasts for a certain duration.
@@ -42,8 +42,8 @@ public abstract class TimedScreenTransition extends ScreenTransition {
 	}
 
 	@Override
-	public final void render(float delta, Texture lastScreen,
-			Texture currScreen) {
+	public final void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen) {
 		this.timePassed = this.timePassed + delta;
 
 		float progress = this.timePassed / duration;
@@ -61,8 +61,8 @@ public abstract class TimedScreenTransition extends ScreenTransition {
 	 *            the progress of the transition; from {@code 0} (excl.) to
 	 *            {@code 1} (incl.)
 	 */
-	public abstract void render(float delta, Texture lastScreen,
-			Texture currScreen, float progress);
+	public abstract void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen, float progress);
 
 	@Override
 	public boolean isDone() {

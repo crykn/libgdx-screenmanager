@@ -29,20 +29,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.common.base.Preconditions;
 
 import de.eskalon.commons.input.BasicInputMultiplexer;
-import de.eskalon.commons.misc.Tuple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
+import de.eskalon.commons.utils.Tuple;
 
 /**
  * A screen manager that handles the different screens of a game and their
  * transitions.
+ * <p>
+ * Has to be {@linkplain #initialize(BasicInputMultiplexer, int, int)
+ * initialized} before it can be used.
  * <p>
  * Screens and transitions can be added via
  * {@link #addScreen(String, ManagedScreen)} and
@@ -80,13 +86,18 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * screen}.
 	 */
 	@Nullable
-	private S lastScreen;
+	private ManagedScreen lastScreen;
 
 	/**
 	 * The current screen.
 	 */
 	@Nullable
-	private S currScreen;
+	private ManagedScreen currScreen;
+
+	/**
+	 * The blank screen that is rendered, when no screen was pushed yet.
+	 */
+	private BlankScreen blankScreen;
 
 	/**
 	 * The transition effect currently rendered.
@@ -110,18 +121,32 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	private int currentWidth, currentHeight;
 
-	public ScreenManager(BasicInputMultiplexer gameInputMultiplexer, int width,
-			int height) {
+	private boolean initialized = false;
+
+	public void initialize(BasicInputMultiplexer gameInputMultiplexer,
+			int width, int height) {
 		this.gameInputMultiplexer = gameInputMultiplexer;
 		this.currentWidth = width;
 		this.currentHeight = height;
+		this.blankScreen = new BlankScreen();
+		this.currScreen = this.blankScreen;
+
+		initBuffers();
+
+		this.initialized = true;
 	}
 
-	public void initBuffers() {
+	protected void initBuffers() {
 		if (lastFBO != null)
 			lastFBO.dispose();
 		lastFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
-				false);
+				false) {
+			@Override
+			protected void disposeColorTexture(Texture colorTexture) {
+				System.out.println("asas");
+				super.disposeColorTexture(colorTexture);
+			}
+		};
 		if (currFBO != null)
 			currFBO.dispose();
 		currFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
@@ -230,9 +255,6 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * {@linkplain #getLastScreen() active screen}, as soon as the transition is
 	 * finished. This is always done on the rendering thread (in
 	 * {@link #render(float)}).
-	 * <p>
-	 * The given transition is ignored if this is the first screen to be pushed,
-	 * as there is no screen to transition from.
 	 *
 	 * @param name
 	 *            the name of screen to be pushed
@@ -251,6 +273,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	public void render(float delta) {
+		Preconditions.checkState(initialized,
+				"The screen manager has to be initalized first!");
+
 		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
 				backgroundColor.b, backgroundColor.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -262,10 +287,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				 */
 				Tuple<T, S> nextTransition = transitionQueue.poll();
 
-				if (this.currScreen != null) {
-					this.gameInputMultiplexer.removeProcessors(
-							new Array<>(this.currScreen.getInputProcessors()));
-				}
+				this.gameInputMultiplexer.removeProcessors(
+						new Array<>(this.currScreen.getInputProcessors()));
 
 				this.lastScreen = currScreen;
 				this.currScreen = nextTransition.y;
@@ -275,8 +298,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				if (this.transition != null) {
 					this.transition.reset();
 				} else { // a screen was pushed without transition
-					if (this.lastScreen != null)
-						this.lastScreen.hide();
+					this.lastScreen.hide();
 
 					this.gameInputMultiplexer.addProcessors(
 							new Array<>(this.currScreen.getInputProcessors()));
@@ -285,29 +307,29 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				// render again so no frame is skipped
 				render(delta);
 			} else {
-				Preconditions.checkState(this.currScreen != null,
-						"A screen has to be pushed before the rendering can begin!");
 				/*
 				 * Render current screen; no transition is going on
 				 */
 				this.currScreen.render(delta);
 			}
 		} else {
-			if (!this.transition.isDone() && this.lastScreen != null) {
+			if (!this.transition.isDone()) {
 				/*
-				 * render the current transition; skip this step if there was no
-				 * lastScreen (i.e. this is the first pushed screen)
+				 * render the current transition
 				 */
-				this.transition.render(delta,
-						screenToTexture(delta, this.lastScreen, this.lastFBO),
-						screenToTexture(delta, this.currScreen, this.currFBO));
+				TextureRegion lastTextureRegion = screenToTexture(
+						this.lastScreen, this.lastFBO, delta);
+				TextureRegion currTextureRegion = screenToTexture(
+						this.currScreen, this.currFBO, delta);
+
+				this.transition.render(delta, lastTextureRegion,
+						currTextureRegion);
 			} else {
 				/*
 				 * the current transition is finished; remove it
 				 */
 				this.transition = null;
-				if (lastScreen != null)
-					this.lastScreen.hide();
+				this.lastScreen.hide();
 				this.gameInputMultiplexer.addProcessors(
 						new Array<>(this.currScreen.getInputProcessors()));
 
@@ -321,6 +343,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * @see ManagedScreen#resize(int, int)
 	 */
 	public void resize(int width, int height) {
+		Preconditions.checkState(initialized,
+				"The screen manager has to be initalized first!");
+
 		if (currentWidth != width || currentHeight != height) {
 			this.currentWidth = width;
 			this.currentHeight = height;
@@ -339,22 +364,26 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * @see ManagedScreen#pause()
 	 */
 	public void pause() {
-		if (inTransition() && lastScreen != null)
+		Preconditions.checkState(initialized,
+				"The screen manager has to be initalized first!");
+
+		if (inTransition())
 			lastScreen.pause();
 
-		if (currScreen != null)
-			currScreen.pause();
+		currScreen.pause();
 	}
 
 	/**
 	 * @see ManagedScreen#resume()
 	 */
 	public void resume() {
-		if (inTransition() && lastScreen != null)
+		Preconditions.checkState(initialized,
+				"The screen manager has to be initalized first!");
+
+		if (inTransition())
 			lastScreen.resume();
 
-		if (currScreen != null)
-			currScreen.resume();
+		currScreen.resume();
 	}
 
 	/**
@@ -381,34 +410,16 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Renders a {@linkplain ManagedScreen screen} into a
-	 * {@linkplain FrameBuffer frame buffer object}.
-	 * 
-	 * @param delta
-	 *            the time delta
-	 * @param screen
-	 *            the screen to be rendered
-	 * @param FBO
-	 *            the frame buffer object the screen gets rendered into
-	 * @return a texture which contains the rendered screen
-	 */
-	Texture screenToTexture(float delta, S screen, FrameBuffer FBO) {
-		FBO.begin();
-		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
-				backgroundColor.b, backgroundColor.a);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		screen.render(delta);
-		FBO.end();
-		return FBO.getColorBufferTexture();
-	}
-
-	/**
 	 * @return the {@linkplain ManagedScreen screen} that was shown before the
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
 	@Nullable
 	public S getLastScreen() {
-		return lastScreen;
+		if (lastScreen == blankScreen)
+			return null; // return null, as the blank screen is not the right
+							// type
+
+		return (S) lastScreen;
 	}
 
 	/**
@@ -416,7 +427,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 *         {@link #pushScreen(String, String)} is called.
 	 */
 	public S getCurrentScreen() {
-		return currScreen;
+		if (currScreen == blankScreen)
+			return null; // return null, as the blank screen is not the right
+							// type
+
+		return (S) currScreen;
 	}
 
 	/**
@@ -426,6 +441,36 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	public boolean inTransition() {
 		return this.transition == null ? false : true;
+	}
+
+	/**
+	 * Renders a {@linkplain Screen screen} into a texture region using the
+	 * given {@linkplain FrameBuffer frame buffer object}.
+	 * 
+	 * @param screen
+	 *            the screen to be rendered
+	 * @param fbo
+	 *            the frame buffer object the screen gets rendered into
+	 * @param delta
+	 *            the time delta
+	 * 
+	 * @return a texture which contains the rendered screen
+	 */
+	TextureRegion screenToTexture(Screen screen, FrameBuffer fbo, float delta) {
+		fbo.begin();
+		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
+				backgroundColor.b, backgroundColor.a);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		screen.render(delta);
+		fbo.end();
+
+		Texture texture = fbo.getColorBufferTexture();
+
+		// flip the texture
+		TextureRegion textureRegion = new TextureRegion(texture);
+		textureRegion.flip(false, true);
+
+		return textureRegion;
 	}
 
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.misc;
+package de.eskalon.commons.utils;
 
 import java.util.Objects;
 

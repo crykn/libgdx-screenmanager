@@ -21,7 +21,7 @@ public class BlueScreen extends ManagedScreen {
 		this.addInputProcessor(new InputAdapter() {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				game.getScreenManager().pushScreen("red", "test_transition");
+				game.getScreenManager().pushScreen("green", "blending_transition");
 				return true;
 			}
 		});
@@ -29,10 +29,12 @@ public class BlueScreen extends ManagedScreen {
 
 	@Override
 	public void render(float delta) {
-		shapeRenderer.setProjectionMatrix(game.getCamera().combined);
-		shapeRenderer.begin(ShapeType.Line);
+		/*
+		 * Render a blue triangle.
+		 */
+		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.rect(100, 100, game.getWidth() - 100, game.getHeight() - 100);
+		shapeRenderer.triangle(50, 50, game.getWidth() - 50, 50, game.getWidth() / 2, game.getHeight() - 50);
 		shapeRenderer.end();
 	}
 

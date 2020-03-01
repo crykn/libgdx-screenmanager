@@ -9,7 +9,8 @@ import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.LibgdxUnitTest;
 import de.eskalon.commons.input.BasicInputMultiplexer;
@@ -35,16 +36,24 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			throws TimeoutException, InterruptedException {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
 
-		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager(
-				mult, 5, 5) {
-			// Mock the screenToTexture method as it is using open gl stuff
-			Texture screenToTexture(float delta, ManagedScreen screen,
-					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO) {
-				screen.render(delta);
+		// Mock initBuffers() & screenToTexture() as they are using open gl
+		// stuff
+		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
+			@Override
+			TextureRegion screenToTexture(Screen screen,
+					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
+					float delta) {
+				screen.render(delta); // only render the screen
 
 				return null;
 			};
+
+			@Override
+			protected void initBuffers() {
+				// do nothing
+			}
 		};
+		sm.initialize(mult, 5, 5);
 
 		ManagedScreen testScreen = new ManagedScreen() {
 			@Override
@@ -171,8 +180,8 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 
 			@Override
-			public void render(float delta, Texture currScreen,
-					Texture nextScreen) {
+			public void render(float delta, TextureRegion currScreen,
+					TextureRegion nextScreen) {
 				if (firstRenderPassTransition) {
 					firstRenderPassTransition = false;
 					assertEquals(4, i);

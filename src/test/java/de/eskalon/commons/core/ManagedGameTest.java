@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
 
@@ -16,7 +15,7 @@ import de.eskalon.commons.screen.transition.ScreenTransition;
 
 public class ManagedGameTest extends LibgdxUnitTest {
 
-	private int i = 1;
+	private int i = 0;
 
 	@Test
 	@SuppressWarnings({ "rawtypes" })
@@ -33,22 +32,39 @@ public class ManagedGameTest extends LibgdxUnitTest {
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testCorrespondingScreenManagerMethods() {
-		ManagedGame game = new ManagedGame();
+		ManagedGame game = new ManagedGame() {
+			@Override
+			public int getWidth() {
+				return 5;
+			}
 
-		// Mock the initBuffers method as it is using open gl stuff
-		game.screenManager = new ScreenManager<ManagedScreen, ScreenTransition>(
-				Mockito.spy(new BasicInputMultiplexer()), 5, 5) {
+			@Override
+			public int getHeight() {
+				return 7;
+			}
+		};
+		game.screenManager = new ScreenManager<ManagedScreen, ScreenTransition>() {
+
+			@Override
+			public void initialize(BasicInputMultiplexer gameInputMultiplexer,
+					int width, int height) {
+				assertEquals(0, i);
+				i++;
+				assertEquals(width, 5);
+				assertEquals(height, 7);
+
+				super.initialize(gameInputMultiplexer, width, height);
+			}
 
 			@Override
 			public void initBuffers() {
-				assertEquals(1, i);
-				i++;
+				// Mock the initBuffers method as it is using open gl stuff
 			}
 
 			@Override
 			public void render(float delta) {
 				assertEquals(Gdx.graphics.getDeltaTime(), delta);
-				assertEquals(2, i);
+				assertEquals(1, i);
 				i++;
 			}
 
@@ -60,24 +76,23 @@ public class ManagedGameTest extends LibgdxUnitTest {
 
 			@Override
 			public void pause() {
-				assertEquals(3, i);
+				assertEquals(2, i);
 				i++;
 			}
 
 			@Override
 			public void resume() {
-				assertEquals(4, i);
+				assertEquals(3, i);
 				i++;
 			}
 
 			@Override
 			public void dispose() {
-				assertEquals(5, i);
+				assertEquals(4, i);
 				i++;
 			}
 		};
-
-		game.create();
+		game.create(); // should initialize the screen manager
 		game.render();
 		game.resize(3, 4);
 		game.pause();

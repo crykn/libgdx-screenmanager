@@ -8,6 +8,7 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 
 * Allows easily **changing the rendered screen** (`game.getScreenManager().pushScreen("screen-name", "transition-name");`)
 * Adds **screen transition effects** for when a screen is changed (see `ScreenTransition`)
+* There are a few **default transitions included**
 * **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
 * There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded
 * The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for nearly everything
@@ -25,18 +26,19 @@ public class MyGdxGame extends ManagedGame {
 	public final void create() {
 		super.create();
 
-		// ...
+		// Do some basic stuff
+		this.batch = new SpriteBatch();
 
 		// Add screens
-		this.screenManager.addScreen("red", new RedScreen());
-		this.screenManager.addScreen("blue", new RedScreen());
+		this.screenManager.addScreen("green", new GreenScreen());
+		this.screenManager.addScreen("blue", new BlueScreen());
 
 		// Add transitions
-		TestTransition transition = new TestTransition(this);
-		screenManager.addScreenTransition("test_transition", transition);
+		BlendingScreenTransition transition = new BlendingScreenTransition(batch);
+		screenManager.addScreenTransition("blending_transition", transition);
 
-		// Push the first screen without a transition
-		this.screenManager.pushScreen("red", null);
+		// Push the first screen with a blending transition
+		this.screenManager.pushScreen("green", "blending_transition");
 	}
 
 }

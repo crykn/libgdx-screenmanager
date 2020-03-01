@@ -1,15 +1,16 @@
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.transition.BlendingScreenTransition;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
+	public static final String TITLE = "MyGdxGame";
 	private Viewport viewport;
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -20,35 +21,19 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 		// Do some basic stuff
 		this.batch = new SpriteBatch();
-		this.camera = new OrthographicCamera();
-		this.viewport = new FitViewport(1024, 720, camera);
 
 		// Add screens
-		this.screenManager.addScreen("red", new RedScreen());
-		this.screenManager.addScreen("blue", new RedScreen());
+		this.screenManager.addScreen("green", new GreenScreen());
+		this.screenManager.addScreen("blue", new BlueScreen());
 
 		// Add transitions
-		TestTransition transition = new TestTransition(this);
-		screenManager.addScreenTransition("test_transition", transition);
+		BlendingScreenTransition transition = new BlendingScreenTransition(batch);
+		screenManager.addScreenTransition("blending_transition", transition);
 
-		// Push the first screen without a transition
-		this.screenManager.pushScreen("red", null);
+		// Push the first screen with a blending transition
+		this.screenManager.pushScreen("green", "blending_transition");
 
 		Gdx.app.debug("Game", "Initialization finished.");
-	}
-	
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-		viewport.update(width, height);
-	}
-
-	public SpriteBatch getSpriteBatch() {
-		return batch;
-	}
-
-	public OrthographicCamera getCamera() {
-		return camera;
 	}
 
 }
