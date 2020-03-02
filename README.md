@@ -1,20 +1,22 @@
 ## What is libgdx-screenmanager?
 
-[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build Status](https://travis-ci.com/crykn/libgdx-screenmanager.svg?branch=master)](https://travis-ci.com/crykn/libgdx-screenmanager) [![Code Coverage](https://codecov.io/gh/crykn/libgdx-screenmanager/branch/master/graph/badge.svg)](https://codecov.io/gh/crykn/libgdx-screenmanager)
+[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build Status](https://travis-ci.com/crykn/libgdx-screenmanager.svg?branch=master)](https://travis-ci.com/crykn/libgdx-screenmanager)
 
 This library is a screen manager for libGDX games. It allows comfortably changing the rendered screen while using transition effects. The library's easy to use nature makes it possible to integrate libgdx-screenmanager into any project without much effort.
 
 ## Features
 
 * Allows easily **changing the rendered screen** (`game.getScreenManager().pushScreen("screen-name", "transition-name");`)
-* Adds **screen transition effects** for when a screen is changed (the included ones can be found [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/main/java/de/eskalon/commons/screen/transition/impl))
+* Adds **screen transition effects** for when a screen is changed
+   * The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/main/java/de/eskalon/commons/screen/transition/impl)
+   * Transition shaders are supported as well (see the [gl-transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones)
 * **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
 * There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded
-* The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for nearly everything
+* The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for  everything that isn't graphical
 
 
 ![](https://raw.githubusercontent.com/crykn/libgdx-screenmanager/master/showcase.gif)
-> ###### A small example using different transitions; the stuttering is due to the recording
+> ###### A small example using different transitions
 
 <br/>
 

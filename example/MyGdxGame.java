@@ -14,6 +14,7 @@ import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 	public static final String TITLE = "MyGdxGame";
+	// private OrthographicCamera camera;
 	private SpriteBatch batch;
 
 	@Override
@@ -22,6 +23,9 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 		// Do some basic stuff
 		this.batch = new SpriteBatch();
+		// this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
+		// this.camera.translate(viewportWidth / 2, viewportHeight / 2, 0);
+		// this.camera.update();
 
 		// Add screens
 		this.screenManager.addScreen("green", new GreenScreen());

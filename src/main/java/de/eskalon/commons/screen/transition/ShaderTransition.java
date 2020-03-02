@@ -1,16 +1,54 @@
+/*
+ * Copyright 2020 damios
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.eskalon.commons.screen.transition;
+
+import javax.annotation.Nullable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.google.common.base.Preconditions;
 
+import de.eskalon.commons.utils.MeshGenerator;
+
+/**
+ * A transition that is using a shader to render the two transitioning screens.
+ * <p>
+ * The following uniforms are set before rendering:
+ * <ul>
+ * <li>vertex shader:</li>
+ * <ul>
+ * <li>{@code uniform mat4 u_projTrans}</li>
+ * </ul>
+ * <li>fragment shader:</li>
+ * <ul>
+ * <li>{@code uniform sampler2D lastScreen}</li>
+ * <li>{@code uniform sampler2D currScreen}</li>
+ * <li>{@code uniform float progress}</li>
+ * </ul>
+ * </ul>
+ * 
+ * @author damios
+ * 
+ * @see GLTransitionsShaderTransition
+ */
 public class ShaderTransition extends TimedTransition {
 
 	private ShaderProgram program;
@@ -25,7 +63,7 @@ public class ShaderTransition extends TimedTransition {
 	private int progressLoc;
 
 	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
-			float duration, Interpolation interpolation) {
+			float duration, @Nullable Interpolation interpolation) {
 		super(duration, interpolation);
 
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
@@ -33,8 +71,8 @@ public class ShaderTransition extends TimedTransition {
 		Preconditions.checkNotNull(camera);
 
 		this.camera = camera;
-
 		this.program = new ShaderProgram(vert, frag);
+
 		Preconditions.checkArgument(this.program.isCompiled(),
 				"Failed to compile shader program: " + this.program.getLog());
 	}
@@ -46,7 +84,7 @@ public class ShaderTransition extends TimedTransition {
 		this.currScreenLoc = this.program.getUniformLocation("currScreen");
 		this.progressLoc = this.program.getUniformLocation("progress");
 
-		this.screenQuad = this.createFullScreenQuad();
+		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -73,64 +111,18 @@ public class ShaderTransition extends TimedTransition {
 		this.program.end();
 	}
 
-	/**
-	 * @return a screen filling quad
-	 */
-	public Mesh createFullScreenQuad() {
-		float[] verts = new float[20];
-		int i = 0;
-
-		// Structure here is as follows:
-		// x-coordinate (position) (left to right)
-		// y-coordinate (position) (bottom to top)
-		// z-coordinate (position) (depth)
-		// u-coordinate (texture coordinate)
-		// v-coordinate (texture coordinate)
-
-		// TODO: texture coordinates are somehow wrong. Could be the fault of
-		// the camera too.
-
-		// lower left vertex
-		verts[i++] = 0;
-		verts[i++] = 0;
-		verts[i++] = 0;
-		verts[i++] = 0;
-		verts[i++] = 0;
-
-		// upper left vertex
-		verts[i++] = 0;
-		verts[i++] = Gdx.graphics.getHeight();
-		verts[i++] = 0;
-		verts[i++] = 0;
-		verts[i++] = 1;
-
-		// lower right vertex
-		verts[i++] = Gdx.graphics.getWidth();
-		verts[i++] = 0;
-		verts[i++] = 0;
-		verts[i++] = 1;
-		verts[i++] = 0;
-
-		// upper right vertex
-		verts[i++] = Gdx.graphics.getWidth();
-		verts[i++] = Gdx.graphics.getHeight();
-		verts[i++] = 0;
-		verts[i++] = 1;
-		verts[i++] = 1;
-
-		Mesh mesh = new Mesh(true, 4, 0,
-				new VertexAttribute(Usage.Position, 3,
-						ShaderProgram.POSITION_ATTRIBUTE),
-				new VertexAttribute(Usage.TextureCoordinates, 2,
-						ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
-
-		mesh.setVertices(verts);
-		return mesh;
+	@Override
+	public void resize(int width, int height) {
+		if (this.screenQuad != null)
+			this.screenQuad.dispose();
+		this.screenQuad = MeshGenerator.createFullScreenQuad(width, height,
+				true);
 	}
 
 	@Override
 	public void dispose() {
 		this.program.dispose();
+		this.screenQuad.dispose();
 	}
 
 }

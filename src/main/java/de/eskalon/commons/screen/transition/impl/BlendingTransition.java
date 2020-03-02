@@ -30,7 +30,7 @@ import de.eskalon.commons.screen.transition.TimedTransition;
  * @since 0.3.0
  * @author damios
  */
-public class BlendingTransition extends TimedTransition {
+public class BlendingTransition extends BlankTimedTransition {
 
 	private SpriteBatch batch;
 
@@ -42,11 +42,6 @@ public class BlendingTransition extends TimedTransition {
 
 	public BlendingTransition(SpriteBatch batch, float duration) {
 		this(batch, duration, null);
-	}
-
-	@Override
-	protected void create() {
-		// not needed
 	}
 
 	@Override
@@ -65,8 +60,4 @@ public class BlendingTransition extends TimedTransition {
 		batch.end();
 	}
 
-	@Override
-	public void dispose() {
-		// not needed
-	}
 }

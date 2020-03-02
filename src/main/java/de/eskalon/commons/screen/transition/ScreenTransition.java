@@ -15,6 +15,7 @@
 
 package de.eskalon.commons.screen.transition;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -37,6 +38,10 @@ import de.eskalon.commons.screen.ScreenManager;
 public abstract class ScreenTransition implements Disposable {
 
 	private boolean initialized = false;
+
+	public boolean isInitialized() {
+		return initialized;
+	}
 
 	/**
 	 * Can be called manually to {@linkplain #create() initialize} the
@@ -72,6 +77,18 @@ public abstract class ScreenTransition implements Disposable {
 	 * @return whether the transition is done
 	 */
 	public abstract boolean isDone();
+
+	/**
+	 * Called when the {@linkplain ApplicationListener#resize(int, int) game is
+	 * resized}, the transition was {@linkplain #isInitialized() initialized}
+	 * before and the new size is different to the previous one.
+	 * 
+	 * @param width
+	 *            the new width in pixels
+	 * @param height
+	 *            the new height in pixels
+	 */
+	public abstract void resize(int width, int height);
 
 	/**
 	 * Is called to reset the transition for another use.

@@ -22,15 +22,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.google.common.base.Preconditions;
 
-import de.eskalon.commons.screen.transition.TimedTransition;
-
 /**
  * A transition where the new screen is sliding in in horizontal slices.
  * 
  * @since 0.3.0
  * @author damios
  */
-public class HorizontalSlicingTransition extends TimedTransition {
+public class HorizontalSlicingTransition extends BlankTimedTransition {
 
 	private SpriteBatch batch;
 	private int sliceCount = 5;
@@ -67,11 +65,6 @@ public class HorizontalSlicingTransition extends TimedTransition {
 	}
 
 	@Override
-	protected void create() {
-		// not needed
-	}
-
-	@Override
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		batch.begin();
@@ -95,11 +88,6 @@ public class HorizontalSlicingTransition extends TimedTransition {
 					currScreen.getRegionWidth(), sliceHeight, false, true);
 		}
 		batch.end();
-	}
-
-	@Override
-	public void dispose() {
-		// not needed
 	}
 
 }

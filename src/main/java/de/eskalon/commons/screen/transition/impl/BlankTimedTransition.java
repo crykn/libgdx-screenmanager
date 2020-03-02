@@ -15,7 +15,10 @@
 
 package de.eskalon.commons.screen.transition.impl;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 
 import de.eskalon.commons.screen.transition.TimedTransition;
 
@@ -25,10 +28,15 @@ import de.eskalon.commons.screen.transition.TimedTransition;
  * @since 0.3.0
  * @author damios
  */
-public class BlankTransition extends TimedTransition {
+public class BlankTimedTransition extends TimedTransition {
 
-	public BlankTransition(float duration) {
-		super(duration);
+	public BlankTimedTransition(float duration,
+			@Nullable Interpolation interpolation) {
+		super(duration, interpolation);
+	}
+
+	public BlankTimedTransition(float duration) {
+		this(duration, null);
 	}
 
 	@Override
@@ -45,6 +53,11 @@ public class BlankTransition extends TimedTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		// do nothing
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// not needed
 	}
 
 }

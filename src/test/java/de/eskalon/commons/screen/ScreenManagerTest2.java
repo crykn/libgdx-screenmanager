@@ -203,6 +203,10 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 				assertEquals(0, k);
 				k = 1;
 			}
+			
+			@Override
+			public void resize(int width, int height) {
+			}
 
 			@Override
 			public void dispose() {

@@ -342,9 +342,15 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 			this.currentWidth = width;
 			this.currentHeight = height;
 
+			// Screens & transitions are resized
 			for (S s : screens.values()) {
 				if (s.isInitialized()) {
 					s.resize(width, height);
+				}
+			}
+			for (T t : transitions.values()) {
+				if (t.isInitialized()) {
+					t.resize(width, height);
 				}
 			}
 

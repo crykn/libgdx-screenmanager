@@ -197,6 +197,10 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 				return false;
 			}
 
+			@Override
+			public void resize(int width, int height) {
+			}
+
 		};
 		sm.addScreenTransition(transitionName, testTransition);
 
@@ -288,7 +292,8 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		String screen1Name = "s1";
 		String screen2Name = "s2";
 		String screen3Name = "s3";
-		String transitionName = "t1";
+		String transition1Name = "t1";
+		String transition2Name = "t2";
 
 		/*
 		 * The last screen; rendered as part of a transition.
@@ -365,7 +370,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		/*
 		 * A never ending transition.
 		 */
-		sm.addScreenTransition(transitionName, new ScreenTransition() {
+		sm.addScreenTransition(transition1Name, new ScreenTransition() {
 			@Override
 			public void dispose() {
 			}
@@ -383,6 +388,42 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			@Override
 			protected void create() {
 			}
+
+			@Override
+			public void resize(int width, int height) {
+				if (width == 5 || height == 5)
+					fail();
+
+				resizeCount++;
+			}
+		});
+
+		/*
+		 * A transition that is not initialized
+		 */
+		sm.addScreenTransition(transition2Name, new ScreenTransition() {
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void render(float delta, TextureRegion lastScreen,
+					TextureRegion currScreen) {
+			}
+
+			@Override
+			public boolean isDone() {
+				return false;
+			}
+
+			@Override
+			protected void create() {
+			}
+
+			@Override
+			public void resize(int width, int height) {
+				fail();
+			}
 		});
 
 		// Make screen1 the current screen
@@ -399,21 +440,21 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		resumeState++;
 
 		// Make screen2 the current screen; the transition is going on
-		sm.pushScreen(screen2Name, transitionName);
+		sm.pushScreen(screen2Name, transition1Name);
 		sm.render(1);
 
 		// resize()
 		sm.resize(5, 5); // ignored
 		sm.resize(10, 10);
-		assertEquals(2, resizeCount);
+		assertEquals(3, resizeCount);
 		sm.resize(10, 10); // ignored
-		assertEquals(2, resizeCount);
+		assertEquals(3, resizeCount);
 
 		// only change width _or_ height
 		sm.resize(10, 15);
-		assertEquals(4, resizeCount);
-		sm.resize(20, 15);
 		assertEquals(6, resizeCount);
+		sm.resize(20, 15);
+		assertEquals(9, resizeCount);
 
 		// pause() & resume()
 		sm.pause();
@@ -482,6 +523,10 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 			@Override
 			protected void create() {
 			}
+
+			@Override
+			public void resize(int width, int height) {
+			}
 		});
 
 		sm.addScreenTransition("t2", new ScreenTransition() {
@@ -502,6 +547,10 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 
 			@Override
 			protected void create() {
+			}
+
+			@Override
+			public void resize(int width, int height) {
 			}
 		});
 

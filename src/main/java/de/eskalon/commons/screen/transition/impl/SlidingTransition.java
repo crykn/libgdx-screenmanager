@@ -19,8 +19,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.eskalon.commons.screen.transition.TimedTransition;
-
 /**
  * The base class for sliding screen transitions.
  *
@@ -29,7 +27,7 @@ import de.eskalon.commons.screen.transition.TimedTransition;
  * @see SlidingInTransition
  * @see SlidingOutTransition
  */
-class SlidingTransition extends TimedTransition {
+class SlidingTransition extends BlankTimedTransition {
 
 	private SlidingDirection dir;
 	private SpriteBatch batch;
@@ -46,11 +44,6 @@ class SlidingTransition extends TimedTransition {
 		this.batch = batch;
 		this.dir = dir;
 		this.slideLastScreen = slideLastScreen;
-	}
-
-	@Override
-	protected void create() {
-		// not needed
 	}
 
 	@Override
@@ -73,11 +66,6 @@ class SlidingTransition extends TimedTransition {
 		}
 
 		batch.end();
-	}
-
-	@Override
-	public void dispose() {
-		// not needed
 	}
 
 }

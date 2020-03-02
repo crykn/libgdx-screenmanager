@@ -23,6 +23,10 @@ public class TimedScreenTransitionTest {
 			@Override
 			public void dispose() {
 			}
+
+			@Override
+			public void resize(int width, int height) {
+			}
 		};
 
 		t.render(1, null, null);
@@ -31,6 +35,7 @@ public class TimedScreenTransitionTest {
 		t.render(1, null, null);
 		t.render(1, null, null);
 		t.render(1, null, null);
+		t.resize(12, 15);
 		t.render(1, null, null);
 		assertTrue(t.isDone());
 
