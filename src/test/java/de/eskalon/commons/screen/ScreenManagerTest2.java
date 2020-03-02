@@ -40,7 +40,7 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 		// stuff
 		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
 			@Override
-			TextureRegion screenToTexture(Screen screen,
+			TextureRegion screenToTexture(ManagedScreen screen,
 					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
 					float delta) {
 				screen.render(delta); // only render the screen
@@ -203,7 +203,7 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 				assertEquals(0, k);
 				k = 1;
 			}
-			
+
 			@Override
 			public void resize(int width, int height) {
 			}

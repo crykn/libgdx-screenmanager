@@ -83,6 +83,14 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 		"	out_Color = transition(v_texCoord0);\n" + 
 		"}\n";
 	
+	/**
+	 * @param glTransitionsCode
+	 *            the GL Transitions shader code; please remember to
+	 *            uncomment/set the transition parameters!
+	 * @param camera
+	 * @param duration
+	 * @param interpolation
+	 */
 	public GLTransitionsShaderTransition(String glTransitionsCode,
 			OrthographicCamera camera, float duration,
 			@Nullable Interpolation interpolation) {

@@ -19,6 +19,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
 import de.eskalon.commons.core.ManagedGame;
@@ -103,7 +104,8 @@ public abstract class ManagedScreen implements Screen {
 	/**
 	 * Called when the screen should render itself.
 	 * <p>
-	 * Before this method is called, the previously rendered stuff is cleared.
+	 * Before this method is called, the previously rendered stuff is cleared
+	 * with the {@linkplain #getClearColor() clear color}.
 	 * 
 	 * @param delta
 	 *            the time in seconds since the last render pass
@@ -168,6 +170,14 @@ public abstract class ManagedScreen implements Screen {
 
 	public Array<InputProcessor> getInputProcessors() {
 		return inputProcessors;
+	}
+
+	/**
+	 * @return the color to clear the screen with before the rendering is
+	 *         started
+	 */
+	public Color getClearColor() {
+		return Color.BLACK;
 	}
 
 }

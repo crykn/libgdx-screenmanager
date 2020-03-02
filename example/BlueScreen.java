@@ -37,8 +37,6 @@ public class BlueScreen extends ManagedScreen {
 		 * Render a blue triangle on a white background.
 		 */
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(Color.WHITE);
-		shapeRenderer.rect(0, 0, game.getWidth(), game.getHeight());
 		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.triangle(50, 50, game.getWidth() - 50, 50, game.getWidth() / 2, game.getHeight() - 50);
 		shapeRenderer.end();
@@ -48,6 +46,11 @@ public class BlueScreen extends ManagedScreen {
 	public void dispose() {
 		if (isInitialized())
 			shapeRenderer.dispose();
+	}
+
+	@Override
+	public Color getClearColor() {
+		return Color.WHITE;
 	}
 
 	@Override

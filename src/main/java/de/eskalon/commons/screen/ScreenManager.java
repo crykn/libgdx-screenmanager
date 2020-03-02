@@ -27,7 +27,6 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -61,11 +60,6 @@ import de.eskalon.commons.utils.Tuple;
  */
 public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		implements Disposable {
-
-	/**
-	 * The background color for all screens.
-	 */
-	protected Color backgroundColor = Color.BLACK;
 
 	/**
 	 * This frame buffer object is used to store the content of the previously
@@ -268,10 +262,6 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		Preconditions.checkState(initialized,
 				"The screen manager has to be initalized first!");
 
-		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
-				backgroundColor.b, backgroundColor.a);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		if (transition == null) {
 			if (!transitionQueue.isEmpty()) {
 				/*
@@ -302,6 +292,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				/*
 				 * Render current screen; no transition is going on
 				 */
+				Gdx.gl.glClearColor(currScreen.getClearColor().r,
+						currScreen.getClearColor().g,
+						currScreen.getClearColor().b,
+						currScreen.getClearColor().a);
+				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 				this.currScreen.render(delta);
 			}
 		} else {
@@ -442,8 +437,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Renders a {@linkplain Screen screen} into a texture region using the
-	 * given {@linkplain FrameBuffer frame buffer object}.
+	 * Renders a {@linkplain ManagedScreen screen} into a texture region using
+	 * the given {@linkplain FrameBuffer frame buffer object}.
 	 * 
 	 * @param screen
 	 *            the screen to be rendered
@@ -454,10 +449,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * 
 	 * @return a texture which contains the rendered screen
 	 */
-	TextureRegion screenToTexture(Screen screen, FrameBuffer fbo, float delta) {
+	TextureRegion screenToTexture(ManagedScreen screen, FrameBuffer fbo,
+			float delta) {
 		fbo.begin();
-		Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g,
-				backgroundColor.b, backgroundColor.a);
+		Gdx.gl.glClearColor(screen.getClearColor().r, screen.getClearColor().g,
+				screen.getClearColor().b, screen.getClearColor().a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		screen.render(delta);
 		fbo.end();
