@@ -46,7 +46,8 @@ public class BlueScreen extends ManagedScreen {
 
 	@Override
 	public void dispose() {
-		shapeRenderer.dispose();
+		if (isInitialized())
+			shapeRenderer.dispose();
 	}
 
 	@Override
