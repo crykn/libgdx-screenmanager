@@ -7,15 +7,16 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 ## Features
 
 * Allows easily **changing the rendered screen** (`game.getScreenManager().pushScreen("screen-name", "transition-name");`)
-* Adds **screen transition effects** for when a screen is changed (see `ScreenTransition`)
-* There are a few **default transitions included** (see [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/main/java/de/eskalon/commons/screen/transition/impl))
+* Adds **screen transition effects** for when a screen is changed (the included ones can be found [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/main/java/de/eskalon/commons/screen/transition/impl))
 * **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
 * There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded
 * The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for nearly everything
 
 
 ![](https://raw.githubusercontent.com/crykn/libgdx-screenmanager/master/showcase.gif)
-> ###### A small example; the stuttering is due to the recording
+> ###### A small example using different transitions; the stuttering is due to the recording
+
+<br/>
 
 
 ## Example code
@@ -64,4 +65,4 @@ public class MyGdxGame extends ManagedGame {
 
 ## How the library works in detail
 
-The life-cycles of a screen that is pushed and the respective transition are detailed [here](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle).
+The life-cycle of a screen that is pushed is detailed [here](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle).
