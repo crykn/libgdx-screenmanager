@@ -1,24 +1,20 @@
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.screen.BlankScreen;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
-import de.eskalon.commons.screen.transition.impl.BlendingScreenTransition;
-import de.eskalon.commons.screen.transition.impl.SlicingScreenTransition;
+import de.eskalon.commons.screen.transition.impl.BlendingTransition;
+import de.eskalon.commons.screen.transition.impl.HorizontalSlicingTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingDirection;
-import de.eskalon.commons.screen.transition.impl.SlidingOutScreenTransition;
+import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 	public static final String TITLE = "MyGdxGame";
-	private Viewport viewport;
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
 
 	@Override
 	public final void create() {
@@ -33,12 +29,11 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 		this.screenManager.addScreen("blank", new BlankScreen());
 
 		// Add transitions
-		BlendingScreenTransition blendingTransition = new BlendingScreenTransition(batch, 1F, Interpolation.pow2In);
+		BlendingTransition blendingTransition = new BlendingTransition(batch, 1F, Interpolation.pow2In);
 		screenManager.addScreenTransition("blending_transition", blendingTransition);
-		SlidingOutScreenTransition slidingOutTransition = new SlidingOutScreenTransition(batch, SlidingDirection.DOWN,
-				0.35F);
+		SlidingOutTransition slidingOutTransition = new SlidingOutTransition(batch, SlidingDirection.DOWN, 0.35F);
 		screenManager.addScreenTransition("sliding_out_transition", slidingOutTransition);
-		SlicingScreenTransition slicingTransition = new SlicingScreenTransition(batch, 5, 1F);
+		HorizontalSlicingTransition slicingTransition = new HorizontalSlicingTransition(batch, 5, 1F);
 		screenManager.addScreenTransition("slicing_transition", slicingTransition);
 
 		// Push the first screen using a blending transition

@@ -19,17 +19,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.eskalon.commons.screen.transition.TimedScreenTransition;
+import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
  * The base class for sliding screen transitions.
  *
  * @author damios
  * 
- * @see SlidingInScreenTransition
- * @see SlidingOutScreenTransition
+ * @see SlidingInTransition
+ * @see SlidingOutTransition
  */
-class SlidingScreenTransition extends TimedScreenTransition {
+class SlidingTransition extends TimedTransition {
 
 	private SlidingDirection dir;
 	private SpriteBatch batch;
@@ -39,7 +39,7 @@ class SlidingScreenTransition extends TimedScreenTransition {
 	 */
 	private boolean slideLastScreen;
 
-	public SlidingScreenTransition(SpriteBatch batch, SlidingDirection dir,
+	public SlidingTransition(SpriteBatch batch, SlidingDirection dir,
 			boolean slideLastScreen, float duration,
 			Interpolation interpolation) {
 		super(duration, interpolation);

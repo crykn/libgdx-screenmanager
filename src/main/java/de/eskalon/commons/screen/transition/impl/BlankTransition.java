@@ -17,16 +17,17 @@ package de.eskalon.commons.screen.transition.impl;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import de.eskalon.commons.screen.transition.TimedScreenTransition;
+import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
  * A blank screen transition going on for a given duration.
  * 
+ * @since 0.3.0
  * @author damios
  */
-public class BlankScreenTransition extends TimedScreenTransition {
+public class BlankTransition extends TimedTransition {
 
-	public BlankScreenTransition(float duration) {
+	public BlankTransition(float duration) {
 		super(duration);
 	}
 

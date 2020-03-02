@@ -10,7 +10,7 @@ public class TimedScreenTransitionTest {
 
 	@Test
 	public void test() {
-		TimedScreenTransition t = new TimedScreenTransition(5) {
+		TimedTransition t = new TimedTransition(5) {
 			@Override
 			public void render(float delta, TextureRegion currScreen,
 					TextureRegion nextScreen, float progress) {

@@ -10,6 +10,7 @@ public class DesktopLauncher {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = MyGdxGame.TITLE;
+		config.foregroundFPS = 0;
 		config.height = 720;
 		config.width = 1024;
 		config.resizable = false;

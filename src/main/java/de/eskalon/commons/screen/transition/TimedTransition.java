@@ -25,7 +25,7 @@ import com.badlogic.gdx.math.Interpolation;
  * 
  * @author damios
  */
-public abstract class TimedScreenTransition extends ScreenTransition {
+public abstract class TimedTransition extends ScreenTransition {
 
 	@Nullable
 	private Interpolation interpolation;
@@ -38,7 +38,7 @@ public abstract class TimedScreenTransition extends ScreenTransition {
 	 * @param interpolation
 	 *            the interpolation to use
 	 */
-	public TimedScreenTransition(float duration,
+	public TimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
 		this.interpolation = interpolation;
 		this.duration = duration;
@@ -48,7 +48,7 @@ public abstract class TimedScreenTransition extends ScreenTransition {
 	 * @param duration
 	 *            the transition's duration in seconds
 	 */
-	public TimedScreenTransition(float duration) {
+	public TimedTransition(float duration) {
 		this(duration, null);
 	}
 

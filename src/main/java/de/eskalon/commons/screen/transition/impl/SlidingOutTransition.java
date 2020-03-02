@@ -21,25 +21,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
 /**
- * A transition where the new screen is sliding in.
+ * A transition where the last screen is sliding out.
  * 
+ * @since 0.3.0
  * @author damios
  * 
- * @see SlidingOutScreenTransition
+ * @see SlidingInTransition
  */
-public class SlidingInScreenTransition extends SlidingScreenTransition {
+public class SlidingOutTransition extends SlidingTransition {
 
 	/**
 	 * @param batch
 	 *            the sprite batch used to render
 	 * @param dir
-	 *            the direction the new screen should slide to
+	 *            the direction the last screen should slide to
 	 * @param duration
 	 *            the duration over which the slide should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
-	public SlidingInScreenTransition(SpriteBatch batch, SlidingDirection dir,
+	public SlidingOutTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration, @Nullable Interpolation interpolation) {
 		super(batch, dir, false, duration, interpolation);
 	}
@@ -48,11 +49,11 @@ public class SlidingInScreenTransition extends SlidingScreenTransition {
 	 * @param batch
 	 *            the sprite batch used to render
 	 * @param dir
-	 *            the direction the new screen should slide to
+	 *            the direction the last screen should slide to
 	 * @param duration
 	 *            the duration over which the slide should happen
 	 */
-	public SlidingInScreenTransition(SpriteBatch batch, SlidingDirection dir,
+	public SlidingOutTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration) {
 		this(batch, dir, duration, null);
 	}

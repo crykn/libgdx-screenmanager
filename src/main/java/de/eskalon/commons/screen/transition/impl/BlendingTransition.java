@@ -22,24 +22,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.eskalon.commons.screen.transition.TimedScreenTransition;
+import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
  * A transition that blends two screens together over a certain time interval.
  *
+ * @since 0.3.0
  * @author damios
  */
-public class BlendingScreenTransition extends TimedScreenTransition {
+public class BlendingTransition extends TimedTransition {
 
 	private SpriteBatch batch;
 
-	public BlendingScreenTransition(SpriteBatch batch, float duration,
+	public BlendingTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
 		super(duration, interpolation);
 		this.batch = batch;
 	}
 
-	public BlendingScreenTransition(SpriteBatch batch, float duration) {
+	public BlendingTransition(SpriteBatch batch, float duration) {
 		this(batch, duration, null);
 	}
 
