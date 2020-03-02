@@ -13,17 +13,22 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen;
+package de.eskalon.commons.screen.transition.impl;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import de.eskalon.commons.screen.transition.TimedScreenTransition;
 
 /**
- * A blank screen.
- * <p>
- * Is used internally when no screen has been
- * {@linkplain ScreenManager#pushScreen(String, String) pushed} yet.
+ * A blank screen transition going on for a given duration.
  * 
  * @author damios
  */
-public class BlankScreen extends ManagedScreen {
+public class BlankScreenTransition extends TimedScreenTransition {
+
+	public BlankScreenTransition(float duration) {
+		super(duration);
+	}
 
 	@Override
 	protected void create() {
@@ -31,23 +36,14 @@ public class BlankScreen extends ManagedScreen {
 	}
 
 	@Override
-	public void render(float delta) {
-		// do nothing
-	}
-
-	@Override
-	public void hide() {
-		// not needed
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// not needed
-	}
-
-	@Override
 	public void dispose() {
 		// not needed
+	}
+
+	@Override
+	public void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen, float progress) {
+		// do nothing
 	}
 
 }

@@ -13,41 +13,25 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen;
+package de.eskalon.commons.screen.transition.impl;
 
 /**
- * A blank screen.
- * <p>
- * Is used internally when no screen has been
- * {@linkplain ScreenManager#pushScreen(String, String) pushed} yet.
+ * An enum denoting the slide direction for the respective transitions.
  * 
  * @author damios
+ * 
+ * @see SlidingInScreenTransition
+ * @see SlidingOutScreenTransition
  */
-public class BlankScreen extends ManagedScreen {
+public enum SlidingDirection {
+	UP(0, 1), DOWN(0, -1), LEFT(-1, 0), RIGHT(1, 0);
 
-	@Override
-	protected void create() {
-		// not needed
-	}
+	public final int xPosFactor;
+	public final int yPosFactor;
 
-	@Override
-	public void render(float delta) {
-		// do nothing
-	}
-
-	@Override
-	public void hide() {
-		// not needed
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// not needed
-	}
-
-	@Override
-	public void dispose() {
-		// not needed
+	SlidingDirection(int xPosFactor, int yPosFactor) {
+		this.xPosFactor = xPosFactor;
+		this.yPosFactor = yPosFactor;
 	}
 
 }

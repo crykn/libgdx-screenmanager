@@ -21,6 +21,9 @@ public class GreenScreen extends ManagedScreen {
 		this.addInputProcessor(new InputAdapter() {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				/*
+				 * Switch using a blending transition.
+				 */
 				game.getScreenManager().pushScreen("blue", "blending_transition");
 				return true;
 			}

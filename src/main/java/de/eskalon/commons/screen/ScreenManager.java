@@ -29,14 +29,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.google.common.base.Preconditions;
 
 import de.eskalon.commons.input.BasicInputMultiplexer;
@@ -95,7 +93,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	private ManagedScreen currScreen;
 
 	/**
-	 * The blank screen that is rendered, when no screen was pushed yet.
+	 * The blank screen used internally when no screen has been pushed yet.
 	 */
 	private BlankScreen blankScreen;
 
@@ -140,13 +138,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		if (lastFBO != null)
 			lastFBO.dispose();
 		lastFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
-				false) {
-			@Override
-			protected void disposeColorTexture(Texture colorTexture) {
-				System.out.println("asas");
-				super.disposeColorTexture(colorTexture);
-			}
-		};
+				false);
 		if (currFBO != null)
 			currFBO.dispose();
 		currFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
@@ -261,7 +253,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * @param transitionName
 	 *            the transition effect; can be {@code null}
 	 */
-	public final void pushScreen(String name, @Nullable String transitionName) {
+	public void pushScreen(String name, @Nullable String transitionName) {
 		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
 			Gdx.app.debug("ScreenManager", String.format(
 					"Screen '%s' was pushed, using the transition '%s'", name,

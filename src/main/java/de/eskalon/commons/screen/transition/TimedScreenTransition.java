@@ -15,7 +15,10 @@
 
 package de.eskalon.commons.screen.transition;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 
 /**
  * A screen transition that lasts for a certain duration.
@@ -24,15 +27,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public abstract class TimedScreenTransition extends ScreenTransition {
 
+	@Nullable
+	private Interpolation interpolation;
 	private float duration;
 	private float timePassed;
 
 	/**
 	 * @param duration
-	 *            the transition's duration in seconds.
+	 *            the transition's duration in seconds
+	 * @param interpolation
+	 *            the interpolation to use
+	 */
+	public TimedScreenTransition(float duration,
+			@Nullable Interpolation interpolation) {
+		this.interpolation = interpolation;
+		this.duration = duration;
+	}
+
+	/**
+	 * @param duration
+	 *            the transition's duration in seconds
 	 */
 	public TimedScreenTransition(float duration) {
-		this.duration = duration;
+		this(duration, null);
 	}
 
 	@Override
@@ -42,11 +59,13 @@ public abstract class TimedScreenTransition extends ScreenTransition {
 	}
 
 	@Override
-	public final void render(float delta, TextureRegion lastScreen,
+	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen) {
 		this.timePassed = this.timePassed + delta;
 
 		float progress = this.timePassed / duration;
+		if (interpolation != null)
+			progress = interpolation.apply(progress);
 
 		render(delta, lastScreen, currScreen, progress > 1F ? 1F : progress);
 	}

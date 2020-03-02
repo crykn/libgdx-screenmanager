@@ -13,11 +13,16 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen.transition;
+package de.eskalon.commons.screen.transition.impl;
+
+import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
+
+import de.eskalon.commons.screen.transition.TimedScreenTransition;
 
 /**
  * A transition that blends two screens together over a certain time interval.
@@ -28,10 +33,14 @@ public class BlendingScreenTransition extends TimedScreenTransition {
 
 	private SpriteBatch batch;
 
-	public BlendingScreenTransition(SpriteBatch batch) {
-		super(1F);
-
+	public BlendingScreenTransition(SpriteBatch batch, float duration,
+			@Nullable Interpolation interpolation) {
+		super(duration, interpolation);
 		this.batch = batch;
+	}
+
+	public BlendingScreenTransition(SpriteBatch batch, float duration) {
+		this(batch, duration, null);
 	}
 
 	@Override

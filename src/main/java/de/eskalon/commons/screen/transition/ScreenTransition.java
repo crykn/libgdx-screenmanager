@@ -23,7 +23,7 @@ import de.eskalon.commons.screen.ScreenManager;
 /**
  * A transition effect between two screen for use with a {@link ScreenManager}.
  * Transitions are intended as objects that are created only once when the game
- * is started.
+ * is started and are then reused.
  * <p>
  * The {@link #create()} method is called when the transition is first used. It
  * can also be initialized manually by calling
