@@ -32,8 +32,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class GLUtils {
 
 	/**
-	 * The buffer used. A size of 64 bytes is required as at most 16 integer
-	 * elements can be returned.
+	 * The buffer used internally. A size of 64 bytes is required as at most 16
+	 * integer elements can be returned.
 	 */
 	private static final IntBuffer USED_INT_BUFF = ByteBuffer
 			.allocateDirect(16 * Integer.BYTES).order(ByteOrder.nativeOrder())

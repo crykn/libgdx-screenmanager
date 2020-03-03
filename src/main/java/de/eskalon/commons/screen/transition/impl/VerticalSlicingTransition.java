@@ -46,7 +46,9 @@ public class VerticalSlicingTransition extends BlankTimedTransition {
 	public VerticalSlicingTransition(SpriteBatch batch, int sliceCount,
 			float duration, @Nullable Interpolation interpolation) {
 		super(duration, interpolation);
-		Preconditions.checkArgument(sliceCount >= 2);
+		Preconditions.checkNotNull(batch);
+		Preconditions.checkArgument(sliceCount >= 2,
+				"The slice count has to be at least 2");
 		this.batch = batch;
 		this.sliceCount = sliceCount;
 	}

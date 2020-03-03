@@ -18,6 +18,7 @@ package de.eskalon.commons.screen.transition;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.google.common.base.Preconditions;
 
 import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingDirection;
@@ -46,6 +47,9 @@ public class SlidingTransition extends BlankTimedTransition {
 			boolean slideLastScreen, float duration,
 			Interpolation interpolation) {
 		super(duration, interpolation);
+		Preconditions.checkNotNull(batch);
+		Preconditions.checkNotNull(dir);
+
 		this.batch = batch;
 		this.dir = dir;
 		this.slideLastScreen = slideLastScreen;

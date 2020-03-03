@@ -21,8 +21,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-
-import de.eskalon.commons.screen.transition.TimedTransition;
+import com.google.common.base.Preconditions;
 
 /**
  * A transition that blends two screens together over a certain time interval.
@@ -37,6 +36,7 @@ public class BlendingTransition extends BlankTimedTransition {
 	public BlendingTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
 		super(duration, interpolation);
+		Preconditions.checkNotNull(batch);
 		this.batch = batch;
 	}
 
