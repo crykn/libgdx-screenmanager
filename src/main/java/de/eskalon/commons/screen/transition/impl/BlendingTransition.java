@@ -51,7 +51,6 @@ public class BlendingTransition extends BlankTimedTransition {
 
 		// Blends the two screens
 		Color c = batch.getColor();
-		batch.setColor(c.r, c.g, c.b, 1);
 		batch.draw(lastScreen, 0, 0);
 
 		batch.setColor(c.r, c.g, c.b, progress);
