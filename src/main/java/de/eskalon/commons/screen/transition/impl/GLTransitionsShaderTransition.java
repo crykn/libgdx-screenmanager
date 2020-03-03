@@ -18,6 +18,7 @@ package de.eskalon.commons.screen.transition.impl;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 
 /**
@@ -34,6 +35,7 @@ import com.badlogic.gdx.math.Interpolation;
  * textures based on the variation of a contextual progress value from
  * {@code 0.0} to {@code 1.0}.
  * 
+ * @version 0.4.0
  * @author damios
  *
  * @see <a href=
@@ -94,9 +96,9 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	public GLTransitionsShaderTransition(String glTransitionsCode,
 			OrthographicCamera camera, float duration,
 			@Nullable Interpolation interpolation) {
-		super(VERT_SHADER,
+		super(ShaderProgram.prependVertexCode + VERT_SHADER,
 				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
-				camera, duration, interpolation);
+				camera, duration, interpolation, true);
 	}
 
 }

@@ -22,6 +22,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.google.common.base.Preconditions;
@@ -46,6 +48,7 @@ import de.eskalon.commons.utils.graphics.MeshGenerator;
  * </ul>
  * </ul>
  * 
+ * @version 0.4.0
  * @author damios
  * 
  * @see GLTransitionsShaderTransition
@@ -55,6 +58,7 @@ public class ShaderTransition extends TimedTransition {
 	private ShaderProgram program;
 
 	private OrthographicCamera camera;
+	private RenderContext renderContext;
 	/**
 	 * A screen filling quad.
 	 */
@@ -64,15 +68,56 @@ public class ShaderTransition extends TimedTransition {
 	private int progressLoc;
 
 	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
+			float duration) {
+		this(vert, frag, camera, duration, null);
+	}
+
+	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
 			float duration, @Nullable Interpolation interpolation) {
+		this(vert, frag, camera, duration, interpolation, false);
+	}
+
+	/**
+	 * @param vert
+	 *            the vertex shader code
+	 * @param frag
+	 *            the fragment shader code
+	 * @param camera
+	 *            the camera
+	 * @param duration
+	 *            the duration of the transition
+	 * @param interpolation
+	 *            the interpolation to use
+	 * @param ignorePrepend
+	 *            whether to ignore the code in
+	 *            {@link ShaderProgram#prependFragmentCode} and
+	 *            {@link ShaderProgram#prependVertexCode}
+	 */
+	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
+			float duration, @Nullable Interpolation interpolation,
+			boolean ignorePrepend) {
 		super(duration, interpolation);
 
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
 		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
-		Preconditions.checkNotNull(camera);
+		Preconditions.checkNotNull(camera, "The camera cannot be null");
 
 		this.camera = camera;
+
+		String prependVertexCode = null, prependFragmentCode = null;
+		if (ignorePrepend) {
+			prependVertexCode = ShaderProgram.prependVertexCode;
+			ShaderProgram.prependVertexCode = null;
+			prependFragmentCode = ShaderProgram.prependFragmentCode;
+			ShaderProgram.prependFragmentCode = null;
+		}
+
 		this.program = new ShaderProgram(vert, frag);
+
+		if (ignorePrepend) {
+			ShaderProgram.prependVertexCode = prependVertexCode;
+			ShaderProgram.prependFragmentCode = prependFragmentCode;
+		}
 
 		Preconditions.checkArgument(this.program.isCompiled(),
 				"Failed to compile shader program: " + this.program.getLog());
@@ -85,31 +130,31 @@ public class ShaderTransition extends TimedTransition {
 		this.currScreenLoc = this.program.getUniformLocation("currScreen");
 		this.progressLoc = this.program.getUniformLocation("progress");
 
+		this.renderContext = new RenderContext(
+				new DefaultTextureBinder(DefaultTextureBinder.ROUNDROBIN));
+
 		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
+		this.renderContext.begin();
 		this.program.begin();
 
 		// Set uniforms
 		this.program.setUniformMatrix(this.projTransLoc, camera.combined);
 		this.program.setUniformf(this.progressLoc, progress);
-		this.program.setUniformi(this.lastScreenLoc, 1);
-		this.program.setUniformi(this.currScreenLoc, 2);
-
-		// Bind textures
-		Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE1);
-		lastScreen.getTexture().bind();
-		Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE2);
-		currScreen.getTexture().bind();
-		Gdx.gl20.glActiveTexture(GL20.GL_TEXTURE0);
+		this.program.setUniformi(this.lastScreenLoc,
+				renderContext.textureBinder.bind(lastScreen.getTexture()));
+		this.program.setUniformi(this.currScreenLoc,
+				renderContext.textureBinder.bind(currScreen.getTexture()));
 
 		// Render the screens using the shader
 		this.screenQuad.render(this.program, GL20.GL_TRIANGLE_STRIP);
 
 		this.program.end();
+		this.renderContext.end();
 	}
 
 	@Override
