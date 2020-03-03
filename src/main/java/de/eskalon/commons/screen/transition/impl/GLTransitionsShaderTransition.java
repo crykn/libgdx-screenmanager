@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen.transition;
+package de.eskalon.commons.screen.transition.impl;
 
 import javax.annotation.Nullable;
 

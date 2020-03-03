@@ -13,12 +13,14 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.utils;
+package de.eskalon.commons.utils.graphics;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 
 /**
+ * Utility methods for generating meshes.
+ * 
  * @author damios
  */
 public final class MeshGenerator {

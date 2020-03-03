@@ -19,6 +19,11 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+/**
+ * A tuple.
+ * 
+ * @author damios
+ */
 public class Tuple<X, Y> {
 
 	@Nullable

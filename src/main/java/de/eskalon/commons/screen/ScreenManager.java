@@ -62,14 +62,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		implements Disposable {
 
 	/**
-	 * This frame buffer object is used to store the content of the previously
-	 * active screen while a transition is played.
+	 * This framebuffer is used to store the content of the previously active
+	 * screen while a transition is played.
 	 */
 	private FrameBuffer lastFBO;
 
 	/**
-	 * This frame buffer object is used to store the content of the active
-	 * screen while a transition is played.
+	 * This framebuffer is used to store the content of the active screen while
+	 * a transition is played.
 	 */
 	private FrameBuffer currFBO;
 
@@ -438,12 +438,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	/**
 	 * Renders a {@linkplain ManagedScreen screen} into a texture region using
-	 * the given {@linkplain FrameBuffer frame buffer object}.
+	 * the given {@linkplain FrameBuffer framebuffer}.
 	 * 
 	 * @param screen
 	 *            the screen to be rendered
 	 * @param fbo
-	 *            the frame buffer object the screen gets rendered into
+	 *            the framebuffer the screen gets rendered into
 	 * @param delta
 	 *            the time delta
 	 * 

@@ -13,11 +13,16 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen.transition.impl;
+package de.eskalon.commons.screen.transition;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+
+import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
+import de.eskalon.commons.screen.transition.impl.SlidingDirection;
+import de.eskalon.commons.screen.transition.impl.SlidingInTransition;
+import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 
 /**
  * The base class for sliding screen transitions.
@@ -27,7 +32,7 @@ import com.badlogic.gdx.math.Interpolation;
  * @see SlidingInTransition
  * @see SlidingOutTransition
  */
-class SlidingTransition extends BlankTimedTransition {
+public class SlidingTransition extends BlankTimedTransition {
 
 	private SlidingDirection dir;
 	private SpriteBatch batch;

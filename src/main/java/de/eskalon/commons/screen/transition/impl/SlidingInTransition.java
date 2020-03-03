@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
+import de.eskalon.commons.screen.transition.SlidingTransition;
+
 /**
  * A transition where the new screen is sliding in.
  * 

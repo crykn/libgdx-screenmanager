@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.screen.transition;
+package de.eskalon.commons.screen.transition.impl;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +26,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 import com.google.common.base.Preconditions;
 
-import de.eskalon.commons.utils.MeshGenerator;
+import de.eskalon.commons.screen.transition.TimedTransition;
+import de.eskalon.commons.utils.graphics.MeshGenerator;
 
 /**
  * A transition that is using a shader to render the two transitioning screens.
