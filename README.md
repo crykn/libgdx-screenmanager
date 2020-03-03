@@ -58,13 +58,13 @@ public class MyGdxGame extends ManagedGame {
 
 **Some additional notes:**
 
-* Screens and transitions are intended as classes that are instantiated _once_ at the beginning. Their state can be reset in `Screen#show()`/`ScreenTransition#reset()`, if needed.
-* The screen's/transitions's `create()` method is either called when they are first shown or when they are manually initialized. The latter is mostly done by a loading screen after the screen's assets have been loaded.
 * Input processors have to be added in a screen via `ManagedScreen#addInputProcessor(...)`. This is needed so the input processors can be automatically registered/unregistered when the screen is shown/hidden.
-* After a screen was pushed, the actual change of the screen happens in the first `game.render(...)` call after that. This ensures that `Screen#show()` and `Screen#hide()` are only called on the rendering thread.
-* If there is a transition still going on while a new one is pushed, the new one is queued until the current one is finished. 
 
 
 ## How the library works in detail
 
-The life-cycle of a screen that is pushed is detailed [here](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle).
+The following wiki entries detail some features of the library:
+
+- The [life-cycle of a screen](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle) that is pushed
+- The [custom FrameBuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nested fbos
+- Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions)

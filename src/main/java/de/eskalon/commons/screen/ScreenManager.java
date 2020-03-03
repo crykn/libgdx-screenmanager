@@ -39,6 +39,7 @@ import com.google.common.base.Preconditions;
 import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.Tuple;
+import de.eskalon.commons.utils.graphics.NestableFrameBuffer;
 
 /**
  * A screen manager that handles the different screens of a game and their
@@ -51,6 +52,10 @@ import de.eskalon.commons.utils.Tuple;
  * {@link #addScreen(String, ManagedScreen)} and
  * {@link #addScreenTransition(String, ScreenTransition)}. To actually show a
  * screen, push it via {@link #pushScreen(String, String)}.
+ * <p>
+ * As the screen manager is using framebuffers internally, screens and
+ * transitions have to use a {@link NestableFrameBuffer} if they want to use
+ * framebuffers as well.
  * 
  * @author damios
  * 
