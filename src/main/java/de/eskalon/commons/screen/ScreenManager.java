@@ -411,6 +411,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * @return the {@linkplain ManagedScreen screen} that was shown before the
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
+	@SuppressWarnings("unchecked")
 	@Nullable
 	public S getLastScreen() {
 		if (lastScreen == blankScreen)
@@ -424,6 +425,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * @return the current screen; is changed in the first render pass after
 	 *         {@link #pushScreen(String, String)} is called.
 	 */
+	@SuppressWarnings("unchecked")
 	public S getCurrentScreen() {
 		if (currScreen == blankScreen)
 			return null; // return null, as the blank screen is not the right

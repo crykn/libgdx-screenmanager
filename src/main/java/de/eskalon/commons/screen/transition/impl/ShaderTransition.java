@@ -168,7 +168,8 @@ public class ShaderTransition extends TimedTransition {
 	@Override
 	public void dispose() {
 		this.program.dispose();
-		this.screenQuad.dispose();
+		if (this.screenQuad != null)
+			this.screenQuad.dispose();
 	}
 
 }
