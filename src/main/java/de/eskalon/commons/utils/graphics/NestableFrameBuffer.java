@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer;
-import com.badlogic.gdx.graphics.glutils.GLFrameBuffer.FrameBufferBuilder;
 
 /**
  * An implementation of the libGDX {@link FrameBuffer} that supports nested
@@ -128,13 +127,16 @@ public class NestableFrameBuffer extends FrameBuffer {
 
 		if (GLUtils.getBoundFboHandle() != framebufferHandle) {
 			throw new IllegalStateException(
-					"The currently bound framebuffer doesn't match this one. Make sure the nested framebuffers are closed in the same order they were opened in! ");
+					"The currently bound framebuffer doesn't match this one. Make sure the nested framebuffers are closed in the same order they were opened in!");
 		}
 
 		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, previousFBOHandle);
 		Gdx.gl20.glViewport(x, y, width, height);
 	}
 
+	/**
+	 * A builder for a NestableFrameBuffer. Useful to add certain attachments.
+	 */
 	public static class NestableFrameBufferBuilder extends FrameBufferBuilder {
 		public NestableFrameBufferBuilder(int width, int height) {
 			super(width, height);
