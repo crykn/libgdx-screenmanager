@@ -23,9 +23,8 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 		// Do some basic stuff
 		this.batch = new SpriteBatch();
-		// this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
-		// this.camera.translate(viewportWidth / 2, viewportHeight / 2, 0);
-		// this.camera.update();
+		// this.camera = new OrthographicCamera();
+		// camera.combined.setToOrtho2D(0, 0, getWidth(), getHeight());
 
 		// Add screens
 		this.screenManager.addScreen("green", new GreenScreen());
@@ -44,6 +43,14 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 		this.screenManager.pushScreen("green", "blending_transition");
 
 		Gdx.app.debug("Game", "Initialization finished.");
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+
+		// this.camera.combined.setToOrtho2D(0, 0, width, height);
+		this.batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 	}
 
 }

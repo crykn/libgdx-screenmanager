@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		config.foregroundFPS = 0;
 		config.height = 720;
 		config.width = 1024;
-		config.resizable = false;
+		config.resizable = true;
 
 		try {
 			// Start the game

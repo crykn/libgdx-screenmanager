@@ -18,6 +18,7 @@ public class GreenScreen extends ManagedScreen {
 	@Override
 	protected void create() {
 		this.shapeRenderer = new ShapeRenderer();
+		this.shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, game.getWidth(), game.getHeight());
 		this.addInputProcessor(new InputAdapter() {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -49,7 +50,8 @@ public class GreenScreen extends ManagedScreen {
 
 	@Override
 	public void resize(int width, int height) {
-		// not needed
+		this.shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		this.shapeRenderer.updateMatrices();
 	}
 
 	@Override
