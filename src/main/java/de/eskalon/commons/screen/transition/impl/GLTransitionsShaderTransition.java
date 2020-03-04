@@ -18,7 +18,6 @@ package de.eskalon.commons.screen.transition.impl;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 
 /**
@@ -44,7 +43,7 @@ import com.badlogic.gdx.math.Interpolation;
  */
 public class GLTransitionsShaderTransition extends ShaderTransition {
 
-	private static final String VERT_SHADER = "#version 120\n#ifdef GL_ES\n" + 
+	private static final String VERT_SHADER = "#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
 			"\n" + 
@@ -61,7 +60,24 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"	v_texCoord0 = a_texCoord0;\n" + 
 			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
 			"}";
-	private static final String FRAG_SHADER_PREPEND = "#version 120\n#ifdef GL_ES\n" + 
+//	private static final String VERT_SHADER_GLSL_330 = "#version 330\n#ifdef GL_ES\n" + 
+//			"precision mediump float;\n" + 
+//			"#endif\n" + 
+//			"\n" + 
+//			"in vec3 a_position;\n" + 
+//			"in vec2 a_texCoord0;\n" + 
+//			"\n" + 
+//			"uniform mat4 u_projTrans;\n" + 
+//			"\n" + 
+//			"out vec3 v_position;\n" + 
+//			"out vec2 v_texCoord0;\n" + 
+//			"\n" + 
+//			"void main() {\n" + 
+//			"	v_position = a_position;\n" + 
+//			"	v_texCoord0 = a_texCoord0;\n" + 
+//			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
+//			"}";
+	private static final String FRAG_SHADER_PREPEND = "#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
 			"\n" + 
@@ -81,9 +97,32 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"vec4 getFromColor(vec2 uv) {\n" + 
 			"		return texture2D(lastScreen, uv);\n" + 
 			"}\n";
+//	private static final String FRAG_SHADER_PREPEND_GLSL_330 = "#version 330\n#ifdef GL_ES\n" + 
+//			"precision mediump float;\n" + 
+//			"#endif\n" + 
+//			"\n" + 
+//			"in vec3 v_position;\n" + 
+//			"in vec2 v_texCoord0;\n" + 
+//			"\n" + 
+//			"out vec4 out_Color;\n" + 
+//			"\n" + 
+//			"uniform sampler2D lastScreen;\n" + 
+//			"uniform sampler2D currScreen;\n" + 
+//			"uniform float progress;\n" + 
+//			"\n" + 
+//			"vec4 getToColor(vec2 uv) {\n" + 
+//			"		return texture(currScreen, uv);\n" + 
+//			"}\n" + 
+//			"\n" + 
+//			"vec4 getFromColor(vec2 uv) {\n" + 
+//			"		return texture(lastScreen, uv);\n" + 
+//			"}\n";
 	private static final String FRAG_SHADER_POSTPEND = "\nvoid main() {\n" + 
 		"	gl_FragColor = transition(v_texCoord0);\n" + 
 		"}\n";
+//	private static final String FRAG_SHADER_POSTPEND_GLSL_330 = "\nvoid main() {\n" + 
+//			"	out_Color = transition(v_texCoord0);\n" + 
+//			"}\n";
 	
 	/**
 	 * @param glTransitionsCode
@@ -96,7 +135,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	public GLTransitionsShaderTransition(String glTransitionsCode,
 			OrthographicCamera camera, float duration,
 			@Nullable Interpolation interpolation) {
-		super(ShaderProgram.prependVertexCode + VERT_SHADER,
+		super(VERT_SHADER,
 				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
 				camera, duration, interpolation, true);
 	}
