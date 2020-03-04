@@ -59,5 +59,10 @@ public class BlueScreen extends ManagedScreen {
 	public void hide() {
 		// not needed
 	}
+	
+	@Override
+	public Color getClearColor() {
+		return Color.WHITE;
+	}
 
 }
