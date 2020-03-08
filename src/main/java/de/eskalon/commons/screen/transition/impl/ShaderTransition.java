@@ -57,6 +57,10 @@ public class ShaderTransition extends TimedTransition {
 
 	private ShaderProgram program;
 
+	// Shader construction stuff
+	private boolean ignorePrepend;
+	protected String vertCode, fragCode;
+
 	private OrthographicCamera camera;
 	private RenderContext renderContext;
 	/**
@@ -78,6 +82,9 @@ public class ShaderTransition extends TimedTransition {
 	}
 
 	/**
+	 * Creates a shader transition. The shader program is compiled in the
+	 * {@link #create()} method.
+	 * 
 	 * @param vert
 	 *            the vertex shader code
 	 * @param frag
@@ -103,7 +110,14 @@ public class ShaderTransition extends TimedTransition {
 		Preconditions.checkNotNull(camera, "The camera cannot be null");
 
 		this.camera = camera;
+		this.ignorePrepend = ignorePrepend;
+		this.vertCode = vert;
+		this.fragCode = frag;
+	}
 
+	@Override
+	protected void create() {
+		// Compile the shader
 		String prependVertexCode = null, prependFragmentCode = null;
 		if (ignorePrepend) {
 			prependVertexCode = ShaderProgram.prependVertexCode;
@@ -112,7 +126,7 @@ public class ShaderTransition extends TimedTransition {
 			ShaderProgram.prependFragmentCode = null;
 		}
 
-		this.program = new ShaderProgram(vert, frag);
+		this.program = new ShaderProgram(vertCode, fragCode);
 
 		if (ignorePrepend) {
 			ShaderProgram.prependVertexCode = prependVertexCode;
@@ -121,10 +135,8 @@ public class ShaderTransition extends TimedTransition {
 
 		Preconditions.checkArgument(this.program.isCompiled(),
 				"Failed to compile shader program: " + this.program.getLog());
-	}
 
-	@Override
-	protected void create() {
+		// Get the uniform locations
 		this.projTransLoc = this.program.getUniformLocation("u_projTrans");
 		this.lastScreenLoc = this.program.getUniformLocation("lastScreen");
 		this.currScreenLoc = this.program.getUniformLocation("currScreen");
