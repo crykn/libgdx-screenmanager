@@ -57,10 +57,6 @@ public class ShaderTransition extends TimedTransition {
 
 	private ShaderProgram program;
 
-	// Shader construction stuff
-	private boolean ignorePrepend;
-	protected String vertCode, fragCode;
-
 	private OrthographicCamera camera;
 	private RenderContext renderContext;
 	/**
@@ -71,53 +67,57 @@ public class ShaderTransition extends TimedTransition {
 	private int lastScreenLoc, currScreenLoc;
 	private int progressLoc;
 
-	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
-			float duration) {
-		this(vert, frag, camera, duration, null);
-	}
-
-	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
-			float duration, @Nullable Interpolation interpolation) {
-		this(vert, frag, camera, duration, interpolation, false);
+	/**
+	 * Creates a shader transition.
+	 * <p>
+	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
+	 * compiled} before {@link #create()} is called.
+	 * 
+	 * @param camera
+	 * @param duration
+	 * 
+	 * @see #ShaderTransition(OrthographicCamera, float, Interpolation)
+	 */
+	public ShaderTransition(OrthographicCamera camera, float duration) {
+		this(camera, duration, null);
 	}
 
 	/**
-	 * Creates a shader transition. The shader program is compiled in the
-	 * {@link #create()} method.
+	 * Creates a shader transition.
+	 * <p>
+	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
+	 * compiled} before {@link #create()} is called.
 	 * 
-	 * @param vert
-	 *            the vertex shader code
-	 * @param frag
-	 *            the fragment shader code
 	 * @param camera
 	 *            the camera
 	 * @param duration
 	 *            the duration of the transition
 	 * @param interpolation
 	 *            the interpolation to use
+	 */
+	public ShaderTransition(OrthographicCamera camera, float duration,
+			@Nullable Interpolation interpolation) {
+		super(duration, interpolation);
+
+		Preconditions.checkNotNull(camera, "The camera cannot be null");
+
+		this.camera = camera;
+	}
+
+	/**
+	 * @param vert
+	 *            the vertex shader code
+	 * @param frag
+	 *            the fragment shader code
 	 * @param ignorePrepend
 	 *            whether to ignore the code in
 	 *            {@link ShaderProgram#prependFragmentCode} and
 	 *            {@link ShaderProgram#prependVertexCode}
 	 */
-	public ShaderTransition(String vert, String frag, OrthographicCamera camera,
-			float duration, @Nullable Interpolation interpolation,
-			boolean ignorePrepend) {
-		super(duration, interpolation);
-
+	public void compileShader(String vert, String frag, boolean ignorePrepend) {
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
 		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
-		Preconditions.checkNotNull(camera, "The camera cannot be null");
 
-		this.camera = camera;
-		this.ignorePrepend = ignorePrepend;
-		this.vertCode = vert;
-		this.fragCode = frag;
-	}
-
-	@Override
-	protected void create() {
-		// Compile the shader
 		String prependVertexCode = null, prependFragmentCode = null;
 		if (ignorePrepend) {
 			prependVertexCode = ShaderProgram.prependVertexCode;
@@ -126,7 +126,7 @@ public class ShaderTransition extends TimedTransition {
 			ShaderProgram.prependFragmentCode = null;
 		}
 
-		this.program = new ShaderProgram(vertCode, fragCode);
+		this.program = new ShaderProgram(vert, frag);
 
 		if (ignorePrepend) {
 			ShaderProgram.prependVertexCode = prependVertexCode;
@@ -135,8 +135,13 @@ public class ShaderTransition extends TimedTransition {
 
 		Preconditions.checkArgument(this.program.isCompiled(),
 				"Failed to compile shader program: " + this.program.getLog());
+	}
 
-		// Get the uniform locations
+	@Override
+	protected void create() {
+		Preconditions.checkState(this.program != null,
+				"The shader has to be compiled before the transition can be created!");
+
 		this.projTransLoc = this.program.getUniformLocation("u_projTrans");
 		this.lastScreenLoc = this.program.getUniformLocation("lastScreen");
 		this.currScreenLoc = this.program.getUniformLocation("currScreen");

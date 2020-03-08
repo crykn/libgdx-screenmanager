@@ -135,9 +135,11 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	public GLTransitionsShaderTransition(String glTransitionsCode,
 			OrthographicCamera camera, float duration,
 			@Nullable Interpolation interpolation) {
-		super(VERT_SHADER,
+		super(camera, duration, interpolation);
+
+		compileShader(VERT_SHADER,
 				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
-				camera, duration, interpolation, true);
+				true);
 	}
 
 }
