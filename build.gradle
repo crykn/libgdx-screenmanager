@@ -3,7 +3,7 @@ apply plugin: "eclipse"
 apply plugin: "idea"
 apply plugin: "jacoco"
 
-version '0.4.0'
+version '0.4.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
