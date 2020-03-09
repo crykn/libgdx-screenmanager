@@ -42,7 +42,7 @@ import com.badlogic.gdx.math.Interpolation;
  *      information on the GL Transition spec</a>
  */
 public class GLTransitionsShaderTransition extends ShaderTransition {
-
+	
 	private static final String VERT_SHADER = "#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
@@ -123,20 +123,28 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 //	private static final String FRAG_SHADER_POSTPEND_GLSL_330 = "\nvoid main() {\n" + 
 //			"	out_Color = transition(v_texCoord0);\n" + 
 //			"}\n";
-	
+
 	/**
-	 * @param glTransitionsCode
-	 *            the GL Transitions shader code; please remember to
-	 *            uncomment/set the transition parameters!
+	 * Creates a shader transition using a GL Transition code.
+	 * <p>
+	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
+	 * before {@link #create()} is called.
+	 * 
 	 * @param camera
 	 * @param duration
 	 * @param interpolation
 	 */
-	public GLTransitionsShaderTransition(String glTransitionsCode,
-			OrthographicCamera camera, float duration,
-			@Nullable Interpolation interpolation) {
+	public GLTransitionsShaderTransition(OrthographicCamera camera,
+			float duration, @Nullable Interpolation interpolation) {
 		super(camera, duration, interpolation);
+	}
 
+	/**
+	 * @param glTransitionsCode
+	 *            the GL Transitions shader code; please remember to
+	 *            uncomment/set the transition parameters!
+	 */
+	public void compileGLTransition(String glTransitionsCode) {
 		compileShader(VERT_SHADER,
 				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
 				true);
