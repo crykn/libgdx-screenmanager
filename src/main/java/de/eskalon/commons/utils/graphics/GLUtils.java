@@ -45,12 +45,11 @@ public class GLUtils {
 	 * <p>
 	 * Doesn't work in WebGL!
 	 * 
-	 * @return returns a single value, the name of the currently bound
-	 *         framebuffer. The initial value is {@code 0}, indicating the
-	 *         default framebuffer.
+	 * @return returns the name of the currently bound framebuffer. The initial
+	 *         value is {@code 0}, indicating the default framebuffer.
 	 * 
-	 * @see @see <a href= "https://github.com/libgdx/libgdx/issues/4688">The
-	 *      libGDX issue detailing the WebGL problems</a>
+	 * @see <a href= "https://github.com/libgdx/libgdx/issues/4688">The libGDX
+	 *      issue detailing the WebGL problems</a>
 	 */
 	public static synchronized int getBoundFboHandle() {
 		if (Gdx.app.getType() == ApplicationType.WebGL)
