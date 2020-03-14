@@ -136,12 +136,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	protected void initBuffers() {
 		if (lastFBO != null)
 			lastFBO.dispose();
-		lastFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
-				false);
+		lastFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
+				currentHeight, false);
 		if (currFBO != null)
 			currFBO.dispose();
-		currFBO = new FrameBuffer(Format.RGBA8888, currentWidth, currentHeight,
-				false);
+		currFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
+				currentHeight, false);
 	}
 
 	/**
