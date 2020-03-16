@@ -43,6 +43,7 @@ import com.badlogic.gdx.math.Interpolation;
  */
 public class GLTransitionsShaderTransition extends ShaderTransition {
 	
+	// @formatter:off
 	private static final String VERT_SHADER = "#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
@@ -123,6 +124,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 //	private static final String FRAG_SHADER_POSTPEND_GLSL_330 = "\nvoid main() {\n" + 
 //			"	out_Color = transition(v_texCoord0);\n" + 
 //			"}\n";
+	// @formatter:on
 
 	/**
 	 * Creates a shader transition using a GL Transition code.
