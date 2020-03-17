@@ -126,8 +126,9 @@ public class NestableFrameBuffer extends FrameBuffer {
 		isActive = false;
 
 		if (GLUtils.getBoundFboHandle() != framebufferHandle) {
-			throw new IllegalStateException(
-					"The currently bound framebuffer doesn't match this one. Make sure the nested framebuffers are closed in the same order they were opened in!");
+			throw new IllegalStateException("The currently bound framebuffer ("
+					+ GLUtils.getBoundFboHandle()
+					+ ") doesn't match this one. Make sure the nested framebuffers are closed in the same order they were opened in!");
 		}
 
 		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, previousFBOHandle);
