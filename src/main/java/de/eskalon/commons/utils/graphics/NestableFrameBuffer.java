@@ -134,6 +134,13 @@ public class NestableFrameBuffer extends FrameBuffer {
 		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, previousFBOHandle);
 		Gdx.gl20.glViewport(x, y, width, height);
 	}
+	
+	@Override
+	protected void build() {
+		int previousFBOHandle = GLUtils.getBoundFboHandle();
+		super.build();
+		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, previousFBOHandle);
+	}
 
 	/**
 	 * A builder for a NestableFrameBuffer. Useful to add certain attachments.
