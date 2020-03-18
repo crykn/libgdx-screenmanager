@@ -30,6 +30,7 @@ import com.google.common.base.Preconditions;
 
 import de.eskalon.commons.screen.transition.TimedTransition;
 import de.eskalon.commons.utils.graphics.MeshGenerator;
+import de.eskalon.commons.utils.graphics.ShaderProgramFactory;
 
 /**
  * A transition that is using a shader to render the two transitioning screens.
@@ -118,23 +119,8 @@ public class ShaderTransition extends TimedTransition {
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
 		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
 
-		String prependVertexCode = null, prependFragmentCode = null;
-		if (ignorePrepend) {
-			prependVertexCode = ShaderProgram.prependVertexCode;
-			ShaderProgram.prependVertexCode = null;
-			prependFragmentCode = ShaderProgram.prependFragmentCode;
-			ShaderProgram.prependFragmentCode = null;
-		}
-
-		this.program = new ShaderProgram(vert, frag);
-
-		if (ignorePrepend) {
-			ShaderProgram.prependVertexCode = prependVertexCode;
-			ShaderProgram.prependFragmentCode = prependFragmentCode;
-		}
-
-		Preconditions.checkArgument(this.program.isCompiled(),
-				"Failed to compile shader program: " + this.program.getLog());
+		this.program = ShaderProgramFactory.createShaderProgram(vert, frag,
+				true, ignorePrepend);
 	}
 
 	@Override

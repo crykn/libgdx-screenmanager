@@ -37,33 +37,50 @@ public final class MeshGenerator {
 	 */
 	public static Mesh createFullScreenQuad(int screenWidth, int screenHeight,
 			boolean flipY) {
+		return createQuad(0, 0, screenWidth, screenHeight, flipY);
+	}
+
+	/**
+	 * Coordinate system: y-up.
+	 * 
+	 * @param x
+	 *            the bottom left x
+	 * @param y
+	 *            the bottom left y
+	 * @param width
+	 * @param height
+	 * @param flipY
+	 * @return
+	 */
+	public static Mesh createQuad(float x, float y, float width, float height,
+			boolean flipY) {
 		float[] verts = new float[20];
 		int i = 0;
 
 		// Bottom left
-		verts[i++] = 0;
-		verts[i++] = 0;
+		verts[i++] = x;
+		verts[i++] = y;
 		verts[i++] = 0;
 		verts[i++] = 0;
 		verts[i++] = flipY ? 0 : 1;
 
 		// Top left
-		verts[i++] = 0;
-		verts[i++] = screenHeight;
+		verts[i++] = x;
+		verts[i++] = y + height;
 		verts[i++] = 0;
 		verts[i++] = 0;
 		verts[i++] = flipY ? 1 : 0;
 
 		// Bottom right
-		verts[i++] = screenWidth;
-		verts[i++] = 0;
+		verts[i++] = x + width;
+		verts[i++] = y;
 		verts[i++] = 0;
 		verts[i++] = 1;
 		verts[i++] = flipY ? 0 : 1;
 
 		// Top right
-		verts[i++] = screenWidth;
-		verts[i++] = screenHeight;
+		verts[i++] = x + width;
+		verts[i++] = y + height;
 		verts[i++] = 0;
 		verts[i++] = 1;
 		verts[i++] = flipY ? 1 : 0;
