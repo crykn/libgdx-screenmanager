@@ -41,8 +41,6 @@ public final class MeshGenerator {
 	}
 
 	/**
-	 * Coordinate system: y-up.
-	 * 
 	 * @param x
 	 *            the bottom left x
 	 * @param y
@@ -54,33 +52,52 @@ public final class MeshGenerator {
 	 */
 	public static Mesh createQuad(float x, float y, float width, float height,
 			boolean flipY) {
+		return createQuadFromCoordinates(x, y, x + width, y + height, flipY);
+	}
+
+	/**
+	 * Coordinate system: y-up.
+	 * 
+	 * @param x1
+	 *            the left x
+	 * @param y1
+	 *            the bottom y
+	 * @param x2
+	 *            the right x
+	 * @param y2
+	 *            the top y
+	 * @param flipY
+	 * @return
+	 */
+	public static Mesh createQuadFromCoordinates(float x1, float y1, float x2,
+			float y2, boolean flipY) {
 		float[] verts = new float[20];
 		int i = 0;
 
 		// Bottom left
-		verts[i++] = x;
-		verts[i++] = y;
+		verts[i++] = x1;
+		verts[i++] = y1;
 		verts[i++] = 0;
 		verts[i++] = 0;
 		verts[i++] = flipY ? 0 : 1;
 
 		// Top left
-		verts[i++] = x;
-		verts[i++] = y + height;
+		verts[i++] = x1;
+		verts[i++] = y2;
 		verts[i++] = 0;
 		verts[i++] = 0;
 		verts[i++] = flipY ? 1 : 0;
 
 		// Bottom right
-		verts[i++] = x + width;
-		verts[i++] = y;
+		verts[i++] = x2;
+		verts[i++] = y1;
 		verts[i++] = 0;
 		verts[i++] = 1;
 		verts[i++] = flipY ? 0 : 1;
 
 		// Top right
-		verts[i++] = x + width;
-		verts[i++] = y + height;
+		verts[i++] = x2;
+		verts[i++] = y2;
 		verts[i++] = 0;
 		verts[i++] = 1;
 		verts[i++] = flipY ? 1 : 0;
