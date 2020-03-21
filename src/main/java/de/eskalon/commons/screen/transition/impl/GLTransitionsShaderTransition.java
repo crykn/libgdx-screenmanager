@@ -44,7 +44,8 @@ import com.badlogic.gdx.math.Interpolation;
 public class GLTransitionsShaderTransition extends ShaderTransition {
 	
 	// @formatter:off
-	private static final String VERT_SHADER = "#ifdef GL_ES\n" + 
+	private static final String VERT_SHADER = "#version 120\n" +
+			"#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
 			"\n" + 
@@ -61,7 +62,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"	v_texCoord0 = a_texCoord0;\n" + 
 			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
 			"}";
-//	private static final String VERT_SHADER_GLSL_330 = "#version 330\n#ifdef GL_ES\n" + 
+//	private static final String VERT_SHADER_GLSL_150 = "#version 150\n#ifdef GL_ES\n" + 
 //			"precision mediump float;\n" + 
 //			"#endif\n" + 
 //			"\n" + 
@@ -78,7 +79,8 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 //			"	v_texCoord0 = a_texCoord0;\n" + 
 //			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
 //			"}";
-	private static final String FRAG_SHADER_PREPEND = "#ifdef GL_ES\n" + 
+	private static final String FRAG_SHADER_PREPEND = "#version 120\n" +
+			"#ifdef GL_ES\n" +  
 			"precision mediump float;\n" + 
 			"#endif\n" + 
 			"\n" + 
@@ -98,7 +100,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"vec4 getFromColor(vec2 uv) {\n" + 
 			"		return texture2D(lastScreen, uv);\n" + 
 			"}\n";
-//	private static final String FRAG_SHADER_PREPEND_GLSL_330 = "#version 330\n#ifdef GL_ES\n" + 
+//	private static final String FRAG_SHADER_PREPEND_GLSL_150 = "#version 150\n#ifdef GL_ES\n" + 
 //			"precision mediump float;\n" + 
 //			"#endif\n" + 
 //			"\n" + 
@@ -121,7 +123,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	private static final String FRAG_SHADER_POSTPEND = "\nvoid main() {\n" + 
 		"	gl_FragColor = transition(v_texCoord0);\n" + 
 		"}\n";
-//	private static final String FRAG_SHADER_POSTPEND_GLSL_330 = "\nvoid main() {\n" + 
+//	private static final String FRAG_SHADER_POSTPEND_GLSL_150 = "\nvoid main() {\n" + 
 //			"	out_Color = transition(v_texCoord0);\n" + 
 //			"}\n";
 	// @formatter:on
