@@ -175,4 +175,11 @@ public class ShaderTransition extends TimedTransition {
 			this.screenQuad.dispose();
 	}
 
+	/**
+	 * @return the used shader
+	 */
+	public ShaderProgram getProgram() {
+		return program;
+	}
+
 }

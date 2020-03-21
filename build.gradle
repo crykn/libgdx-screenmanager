@@ -2,30 +2,56 @@ apply plugin: "java-library"
 apply plugin: "eclipse"
 apply plugin: "idea"
 apply plugin: "jacoco"
+apply plugin: "maven"
 
-version '0.4.3'
+version '0.5.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-        //mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "https://jitpack.io" }
         jcenter()
 }
 
-test {
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
-    }
-    
-    finalizedBy(tasks.jacocoTestReport)
+// PUBLISH SOURCES & JAVADOC
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
 }
 
+javadoc {
+    failOnError = false
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+install {
+  repositories.mavenInstaller {
+    pom.project {
+      licenses {
+        license {
+          name "The Apache Software License, Version 2.0"
+          url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          distribution "repo"
+        }
+      }
+    }
+  }
+}
+
+// DEPENDENCIES
 ext {
 	gdxVersion = "1.9.10"
 	guavaVersion = "28.2-jre"
@@ -34,8 +60,8 @@ ext {
 }
 
 dependencies {
-	api "com.badlogicgames.gdx:gdx:$gdxVersion"
-	implementation "com.google.guava:guava:$guavaVersion"
+	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+	implementation "com.google.guava:guava-gwt:$guavaVersion"
 	
 	//testCompile "org.junit.platform:junit-platform-launcher:1.2.0" // needed for a bug in older eclipse versions
 
@@ -44,6 +70,16 @@ dependencies {
 	testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+// TESTS & CI
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+    
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 jacocoTestReport {

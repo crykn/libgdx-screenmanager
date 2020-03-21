@@ -58,7 +58,7 @@ public class NestableFrameBuffer extends FrameBuffer {
 	 * @param format
 	 *            the format of the color buffer; according to the OpenGL ES 2.0
 	 *            spec, only {@link Format#RGB565}, {@link Format#RGBA4444} and
-	 *            {@link Format#RGB5_A1} are color-renderable
+	 *            {@code RGB5_A1} are color-renderable
 	 * @param width
 	 *            the width of the framebuffer in pixels
 	 * @param height
@@ -134,7 +134,7 @@ public class NestableFrameBuffer extends FrameBuffer {
 		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, previousFBOHandle);
 		Gdx.gl20.glViewport(x, y, width, height);
 	}
-	
+
 	@Override
 	protected void build() {
 		int previousFBOHandle = GLUtils.getBoundFboHandle();

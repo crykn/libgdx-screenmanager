@@ -42,8 +42,6 @@ public class GLUtils {
 	/**
 	 * Returns the name of the currently bound framebuffer
 	 * ({@code GL_FRAMEBUFFER_BINDING}).
-	 * <p>
-	 * Doesn't work in WebGL!
 	 * 
 	 * @return returns the name of the currently bound framebuffer. The initial
 	 *         value is {@code 0}, indicating the default framebuffer.
@@ -54,7 +52,7 @@ public class GLUtils {
 	public static synchronized int getBoundFboHandle() {
 		if (Gdx.app.getType() == ApplicationType.WebGL)
 			throw new GdxRuntimeException(
-					"This operation is not supported on WebGL.");
+					"This operation is not supported on WebGL without the libgdx-screenmanager-gwt extension!");
 
 		IntBuffer intBuf = USED_INT_BUFF;
 		Gdx.gl.glGetIntegerv(GL20.GL_FRAMEBUFFER_BINDING, intBuf);

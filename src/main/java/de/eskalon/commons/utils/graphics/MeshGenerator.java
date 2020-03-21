@@ -48,7 +48,7 @@ public final class MeshGenerator {
 	 * @param width
 	 * @param height
 	 * @param flipY
-	 * @return
+	 * @return a quad with the given dimensions
 	 */
 	public static Mesh createQuad(float x, float y, float width, float height,
 			boolean flipY) {
@@ -67,7 +67,7 @@ public final class MeshGenerator {
 	 * @param y2
 	 *            the top y
 	 * @param flipY
-	 * @return
+	 * @return a quad with the given coordinates
 	 */
 	public static Mesh createQuadFromCoordinates(float x1, float y1, float x2,
 			float y2, boolean flipY) {

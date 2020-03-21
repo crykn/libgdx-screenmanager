@@ -22,6 +22,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 import de.eskalon.commons.input.BasicInputMultiplexer;
+import de.eskalon.commons.utils.ImplementationVersionUtils;
 
 /**
  * A basic game. Takes care of setting some convenience variables and constants.
@@ -34,11 +35,15 @@ class BasicGame extends ApplicationAdapter {
 	/**
 	 * The version the application is running on. Set via the jar manifest. Is
 	 * {@code Development} if the game is started in a development environment.
+	 * <p>
+	 * Is always {@code Web} on GWT.
 	 */
 	public final String VERSION;
 	/**
 	 * Whether the application is running in a development environment. Checks
 	 * if a {@linkplain #VERSION version} is set in the jar manifest.
+	 * <p>
+	 * Is always {@code false} on GWT.
 	 */
 	public final boolean IN_DEV_ENV;
 
@@ -54,9 +59,8 @@ class BasicGame extends ApplicationAdapter {
 	private BasicInputMultiplexer inputProcessor = new BasicInputMultiplexer();
 
 	public BasicGame() {
-		IN_DEV_ENV = getClass().getPackage().getImplementationVersion() == null;
-		VERSION = IN_DEV_ENV ? "Development"
-				: getClass().getPackage().getImplementationVersion();
+		IN_DEV_ENV = ImplementationVersionUtils.get() == null;
+		VERSION = IN_DEV_ENV ? "Development" : ImplementationVersionUtils.get();
 	}
 
 	@Override

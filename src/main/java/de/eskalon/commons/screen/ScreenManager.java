@@ -16,11 +16,11 @@
 package de.eskalon.commons.screen;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.Nullable;
 
@@ -112,7 +112,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	private final Map<String, T> transitions = new ConcurrentHashMap<>();
 
-	private final Queue<Tuple<T, S>> transitionQueue = new ConcurrentLinkedQueue<>();
+	private final Queue<Tuple<T, S>> transitionQueue = new LinkedList<>();
 
 	private BasicInputMultiplexer gameInputMultiplexer;
 
@@ -175,9 +175,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		S screen = this.screens.get(name);
 
 		if (screen == null) {
-			throw new NoSuchElementException(String.format(
-					"No screen with the name '%s' could be found. Add the screen via #addScreen(String, ManagedScreen) first.",
-					name));
+			throw new NoSuchElementException("No screen with the name '" + name
+					+ "' could be found. Add the screen via #addScreen(String, ManagedScreen) first.");
 		}
 
 		return screen;
@@ -221,9 +220,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		T transition = this.transitions.get(name);
 
 		if (transition == null) {
-			throw new NoSuchElementException(String.format(
-					"No transition with the name '%s' could be found. Add the transition via #addScreenTransition(String, ScreenTransition) first.",
-					name));
+			throw new NoSuchElementException("No transition with the name '"
+					+ name
+					+ "' could be found. Add the transition via #addScreenTransition(String, ScreenTransition) first.");
 		}
 
 		return transition;
@@ -254,9 +253,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	public void pushScreen(String name, @Nullable String transitionName) {
 		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
-			Gdx.app.debug("ScreenManager", String.format(
-					"Screen '%s' was pushed, using the transition '%s'", name,
-					transitionName == null ? "null" : transitionName));
+			Gdx.app.debug("ScreenManager",
+					"Screen '" + name + "' was pushed, using the transition '"
+							+ (transitionName == null ? "null" : transitionName)
+							+ "'");
 		transitionQueue.add(new Tuple<T, S>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
