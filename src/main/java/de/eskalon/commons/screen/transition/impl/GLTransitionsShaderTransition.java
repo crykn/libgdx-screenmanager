@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.PlatformUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 
 /**
  * A transition that is using shader code conforming to the GL Transition
@@ -108,7 +108,10 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 *            uncomment/set the transition parameters!
 	 */
 	public void compileGLTransition(String glTransitionsCode) {
-		if (Gdx.gl30 != null && PlatformUtils.isMac) {
+		// TODO use PlatformUtils.isMac (see
+		// https://github.com/libgdx/libgdx/pull/5960)
+
+		if (Gdx.gl30 != null && UIUtils.isMac) {
 			// Mac only supports the OpenGL 3.2 core profile, which is not
 			// backward compatible
 			compileShader(
