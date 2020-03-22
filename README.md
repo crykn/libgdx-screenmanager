@@ -59,14 +59,14 @@ public class MyGdxGame extends ManagedGame {
 * Input processors have to be added in a screen via `ManagedScreen#addInputProcessor(...)`. This is needed so the input processors can be automatically registered/unregistered when the screen is shown/hidden.
 
 
-## How the library works in detail
+## Documentation
 
 The following wiki entries detail some features of the library:
 
-- The [life-cycle of a screen](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle) that is pushed
-- How to use [GL Transitions](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions)
-- Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions)
-- How to create [complex transition effects](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-create-complex-transitions)
-- Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library)
+- The [life-cycle of a screen](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle) that is pushed (`show()`, `render()`, `hide()`, ...)
+- How to use the shaders from [GL Transitions](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions)
+- Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions) (`create()`)
+- How to create [complex transition effects](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-create-complex-transitions) by chaining them
+- Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library) (gradle, maven...)
 - How to get libgdx-screenmanager [working with GWT](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
-- The [custom FrameBuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nested fbos
+- The reasoning behin the [custom framebuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nesting
