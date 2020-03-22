@@ -43,8 +43,8 @@ public class GLUtils {
 	 * Returns the name of the currently bound framebuffer
 	 * ({@code GL_FRAMEBUFFER_BINDING}).
 	 * 
-	 * @return returns the name of the currently bound framebuffer. The initial
-	 *         value is {@code 0}, indicating the default framebuffer.
+	 * @return the name of the currently bound framebuffer; the initial value is
+	 *         {@code 0}, indicating the default framebuffer
 	 * 
 	 * @see <a href= "https://github.com/libgdx/libgdx/issues/4688">The libGDX
 	 *      issue detailing the WebGL problems</a>

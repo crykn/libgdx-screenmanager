@@ -13,7 +13,7 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 * The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for  everything that isn't graphical
 
 
-![](https://raw.githubusercontent.com/crykn/libgdx-screenmanager/master/showcase/basic.gif)
+![](https://raw.githubusercontent.com/crykn/libgdx-screenmanager/master/showcase/gl_transitions_2.gif)
 > ###### A small example using different transitions. Look at the [showcases folder](https://github.com/crykn/libgdx-screenmanager/tree/master/showcase) for more gifs.
 
 <br/>
@@ -68,3 +68,4 @@ The following wiki entries detail some features of the library:
 - Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions)
 - The [custom FrameBuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nested fbos
 - Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library)
+- How to get libgdx-screenmanager [working with GWT](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)

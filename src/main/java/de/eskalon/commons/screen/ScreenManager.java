@@ -145,7 +145,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Adds a screen. If a screen with the same name was added before it is
+	 * Adds a screen. If a screen with the same name was added before, it is
 	 * replaced.
 	 *
 	 * @param name
@@ -190,7 +190,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Adds a transition. If a transition with the same name was added before it
+	 * Adds a transition. If a transition with the same name was added before, it
 	 * is replaced.
 	 *
 	 * @param name
@@ -385,8 +385,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Disposes the screens, the transitions and the internally used frame
-	 * buffer objects.
+	 * Disposes the screens, the transitions and the internally used framebuffers.
 	 */
 	@Override
 	public void dispose() {
