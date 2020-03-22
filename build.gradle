@@ -4,7 +4,7 @@ apply plugin: "idea"
 apply plugin: "jacoco"
 apply plugin: "maven"
 
-version '0.5.0'
+version '0.5.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
