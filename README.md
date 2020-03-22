@@ -69,4 +69,4 @@ The following wiki entries detail some features of the library:
 - How to create [complex transition effects](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-create-complex-transitions) by chaining them
 - Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library) (gradle, maven...)
 - How to get libgdx-screenmanager [working with GWT](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
-- The reasoning behin the [custom framebuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nesting
+- The reasoning behind the [custom framebuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nesting
