@@ -66,6 +66,7 @@ The following wiki entries detail some features of the library:
 - The [life-cycle of a screen](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle) that is pushed
 - How to use [GL Transitions](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions)
 - Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions)
-- The [custom FrameBuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nested fbos
+- How to create [complex transition effects](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-create-complex-transitions)
 - Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library)
 - How to get libgdx-screenmanager [working with GWT](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
+- The [custom FrameBuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nested fbos

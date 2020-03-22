@@ -37,6 +37,10 @@ public abstract class TimedTransition extends ScreenTransition {
 	 *            the transition's duration in seconds
 	 * @param interpolation
 	 *            the interpolation to use
+	 * 
+	 * @see <a href=
+	 *      "https://github.com/libgdx/libgdx/wiki/Interpolation#visual-display-of-interpolations">A
+	 *      visual representation of the different interpolation modes</a>
 	 */
 	public TimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
