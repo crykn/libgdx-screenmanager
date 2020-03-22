@@ -44,7 +44,7 @@ public class SlidingOutTransition extends SlidingTransition {
 	 */
 	public SlidingOutTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration, @Nullable Interpolation interpolation) {
-		super(batch, dir, false, duration, interpolation);
+		super(batch, dir, true, duration, interpolation);
 	}
 
 	/**
