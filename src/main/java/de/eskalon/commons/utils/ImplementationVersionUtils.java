@@ -25,6 +25,7 @@ public class ImplementationVersionUtils {
 	}
 
 	public static String get() {
+		// not available in GWT
 		return ImplementationVersionUtils.class.getPackage()
 				.getImplementationVersion();
 	}
