@@ -120,8 +120,8 @@ public class ShaderTransition extends TimedTransition {
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
 		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
 
-		this.program = ShaderProgramFactory.createShaderProgram(vert, frag,
-				true, ignorePrepend);
+		this.program = ShaderProgramFactory.fromString(vert, frag, true,
+				ignorePrepend);
 	}
 
 	@Override

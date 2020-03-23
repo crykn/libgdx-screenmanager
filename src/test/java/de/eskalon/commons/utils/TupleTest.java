@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import de.eskalon.commons.utils.Tuple;
-
 public class TupleTest {
 
 	@SuppressWarnings({ "unlikely-arg-type", "unchecked", "rawtypes" })
@@ -25,5 +23,5 @@ public class TupleTest {
 		// Hashcode
 		assertEquals(2988058, t.hashCode());
 	}
-
+	
 }

@@ -157,7 +157,8 @@ public class NestableFrameBuffer extends FrameBuffer {
 	}
 
 	/**
-	 * A builder for a NestableFrameBuffer. Useful to add certain attachments.
+	 * A builder for a {@link NestableFrameBuffer}. Useful to add certain
+	 * attachments.
 	 * 
 	 * @author damios
 	 */

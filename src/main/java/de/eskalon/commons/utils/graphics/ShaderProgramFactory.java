@@ -34,7 +34,7 @@ public final class ShaderProgramFactory {
 	 *            the version being set twice
 	 * @return the shader program
 	 */
-	public static ShaderProgram createShaderProgram(String vertexShader,
+	public static ShaderProgram fromString(String vertexShader,
 			String fragmentShader, boolean throwException,
 			boolean ignorePrepend) {
 		String prependVertexCode = null, prependFragmentCode = null;
@@ -66,10 +66,9 @@ public final class ShaderProgramFactory {
 	 *            compiled
 	 * @return the shader program
 	 */
-	public static ShaderProgram createShaderProgram(String vertexShader,
+	public static ShaderProgram fromString(String vertexShader,
 			String fragmentShader, boolean throwException) {
-		return createShaderProgram(vertexShader, fragmentShader, throwException,
-				false);
+		return fromString(vertexShader, fragmentShader, throwException, false);
 	}
 
 	/**
@@ -80,9 +79,9 @@ public final class ShaderProgramFactory {
 	 * @param fragmentShader
 	 * @return the shader program
 	 */
-	public static ShaderProgram createShaderProgram(String vertexShader,
+	public static ShaderProgram fromString(String vertexShader,
 			String fragmentShader) {
-		return createShaderProgram(vertexShader, fragmentShader, true);
+		return fromString(vertexShader, fragmentShader, true);
 	}
 
 	/**
@@ -93,9 +92,9 @@ public final class ShaderProgramFactory {
 	 * @param fragmentShader
 	 * @return the shader program
 	 */
-	public static ShaderProgram createShaderProgram(FileHandle vertexShader,
+	public static ShaderProgram fromFile(FileHandle vertexShader,
 			FileHandle fragmentShader) {
-		return createShaderProgram(vertexShader.readString(),
+		return fromString(vertexShader.readString(),
 				fragmentShader.readString());
 	}
 
