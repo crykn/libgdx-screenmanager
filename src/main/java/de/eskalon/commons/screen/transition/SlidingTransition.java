@@ -41,7 +41,7 @@ public class SlidingTransition extends BlankTimedTransition {
 	private SpriteBatch batch;
 	/**
 	 * {@code true} if the last screen should slide out; {@code false} if the
-	 * new screen should fade in.
+	 * new screen should slide in.
 	 */
 	private boolean slideLastScreen;
 

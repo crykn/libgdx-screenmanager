@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 public final class MeshGenerator {
 
 	private MeshGenerator() {
-		// not used
+		throw new UnsupportedOperationException();
 	}
 
 	/**

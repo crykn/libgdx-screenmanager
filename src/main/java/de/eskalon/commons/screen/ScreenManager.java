@@ -190,8 +190,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Adds a transition. If a transition with the same name was added before, it
-	 * is replaced.
+	 * Adds a transition. If a transition with the same name was added before,
+	 * it is replaced.
 	 *
 	 * @param name
 	 *            the name of the transition
@@ -385,7 +385,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Disposes the screens, the transitions and the internally used framebuffers.
+	 * Disposes the screens, the transitions and the internally used
+	 * framebuffers.
 	 */
 	@Override
 	public void dispose() {
@@ -439,7 +440,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
 	public boolean inTransition() {
-		return this.transition == null ? false : true;
+		return this.transition != null;
 	}
 
 	/**

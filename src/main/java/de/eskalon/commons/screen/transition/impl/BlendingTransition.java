@@ -55,8 +55,8 @@ public class BlendingTransition extends BlankTimedTransition {
 
 		batch.setColor(c.r, c.g, c.b, progress);
 		batch.draw(currScreen, 0, 0);
-
 		batch.setColor(c.r, c.g, c.b, 1);
+		
 		batch.end();
 	}
 

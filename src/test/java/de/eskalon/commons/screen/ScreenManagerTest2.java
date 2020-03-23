@@ -9,7 +9,6 @@ import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.LibgdxUnitTest;

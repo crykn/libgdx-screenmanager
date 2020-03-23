@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
  * @author damios
  * 
  */
-public class ShaderProgramFactory {
+public final class ShaderProgramFactory {
 
 	private ShaderProgramFactory() {
-		// not needed
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -26,10 +26,12 @@ public class ShaderProgramFactory {
 	 * @param throwException
 	 *            whether to throw an exception when the shader couldn't be
 	 *            compiled
+	 *            ({@link ShaderPreconditions#checkCompiled(ShaderProgram)})
 	 * @param ignorePrepend
 	 *            whether to ignore the code in
 	 *            {@link ShaderProgram#prependFragmentCode} and
-	 *            {@link ShaderProgram#prependVertexCode}
+	 *            {@link ShaderProgram#prependVertexCode}; is useful to prevent
+	 *            the version being set twice
 	 * @return the shader program
 	 */
 	public static ShaderProgram createShaderProgram(String vertexShader,
@@ -100,11 +102,13 @@ public class ShaderProgramFactory {
 	/**
 	 * A simple preconditions class used to check whether a
 	 * {@link ShaderProgram} was properly compiled.
+	 * 
+	 * @author damios
 	 */
-	public static class ShaderPreconditions {
+	public static final class ShaderPreconditions {
 
 		private ShaderPreconditions() {
-			// not needed
+			throw new UnsupportedOperationException();
 		}
 
 		/**

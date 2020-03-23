@@ -29,7 +29,11 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
  * 
  * @author damios
  */
-public class GLUtils {
+public final class GLUtils {
+
+	private GLUtils() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * The buffer used internally. A size of 64 bytes is required as at most 16

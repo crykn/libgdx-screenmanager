@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.GLFrameBuffer;
+import com.google.common.base.Preconditions;
 
 /**
  * An implementation of the libGDX {@link FrameBuffer} that supports nested
@@ -82,9 +83,8 @@ public class NestableFrameBuffer extends FrameBuffer {
 	 */
 	@Override
 	public void begin() {
-		if (isActive)
-			throw new IllegalStateException(
-					"end() has to be called before another draw can begin!");
+		Preconditions.checkState(!isActive,
+				"end() has to be called before another draw can begin!");
 		isActive = true;
 
 		previousFBOHandle = GLUtils.getBoundFboHandle();
@@ -92,6 +92,21 @@ public class NestableFrameBuffer extends FrameBuffer {
 
 		previousViewport = GLUtils.getViewport();
 		setFrameBufferViewport();
+	}
+
+	/**
+	 * Makes the frame buffer current so everything gets drawn to it.
+	 * <p>
+	 * The static {@link #unbind()} method is always rebinding the
+	 * <i>default</i> framebuffer afterwards.
+	 * 
+	 * @deprecated Doesn't support nesting!
+	 * @see #begin()
+	 */
+	@Deprecated
+	@Override
+	public void bind() {
+		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, framebufferHandle);
 	}
 
 	/**
@@ -121,8 +136,7 @@ public class NestableFrameBuffer extends FrameBuffer {
 	 */
 	@Override
 	public void end(int x, int y, int width, int height) {
-		if (!isActive)
-			throw new IllegalStateException("begin() has to be called first!");
+		Preconditions.checkState(isActive, "begin() has to be called first!");
 		isActive = false;
 
 		if (GLUtils.getBoundFboHandle() != framebufferHandle) {
@@ -144,6 +158,8 @@ public class NestableFrameBuffer extends FrameBuffer {
 
 	/**
 	 * A builder for a NestableFrameBuffer. Useful to add certain attachments.
+	 * 
+	 * @author damios
 	 */
 	public static class NestableFrameBufferBuilder extends FrameBufferBuilder {
 		public NestableFrameBufferBuilder(int width, int height) {

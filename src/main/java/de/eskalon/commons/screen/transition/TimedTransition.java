@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.google.common.base.Preconditions;
 
 /**
  * A screen transition that lasts for a certain duration.
@@ -44,6 +45,7 @@ public abstract class TimedTransition extends ScreenTransition {
 	 */
 	public TimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
+		Preconditions.checkArgument(duration > 0);
 		this.interpolation = interpolation;
 		this.duration = duration;
 	}

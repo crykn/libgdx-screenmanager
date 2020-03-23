@@ -35,7 +35,8 @@ import de.eskalon.commons.utils.graphics.ShaderProgramFactory;
 /**
  * A transition that is using a shader to render the two transitioning screens.
  * <p>
- * The following uniforms are set before rendering:
+ * The following uniforms are set before rendering and thus have to be specified
+ * in the shader code:
  * <ul>
  * <li>vertex shader:</li>
  * <ul>

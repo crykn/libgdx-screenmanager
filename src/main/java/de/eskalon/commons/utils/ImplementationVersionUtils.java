@@ -18,10 +18,10 @@ package de.eskalon.commons.utils;
 /**
  * @author damios
  */
-public class ImplementationVersionUtils {
+public final class ImplementationVersionUtils {
 
 	private ImplementationVersionUtils() {
-		// not needed
+		throw new UnsupportedOperationException();
 	}
 
 	public static String get() {
