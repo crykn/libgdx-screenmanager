@@ -36,9 +36,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.google.common.base.Preconditions;
 
-import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.screen.transition.ScreenTransition;
-import de.eskalon.commons.utils.Tuple;
+import de.eskalon.commons.utils.BasicInputMultiplexer;
+import de.eskalon.commons.utils.Pair;
 import de.eskalon.commons.utils.graphics.NestableFrameBuffer;
 
 /**
@@ -112,7 +112,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	private final Map<String, T> transitions = new ConcurrentHashMap<>();
 
-	private final Queue<Tuple<T, S>> transitionQueue = new LinkedList<>();
+	private final Queue<Pair<T, S>> transitionQueue = new LinkedList<>();
 
 	private BasicInputMultiplexer gameInputMultiplexer;
 
@@ -257,7 +257,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 					"Screen '" + name + "' was pushed, using the transition '"
 							+ (transitionName == null ? "null" : transitionName)
 							+ "'");
-		transitionQueue.add(new Tuple<T, S>(
+		transitionQueue.add(new Pair<T, S>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
 				getScreen(name)));
@@ -272,7 +272,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				/*
 				 * Start the queued transition
 				 */
-				Tuple<T, S> nextTransition = transitionQueue.poll();
+				Pair<T, S> nextTransition = transitionQueue.poll();
 
 				this.gameInputMultiplexer.removeProcessors(
 						new Array<>(this.currScreen.getInputProcessors()));

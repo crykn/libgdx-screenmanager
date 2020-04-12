@@ -16,13 +16,19 @@
 package de.eskalon.commons.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
 import de.eskalon.commons.screen.transition.ScreenTransition;
+import de.eskalon.commons.utils.BasicInputMultiplexer;
 
 /**
  * A game class that utilizes a {@linkplain ScreenManager screen manager}.
+ * <p>
+ * Input listeners have to be added via the game's {@linkplain #inputProcessor
+ * input multiplexer}.
  * 
  * @author damios
  * 
@@ -31,6 +37,15 @@ import de.eskalon.commons.screen.transition.ScreenTransition;
 public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		extends BasicGame {
 
+	/**
+	 * The input multiplexer of the game. Must be used to add input listeners
+	 * instead of {@link Input#setInputProcessor(InputProcessor)}.
+	 */
+	protected final BasicInputMultiplexer inputProcessor = new BasicInputMultiplexer();
+	/**
+	 * The game's screen manager. Is used to register and push new
+	 * screens/transitions.
+	 */
 	protected ScreenManager<S, T> screenManager;
 
 	public ManagedGame() {
@@ -42,6 +57,7 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 	public void create() {
 		super.create();
 
+		Gdx.input.setInputProcessor(inputProcessor);
 		screenManager.initialize(getInputMultiplexer(), getWidth(),
 				getHeight());
 	}
@@ -74,6 +90,16 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 	@Override
 	public void dispose() {
 		screenManager.dispose();
+	}
+
+	/**
+	 * Returns the input multiplexer of the game. Must be used to add input
+	 * listeners instead of {@link Input#setInputProcessor(InputProcessor)}.
+	 *
+	 * @return the game's input multiplexer
+	 */
+	public BasicInputMultiplexer getInputMultiplexer() {
+		return inputProcessor;
 	}
 
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.eskalon.commons.input;
+package de.eskalon.commons.utils;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;

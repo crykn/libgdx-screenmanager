@@ -16,8 +16,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import de.eskalon.commons.LibgdxUnitTest;
-import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.screen.transition.ScreenTransition;
+import de.eskalon.commons.utils.BasicInputMultiplexer;
 
 public class ScreenManagerTest extends LibgdxUnitTest {
 

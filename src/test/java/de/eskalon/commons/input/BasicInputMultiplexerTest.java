@@ -8,6 +8,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
 
+import de.eskalon.commons.utils.BasicInputMultiplexer;
+
 public class BasicInputMultiplexerTest {
 
 	@Test

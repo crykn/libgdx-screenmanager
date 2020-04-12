@@ -24,14 +24,14 @@ import javax.annotation.Nullable;
  * 
  * @author damios
  */
-public class Tuple<X, Y> {
+public class Pair<X, Y> {
 
 	@Nullable
 	public final X x;
 	@Nullable
 	public final Y y;
 
-	public Tuple(@Nullable X x, @Nullable Y y) {
+	public Pair(@Nullable X x, @Nullable Y y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -47,12 +47,12 @@ public class Tuple<X, Y> {
 			return true;
 		}
 
-		if (!(other instanceof Tuple)) {
+		if (!(other instanceof Pair)) {
 			return false;
 		}
 
 		@SuppressWarnings("unchecked")
-		Tuple<X, Y> other_ = (Tuple<X, Y>) other;
+		Pair<X, Y> other_ = (Pair<X, Y>) other;
 
 		return Objects.equals(other_.x, this.x)
 				&& Objects.equals(other_.y, this.y);

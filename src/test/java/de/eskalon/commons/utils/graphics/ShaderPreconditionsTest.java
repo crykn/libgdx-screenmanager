@@ -18,7 +18,7 @@ public class ShaderPreconditionsTest {
 		Mockito.doReturn(false).when(s).isCompiled();
 
 		assertThrows(GdxRuntimeException.class, () -> {
-			ShaderPreconditions.checkCompiled(s);
+			ShaderPreconditions.checkCompilation(s);
 		});
 	}
 

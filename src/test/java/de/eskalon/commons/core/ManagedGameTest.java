@@ -4,14 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 
 import de.eskalon.commons.LibgdxUnitTest;
-import de.eskalon.commons.input.BasicInputMultiplexer;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
 import de.eskalon.commons.screen.transition.ScreenTransition;
+import de.eskalon.commons.utils.BasicInputMultiplexer;
 
 public class ManagedGameTest extends LibgdxUnitTest {
 
@@ -24,6 +26,26 @@ public class ManagedGameTest extends LibgdxUnitTest {
 
 		// Screen Manager
 		assertNotNull(game.getScreenManager());
+	}
+
+	@Test
+	@SuppressWarnings({ "rawtypes" })
+	public void testInputMultiplexer() {
+		ManagedGame game = new ManagedGame();
+		game.screenManager = Mockito.mock(ScreenManager.class);
+		game.create();
+
+		assertNotNull(game.getInputMultiplexer());
+
+		game.getInputMultiplexer().addProcessor(new InputAdapter() {
+			@Override
+			public boolean keyDown(int keycode) {
+				assertEquals(3, keycode);
+
+				return true;
+			}
+		});
+		Gdx.input.getInputProcessor().keyDown(3);
 	}
 
 	/**

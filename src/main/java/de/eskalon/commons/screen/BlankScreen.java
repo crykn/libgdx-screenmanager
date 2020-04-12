@@ -23,11 +23,11 @@ package de.eskalon.commons.screen;
  * 
  * @author damios
  */
-public class BlankScreen extends ManagedScreen {
+class BlankScreen extends ManagedScreen {
 
 	@Override
 	protected void create() {
-		// not needed
+		// do nothing
 	}
 
 	@Override
@@ -37,17 +37,17 @@ public class BlankScreen extends ManagedScreen {
 
 	@Override
 	public void hide() {
-		// not needed
+		// do nothing
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// not needed
+		// do nothing
 	}
 
 	@Override
 	public void dispose() {
-		// not needed
+		// do nothing
 	}
 
 }

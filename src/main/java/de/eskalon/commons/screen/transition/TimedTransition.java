@@ -29,9 +29,9 @@ import com.google.common.base.Preconditions;
 public abstract class TimedTransition extends ScreenTransition {
 
 	@Nullable
-	private Interpolation interpolation;
-	private float duration;
-	private float timePassed;
+	protected Interpolation interpolation;
+	protected float duration;
+	protected float timePassed;
 
 	/**
 	 * @param duration

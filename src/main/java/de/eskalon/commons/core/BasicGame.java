@@ -18,34 +18,13 @@ package de.eskalon.commons.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-
-import de.eskalon.commons.input.BasicInputMultiplexer;
-import de.eskalon.commons.utils.ImplementationVersionUtils;
 
 /**
  * A basic game. Takes care of setting some convenience variables and constants.
- * Furthermore, adds an {@linkplain #getInputMultiplexer() input multiplexer}.
  * 
  * @author damios
  */
 class BasicGame extends ApplicationAdapter {
-
-	/**
-	 * The version the application is running on. Set via the jar manifest. Is
-	 * {@code Development} if the game is started in a development environment.
-	 * <p>
-	 * Is always {@code Web} on GWT.
-	 */
-	public final String VERSION;
-	/**
-	 * Whether the application is running in a development environment. Checks
-	 * if a {@linkplain #VERSION version} is set in the jar manifest.
-	 * <p>
-	 * Is always {@code false} on GWT.
-	 */
-	public final boolean IN_DEV_ENV;
 
 	/**
 	 * @see Graphics#getWidth()
@@ -56,19 +35,10 @@ class BasicGame extends ApplicationAdapter {
 	 */
 	protected int viewportHeight;
 
-	private BasicInputMultiplexer inputProcessor = new BasicInputMultiplexer();
-
-	public BasicGame() {
-		IN_DEV_ENV = ImplementationVersionUtils.get() == null;
-		VERSION = IN_DEV_ENV ? "Development" : ImplementationVersionUtils.get();
-	}
-
 	@Override
 	public void create() {
 		this.viewportWidth = Gdx.graphics.getWidth();
 		this.viewportHeight = Gdx.graphics.getHeight();
-
-		Gdx.input.setInputProcessor(inputProcessor);
 	}
 
 	/**
@@ -89,16 +59,6 @@ class BasicGame extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		this.viewportWidth = width;
 		this.viewportHeight = height;
-	}
-
-	/**
-	 * Returns the input multiplexer of the game. Must be used to add input
-	 * listeners instead of {@link Input#setInputProcessor(InputProcessor)}.
-	 *
-	 * @return the game's input multiplexer
-	 */
-	public BasicInputMultiplexer getInputMultiplexer() {
-		return inputProcessor;
 	}
 
 }
