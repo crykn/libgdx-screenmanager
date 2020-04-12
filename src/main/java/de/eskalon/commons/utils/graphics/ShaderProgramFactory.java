@@ -26,7 +26,7 @@ public final class ShaderProgramFactory {
 	 * @param throwException
 	 *            whether to throw an exception when the shader couldn't be
 	 *            compiled
-	 *            ({@link ShaderPreconditions#checkCompiled(ShaderProgram)})
+	 *            ({@link ShaderPreconditions#checkCompilation(ShaderProgram)})
 	 * @param ignorePrepend
 	 *            whether to ignore the code in
 	 *            {@link ShaderProgram#prependFragmentCode} and
@@ -53,7 +53,7 @@ public final class ShaderProgramFactory {
 		}
 
 		if (throwException)
-			ShaderPreconditions.checkCompiled(program);
+			ShaderPreconditions.checkCompilation(program);
 
 		return program;
 	}
@@ -118,7 +118,7 @@ public final class ShaderProgramFactory {
 		 * @param msg
 		 *            the exception's message
 		 */
-		public static void checkCompiled(ShaderProgram program, String msg) {
+		public static void checkCompilation(ShaderProgram program, String msg) {
 			if (!program.isCompiled())
 				throw new GdxRuntimeException(msg + program.getLog());
 		}
@@ -130,8 +130,8 @@ public final class ShaderProgramFactory {
 		 * 
 		 * @param program
 		 */
-		public static void checkCompiled(ShaderProgram program) {
-			checkCompiled(program, "");
+		public static void checkCompilation(ShaderProgram program) {
+			checkCompilation(program, "");
 		}
 
 	}
