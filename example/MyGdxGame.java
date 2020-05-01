@@ -3,7 +3,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.eskalon.commons.core.ManagedGame;
-import de.eskalon.commons.screen.BlankScreen;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.screen.transition.impl.BlendingTransition;
@@ -14,7 +13,6 @@ import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 	public static final String TITLE = "MyGdxGame";
-	// private OrthographicCamera camera;
 	private SpriteBatch batch;
 
 	@Override
@@ -23,8 +21,6 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 		// Do some basic stuff
 		this.batch = new SpriteBatch();
-		// this.camera = new OrthographicCamera();
-		// camera.combined.setToOrtho2D(0, 0, getWidth(), getHeight());
 
 		// Add screens
 		this.screenManager.addScreen("green", new GreenScreen());
@@ -49,7 +45,6 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 
-		// this.camera.combined.setToOrtho2D(0, 0, width, height);
 		this.batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 	}
 
