@@ -29,7 +29,7 @@ public class ManagedGameTest extends LibgdxUnitTest {
 	}
 
 	@Test
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testInputMultiplexer() {
 		ManagedGame game = new ManagedGame();
 		game.screenManager = Mockito.mock(ScreenManager.class);
