@@ -38,7 +38,6 @@ import com.google.common.base.Preconditions;
 
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
-import de.eskalon.commons.utils.Pair;
 import de.eskalon.commons.utils.Triple;
 import de.eskalon.commons.utils.graphics.NestableFrameBuffer;
 
@@ -278,13 +277,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				/*
 				 * Start the queued transition
 				 */
-				Pair<T, S> nextTransition = transitionQueue.poll();
+				Triple<T, S, Object[]> nextTransition = transitionQueue.poll();
 
 				this.gameInputMultiplexer.removeProcessors(
 						new Array<>(this.currScreen.getInputProcessors()));
 
 				this.lastScreen = currScreen;
 				this.currScreen = nextTransition.y;
+				this.currScreen.pushParams = nextTransition.z;
 				this.currScreen.show();
 				this.transition = nextTransition.x;
 
