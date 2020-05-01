@@ -39,6 +39,7 @@ import com.google.common.base.Preconditions;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
 import de.eskalon.commons.utils.Pair;
+import de.eskalon.commons.utils.Triple;
 import de.eskalon.commons.utils.graphics.NestableFrameBuffer;
 
 /**
@@ -112,7 +113,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	private final Map<String, T> transitions = new ConcurrentHashMap<>();
 
-	private final Queue<Pair<T, S>> transitionQueue = new LinkedList<>();
+	private final Queue<Triple<T, S, Object[]>> transitionQueue = new LinkedList<>();
 
 	private BasicInputMultiplexer gameInputMultiplexer;
 
@@ -250,17 +251,22 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 *            the name of screen to be pushed
 	 * @param transitionName
 	 *            the transition effect; can be {@code null}
+	 * @param params
+	 *            an array of params given to the
+	 *            {@linkplain ManagedScreen#pushParams screen}; can be
+	 *            {@code null}
 	 */
-	public void pushScreen(String name, @Nullable String transitionName) {
+	public void pushScreen(String name, @Nullable String transitionName,
+			@Nullable Object... params) {
 		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
 			Gdx.app.debug("ScreenManager",
 					"Screen '" + name + "' was pushed, using the transition '"
 							+ (transitionName == null ? "null" : transitionName)
 							+ "'");
-		transitionQueue.add(new Pair<T, S>(
+		transitionQueue.add(new Triple<T, S, Object[]>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
-				getScreen(name)));
+				getScreen(name), params));
 	}
 
 	public void render(float delta) {
