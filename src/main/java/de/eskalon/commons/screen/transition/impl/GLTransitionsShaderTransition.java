@@ -159,10 +159,13 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	/**
 	 * The GL Transitions shader code has to be set via this method.
 	 * <p>
-	 * Don't forget to uncomment/set the uniforms that act as transition
+	 * Do not forget to uncomment/set the uniforms that act as transition
 	 * parameters! Please note that in GLSL EL (Web, Android, iOS) uniforms
 	 * cannot be set from within the shader code, so this has to be done in Java
 	 * via {@link #getProgram()} instead!
+	 * <p>
+	 * Furthermore, do not forget to replace {@code ratio} in the code with your
+	 * screen ratio (width / height).
 	 * <p>
 	 * Ignores code in {@link ShaderProgram#prependFragmentCode} and
 	 * {@link ShaderProgram#prependVertexCode}.
@@ -177,14 +180,23 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 		if (Gdx.gl30 != null && UIUtils.isMac) {
 			// Mac only supports the OpenGL 3.2 _core_ profile, which is not
 			// backward compatible
-			compileShader(
+			super.compileShader(
 					VERT_SHADER_GLSL_150, FRAG_SHADER_PREPEND_GLSL_150
 							+ glTransitionsCode + FRAG_SHADER_POSTPEND_GLSL_150,
 					true);
 		} else {
-			compileShader(VERT_SHADER, FRAG_SHADER_PREPEND + glTransitionsCode
-					+ FRAG_SHADER_POSTPEND, true);
+			super.compileShader(VERT_SHADER, FRAG_SHADER_PREPEND
+					+ glTransitionsCode + FRAG_SHADER_POSTPEND, true);
 		}
+	}
+
+	/**
+	 * @deprecated Call {@link #compileGLTransition(String)} instead!
+	 */
+	@Deprecated
+	@Override
+	public void compileShader(String vert, String frag, boolean ignorePrepend) {
+		super.compileShader(vert, frag, ignorePrepend);
 	}
 
 }
