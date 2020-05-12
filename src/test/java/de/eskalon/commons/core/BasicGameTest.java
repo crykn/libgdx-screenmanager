@@ -8,7 +8,7 @@ public class BasicGameTest extends de.eskalon.commons.LibgdxUnitTest {
 
 	@Test
 	public void testConstructorAndMembers() {
-		BasicGame game = new BasicGame();
+		BasicApplication game = new BasicApplication();
 
 		// Resize
 		game.resize(123, 456);

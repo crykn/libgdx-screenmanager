@@ -20,11 +20,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 
 /**
- * A basic game. Takes care of setting some convenience variables and constants.
+ * A basic game application. Takes care of setting some convenience variables.
  * 
  * @author damios
  */
-class BasicGame extends ApplicationAdapter {
+class BasicApplication extends ApplicationAdapter {
 
 	/**
 	 * @see Graphics#getWidth()

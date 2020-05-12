@@ -35,7 +35,7 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
  * @see ScreenManager How to register screens and tranistions.
  */
 public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
-		extends BasicGame {
+		extends BasicApplication {
 
 	/**
 	 * The input multiplexer of the game. Must be used to add input listeners
