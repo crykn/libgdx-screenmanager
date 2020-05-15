@@ -256,7 +256,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 *            {@code null}
 	 */
 	public void pushScreen(String name, @Nullable String transitionName,
-			@Nullable Object... params) {
+			Object... params) {
 		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
 			Gdx.app.debug("ScreenManager",
 					"Screen '" + name + "' was pushed, using the transition '"
@@ -284,7 +284,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 				this.lastScreen = currScreen;
 				this.currScreen = nextTransition.y;
-				this.currScreen.pushParams = nextTransition.z;
+				this.currScreen.pushParams = nextTransition.z.length == 0 ? null
+						: nextTransition.z;
 				this.currScreen.show();
 				this.transition = nextTransition.x;
 
