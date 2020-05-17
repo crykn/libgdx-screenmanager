@@ -7,7 +7,7 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 ## Features
 
 * Allows easily **changing the rendered screen** (`game.getScreenManager().pushScreen("screen_name", "transition_name")`)
-* Adds **screen transition effects** for when a screen is changed. The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/main/java/de/eskalon/commons/screen/transition/impl). Furthermore, transition shaders are supported as well (see the [GL Transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones).
+* Adds **screen transition effects** for when a screen is changed. The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/wiki/Available-transitions). Furthermore, transition shaders are supported as well (see the [GL Transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones).
 * **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
 * There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded
 * The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for  everything that isn't graphical
@@ -23,7 +23,7 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 
 The following example shows how to use libgdx-screenmanager in your code. You can find the full example [here](https://github.com/crykn/libgdx-screenmanager/tree/master/example). 
 
-The library is very easy to use: The game has to extends `ManagedGame`, all screen have to inherit from `ManagedScreen`. Screens and transitions have to be registered with the screen manager before they can be used. To push a screen `game.getScreenManager().pushScreen("screen-name", "transition-name")` has to be called. If no transition should be used, just call `pushScreen("screen-name", null)`.
+The library is very easy to use: The game has to extend `ManagedGame`, all screen have to inherit from `ManagedScreen`. Screens and transitions have to be registered with the screen manager before they can be used. To push a screen `game.getScreenManager().pushScreen("screen-name", "transition-name")` has to be called. If no transition should be used, just call `pushScreen("screen-name", null)`.
 
 ```java
 public class MyGdxGame extends ManagedGame<MyScreenClass, ScreenTransition> {
@@ -61,12 +61,4 @@ public class MyGdxGame extends ManagedGame<MyScreenClass, ScreenTransition> {
 
 ## Documentation
 
-The following wiki entries detail some features of the library:
-
-- The [life-cycle of a screen](https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle) that is pushed (`show()`, `render()`, `hide()`, ...)
-- How to use the shaders from [GL Transitions](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions)
-- Where to [initialize the screens & transitions](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-initialize-screens-and-transitions) (`create()`)
-- How to create [complex transition effects](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-create-complex-transitions) by chaining them
-- Where to [get the library](https://github.com/crykn/libgdx-screenmanager/wiki/Where-to-get-the-library) (gradle, maven...)
-- How to get libgdx-screenmanager [working with GWT](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
-- The reasoning behind the [custom framebuffer implementation](https://github.com/crykn/libgdx-screenmanager/wiki/Custom-FrameBuffer-implementation) that allows nesting
+In the [wiki](https://github.com/crykn/libgdx-screenmanager/wiki) you can find articles detailing the usage of the library and its inner workings.
