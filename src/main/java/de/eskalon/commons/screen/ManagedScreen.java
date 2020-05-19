@@ -15,6 +15,8 @@
 
 package de.eskalon.commons.screen;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.InputProcessor;
@@ -48,6 +50,8 @@ public abstract class ManagedScreen implements Screen {
 	 * @see #addInputProcessor(InputProcessor)
 	 */
 	private final Array<InputProcessor> inputProcessors = new Array<>(4);
+	@Nullable
+	protected Object[] pushParams;
 
 	private boolean initialized = false;
 
