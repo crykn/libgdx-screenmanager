@@ -120,11 +120,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	private boolean initialized = false;
 
+	private boolean hasDepth;
+
 	public void initialize(BasicInputMultiplexer gameInputMultiplexer,
-			int width, int height) {
+			int width, int height, boolean hasDepth) {
 		this.gameInputMultiplexer = gameInputMultiplexer;
 		this.currentWidth = width;
 		this.currentHeight = height;
+		this.hasDepth = hasDepth;
 		this.blankScreen = new BlankScreen();
 		this.currScreen = this.blankScreen;
 
@@ -137,11 +140,19 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		if (lastFBO != null)
 			lastFBO.dispose();
 		lastFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
-				currentHeight, false);
+				currentHeight, hasDepth);
 		if (currFBO != null)
 			currFBO.dispose();
 		currFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
-				currentHeight, false);
+				currentHeight, hasDepth);
+	}
+
+	/**
+	 * @param hasDepth
+	 *            whether the internal framebuffer should use depth
+	 */
+	public void setHasDepth(boolean hasDepth) {
+		this.hasDepth = hasDepth;
 	}
 
 	/**

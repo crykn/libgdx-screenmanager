@@ -41,7 +41,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		ScreenManager sm = Mockito.spy(new ScreenManager());
 		// Mock initBuffers() as it is using open gl stuff
 		Mockito.doNothing().when(sm).initBuffers();
-		sm.initialize(mult, 5, 5);
+		sm.initialize(mult, 5, 5, false);
 
 		testScreen = new TestScreen() {
 			@Override
@@ -287,7 +287,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		Mockito.doNothing().when(sm).initBuffers();
 		Mockito.doReturn(null).when(sm).screenToTexture(Mockito.any(),
 				Mockito.any(), Mockito.anyFloat());
-		sm.initialize(Mockito.spy(new BasicInputMultiplexer()), 5, 5);
+		sm.initialize(Mockito.spy(new BasicInputMultiplexer()), 5, 5, false);
 
 		String screen1Name = "s1";
 		String screen2Name = "s2";

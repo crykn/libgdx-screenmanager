@@ -69,13 +69,13 @@ public class ManagedGameTest extends LibgdxUnitTest {
 
 			@Override
 			public void initialize(BasicInputMultiplexer gameInputMultiplexer,
-					int width, int height) {
+					int width, int height, boolean hasDepth) {
 				assertEquals(0, i);
 				i++;
 				assertEquals(width, 5);
 				assertEquals(height, 7);
 
-				super.initialize(gameInputMultiplexer, width, height);
+				super.initialize(gameInputMultiplexer, width, height, hasDepth);
 			}
 
 			@Override

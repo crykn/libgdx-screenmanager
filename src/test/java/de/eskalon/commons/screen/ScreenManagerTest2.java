@@ -52,7 +52,7 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 				// do nothing
 			}
 		};
-		sm.initialize(mult, 5, 5);
+		sm.initialize(mult, 5, 5, false);
 
 		ManagedScreen testScreen = new ManagedScreen() {
 			@Override

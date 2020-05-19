@@ -59,7 +59,7 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 
 		Gdx.input.setInputProcessor(inputProcessor);
 		screenManager.initialize(getInputMultiplexer(), getWidth(),
-				getHeight());
+				getHeight(), false);
 	}
 
 	@Override
