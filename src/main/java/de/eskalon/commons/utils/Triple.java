@@ -20,25 +20,23 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
- * A pair.
+ * A tuple.
  * 
  * @author damios
  */
-public class Pair<X, Y> {
+public class Triple<X, Y, Z> extends Pair<X, Y> {
 
 	@Nullable
-	public final X x;
-	@Nullable
-	public final Y y;
+	public final Z z;
 
-	public Pair(@Nullable X x, @Nullable Y y) {
-		this.x = x;
-		this.y = y;
+	public Triple(@Nullable X x, @Nullable Y y, @Nullable Z z) {
+		super(x, y);
+		this.z = z;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + x + "," + y + ")";
+		return "(" + x + "," + y + "," + z + ")";
 	}
 
 	@Override
@@ -47,15 +45,16 @@ public class Pair<X, Y> {
 			return true;
 		}
 
-		if (!(other instanceof Pair)) {
+		if (!(other instanceof Triple)) {
 			return false;
 		}
 
 		@SuppressWarnings("unchecked")
-		Pair<X, Y> other_ = (Pair<X, Y>) other;
+		Triple<X, Y, Z> other_ = (Triple<X, Y, Z>) other;
 
 		return Objects.equals(other_.x, this.x)
-				&& Objects.equals(other_.y, this.y);
+				&& Objects.equals(other_.y, this.y)
+				&& Objects.equals(other_.z, this.z);
 	}
 
 	@Override
@@ -64,6 +63,7 @@ public class Pair<X, Y> {
 		int result = 1;
 		result = prime * result + ((x == null) ? 0 : x.hashCode());
 		result = prime * result + ((y == null) ? 0 : y.hashCode());
+		result = prime * result + ((z == null) ? 0 : z.hashCode());
 		return result;
 	}
 
