@@ -148,11 +148,15 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
+	 * Sets the {@code hasDepth} attribute of the internal framebuffers and
+	 * recreates them.
+	 * 
 	 * @param hasDepth
-	 *            whether the internal framebuffer should use depth
 	 */
 	public void setHasDepth(boolean hasDepth) {
 		this.hasDepth = hasDepth;
+
+		initBuffers();
 	}
 
 	/**
