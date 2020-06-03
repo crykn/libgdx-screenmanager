@@ -36,7 +36,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.damios.guacamole.Preconditions;
-import de.damios.guacamole.gdx.NestableFrameBuffer;
+import de.damios.guacamole.gdx.graphics.NestableFrameBuffer;
 import de.damios.guacamole.tuple.Triple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;

@@ -28,8 +28,8 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.damios.guacamole.Preconditions;
-import de.damios.guacamole.gdx.MeshGenerator;
-import de.damios.guacamole.gdx.ShaderProgramFactory;
+import de.damios.guacamole.gdx.graphics.QuadMeshGenerator;
+import de.damios.guacamole.gdx.graphics.ShaderProgramFactory;
 import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
@@ -165,7 +165,7 @@ public class ShaderTransition extends TimedTransition {
 	public void resize(int width, int height) {
 		if (this.screenQuad != null)
 			this.screenQuad.dispose();
-		this.screenQuad = MeshGenerator.createFullScreenQuad(width, height,
+		this.screenQuad = QuadMeshGenerator.createFullScreenQuad(width, height,
 				true);
 	}
 
