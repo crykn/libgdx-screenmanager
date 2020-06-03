@@ -4,6 +4,4 @@
 	<source path="de/eskalon/commons">
 		<include name="**/*"/>
 	</source>
-	<inherits name="guacamole_gdx"/>
-	<inherits name="guacamole_gdx_gwt"/>
 </module>
