@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.google.common.base.Preconditions;
 
+import de.damios.guacamole.Preconditions;
 import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingDirection;
 import de.eskalon.commons.screen.transition.impl.SlidingInTransition;

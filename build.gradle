@@ -13,6 +13,7 @@ repositories {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
         jcenter()
 }
 
@@ -54,21 +55,22 @@ install {
 // DEPENDENCIES
 ext {
 	gdxVersion = "1.9.10"
-	guavaVersion = "28.2-jre"
+	guacamoleVersion = "c0f1e93"
 	junitVersion = "5.6.0"
 	mockitoVersion = "3.2.4"
 }
 
 dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-	implementation "com.google.guava:guava-gwt:$guavaVersion"
+	implementation "com.github.crykn.guacamole:core:$guacamoleVersion"
+	implementation "com.github.crykn.guacamole:gdx:$guacamoleVersion"
 	
 	//testCompile "org.junit.platform:junit-platform-launcher:1.2.0" // needed for a bug in older eclipse versions
 
 	testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 	testImplementation "org.mockito:mockito-core:$mockitoVersion"
-	testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+	testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 

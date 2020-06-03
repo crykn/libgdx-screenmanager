@@ -26,11 +26,11 @@ import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
-import com.google.common.base.Preconditions;
 
+import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.gdx.MeshGenerator;
+import de.damios.guacamole.gdx.ShaderProgramFactory;
 import de.eskalon.commons.screen.transition.TimedTransition;
-import de.eskalon.commons.utils.graphics.MeshGenerator;
-import de.eskalon.commons.utils.graphics.ShaderProgramFactory;
 
 /**
  * A transition that is using a shader to render the two transitioning screens.

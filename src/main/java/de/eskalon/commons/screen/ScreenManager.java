@@ -34,12 +34,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.google.common.base.Preconditions;
 
+import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.gdx.NestableFrameBuffer;
+import de.damios.guacamole.tuple.Triple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
-import de.eskalon.commons.utils.Triple;
-import de.eskalon.commons.utils.graphics.NestableFrameBuffer;
 
 /**
  * A screen manager that handles the different screens of a game and their

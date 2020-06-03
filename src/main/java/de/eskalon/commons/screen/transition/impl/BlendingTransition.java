@@ -21,7 +21,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.google.common.base.Preconditions;
+
+import de.damios.guacamole.Preconditions;
 
 /**
  * A transition that blends two screens together over a certain time interval.
