@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -36,6 +35,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.gdx.Log;
 import de.damios.guacamole.gdx.graphics.NestableFrameBuffer;
 import de.damios.guacamole.tuple.Triple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
@@ -272,11 +272,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	public void pushScreen(String name, @Nullable String transitionName,
 			Object... params) {
-		if (Gdx.app.getLogLevel() >= Application.LOG_DEBUG)
-			Gdx.app.debug("ScreenManager",
-					"Screen '" + name + "' was pushed, using the transition '"
-							+ (transitionName == null ? "null" : transitionName)
-							+ "'");
+		if (Log.isDebugEnabled())
+			Log.debug("ScreenManager",
+					"Screen '%s' was pushed, using the transition '%s'", name,
+					transitionName == null ? "null" : transitionName);
 		transitionQueue.add(new Triple<T, S, Object[]>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
