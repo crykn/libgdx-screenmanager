@@ -119,6 +119,9 @@ public abstract class ManagedScreen implements Screen {
 	 * Called when the {@linkplain ApplicationListener#resize(int, int) game is
 	 * resized}, the screen was {@linkplain #isInitialized() initialized} before
 	 * and the new size is different to the previous one.
+	 * <p>
+	 * In addition, this method is called once right after the screen was
+	 * initialized ({@link #create()}).
 	 * 
 	 * @param width
 	 *            the new width in pixels
