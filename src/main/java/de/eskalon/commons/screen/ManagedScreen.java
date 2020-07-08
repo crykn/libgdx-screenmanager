@@ -17,10 +17,7 @@ package de.eskalon.commons.screen;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
@@ -67,6 +64,7 @@ public abstract class ManagedScreen implements Screen {
 		if (!initialized) {
 			initialized = true;
 			create();
+			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		}
 	}
 
