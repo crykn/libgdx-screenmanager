@@ -23,9 +23,6 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 
 	private int i = 1, k = 0;
 	private boolean firstRenderPassScreen2 = true;
-	private ManagedScreen testScreen;
-
-	private static int width = 123, height = 234;
 
 	/**
 	 * Tests whether create(), show() and hide() and are called at the right
@@ -43,7 +40,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		Mockito.doNothing().when(sm).initBuffers();
 		sm.initialize(mult, 5, 5, false);
 
-		testScreen = new TestScreen() {
+		ManagedScreen testScreen = new TestScreen() {
 			@Override
 			public void show() {
 				initializeScreen(); // instead of super.show();
@@ -73,8 +70,6 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 
 			@Override
 			public void resize(int width, int height) {
-				assertEquals(ScreenManagerTest.width, width);
-				assertEquals(ScreenManagerTest.height, height);
 			}
 
 			@Override
@@ -442,19 +437,21 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		// Make screen2 the current screen; the transition is going on
 		sm.pushScreen(screen2Name, transition1Name);
 		sm.render(1);
+		
 
 		// resize()
+		assertEquals(2, resizeCount);
 		sm.resize(5, 5); // ignored
 		sm.resize(10, 10);
-		assertEquals(3, resizeCount);
+		assertEquals(5, resizeCount);
 		sm.resize(10, 10); // ignored
-		assertEquals(3, resizeCount);
+		assertEquals(5, resizeCount);
 
 		// only change width _or_ height
 		sm.resize(10, 15);
-		assertEquals(6, resizeCount);
+		assertEquals(8, resizeCount);
 		sm.resize(20, 15);
-		assertEquals(9, resizeCount);
+		assertEquals(11, resizeCount);
 
 		// pause() & resume()
 		sm.pause();
@@ -566,7 +563,7 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 	/**
 	 * Implements some empty default methods to reduce boilerplate code.
 	 */
-	abstract class TestScreen extends ManagedScreen {
+	static abstract class TestScreen extends ManagedScreen {
 		@Override
 		protected void create() {
 		}
