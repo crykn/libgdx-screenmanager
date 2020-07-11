@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -90,6 +91,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	@Nullable
 	private ManagedScreen currScreen;
+
+	/**
+	 * The input processors of the {@linkplain #currScreen current screen}.
+	 */
+	private Array<InputProcessor> currentProcessors = new Array<>();
 
 	/**
 	 * The blank screen used internally when no screen has been pushed yet.
@@ -297,12 +303,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				Triple<T, S, Object[]> nextTransition = transitionQueue.poll();
 
 				if (nextTransition.y == currScreen) {
-					render(delta); // one can't push the currently active screen
+					render(delta); // one can't push the same screen twice in a
+									// row
 					return;
 				}
 
-				this.gameInputMultiplexer.removeProcessors(
-						new Array<>(this.currScreen.getInputProcessors()));
+				this.gameInputMultiplexer.removeProcessors(currentProcessors);
 
 				this.lastScreen = currScreen;
 				this.currScreen = nextTransition.y;
@@ -316,8 +322,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				} else { // a screen was pushed without transition
 					this.lastScreen.hide();
 
-					this.gameInputMultiplexer.addProcessors(
-							new Array<>(this.currScreen.getInputProcessors()));
+					this.currentProcessors = new Array<>(
+							this.currScreen.getInputProcessors());
+					this.gameInputMultiplexer.addProcessors(currentProcessors);
 				}
 
 				// render again so no frame is skipped
@@ -351,8 +358,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				 */
 				this.transition = null;
 				this.lastScreen.hide();
-				this.gameInputMultiplexer.addProcessors(
-						new Array<>(this.currScreen.getInputProcessors()));
+				this.currentProcessors = new Array<>(
+						this.currScreen.getInputProcessors());
+				this.gameInputMultiplexer.addProcessors(currentProcessors);
 
 				// render again so no frame is skipped
 				render(delta);

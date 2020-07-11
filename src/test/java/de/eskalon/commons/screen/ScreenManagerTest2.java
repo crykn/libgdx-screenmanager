@@ -328,4 +328,73 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 		sm.render(1F);
 	}
 
+	/**
+	 * Tests whether a screen's input processor is removed from the game, even
+	 * though it was deleted from the screen's list of processors beforehand.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testRemovingProcessor() {
+		BasicInputMultiplexer mult = new BasicInputMultiplexer();
+
+		// Mock initBuffers() & screenToTexture() as they are using open gl
+		// stuff
+		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
+			@Override
+			TextureRegion screenToTexture(ManagedScreen screen,
+					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
+					float delta) {
+				screen.render(delta); // only render the screen
+
+				return null;
+			};
+
+			@Override
+			protected void initBuffers() {
+				// do nothing
+			}
+		};
+		sm.initialize(mult, 5, 5, false);
+
+		ManagedScreen mainScreen = new TestScreen() {
+			boolean doneOnce = false;
+
+			@Override
+			public void show() {
+				addInputProcessor(new InputAdapter());
+				addInputProcessor(new InputAdapter());
+			}
+
+			@Override
+			public void render(float delta) {
+				if (!doneOnce) {
+					doneOnce = true;
+
+					this.getInputProcessors().removeIndex(0);
+				}
+			}
+
+			@Override
+			public void resize(int width, int height) {
+			}
+		};
+
+		ManagedScreen secondScreen = new TestScreen() {
+			@Override
+			public void resize(int width, int height) {
+			}
+		};
+
+		sm.addScreen("main", mainScreen);
+		sm.addScreen("second", secondScreen);
+
+		sm.pushScreen("main", null);
+		sm.render(1F);
+		assertEquals(2, mult.size());
+
+		sm.pushScreen("second", null);
+		sm.render(1F);
+		assertEquals(0, mult.size());
+	}
+
 }

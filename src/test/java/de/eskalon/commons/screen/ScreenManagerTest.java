@@ -437,10 +437,10 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		// Make screen2 the current screen; the transition is going on
 		sm.pushScreen(screen2Name, transition1Name);
 		sm.render(1);
-		
 
 		// resize()
-		assertEquals(2, resizeCount);
+		assertEquals(2, resizeCount); // the two screens were automatically
+										// resized when they were first shown
 		sm.resize(5, 5); // ignored
 		sm.resize(10, 10);
 		assertEquals(5, resizeCount);
