@@ -260,6 +260,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * {@linkplain #getLastScreen() active screen}, as soon as the transition is
 	 * finished. This is always done on the rendering thread (in
 	 * {@link #render(float)}).
+	 * <p>
+	 * If the same screen is pushed twice in a row, the second one is being
+	 * ignored.
 	 *
 	 * @param name
 	 *            the name of screen to be pushed
@@ -292,6 +295,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				 * Start the queued transition
 				 */
 				Triple<T, S, Object[]> nextTransition = transitionQueue.poll();
+
+				if (nextTransition.y == currScreen) {
+					render(delta); // one can't push the currently active screen
+					return;
+				}
 
 				this.gameInputMultiplexer.removeProcessors(
 						new Array<>(this.currScreen.getInputProcessors()));

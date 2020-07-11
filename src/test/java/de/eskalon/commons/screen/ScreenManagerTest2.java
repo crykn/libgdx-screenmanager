@@ -1,6 +1,7 @@
 package de.eskalon.commons.screen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -12,6 +13,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.LibgdxUnitTest;
+import de.eskalon.commons.screen.ScreenManagerTest.TestScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
 
@@ -210,7 +212,6 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			@Override
 			public void dispose() {
 			}
-
 		};
 
 		String transitionName = "Transition";
@@ -262,6 +263,69 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 
 		// Try to initialize the transition a second time
 		transition.initializeScreenTransition();
+	}
+
+	/**
+	 * Tests that pushing the same screen twice in sucession is ignored.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testIdenticalDoublePush() {
+		BasicInputMultiplexer mult = new BasicInputMultiplexer();
+
+		// Mock initBuffers() & screenToTexture() as they are using open gl
+		// stuff
+		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
+			@Override
+			TextureRegion screenToTexture(ManagedScreen screen,
+					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
+					float delta) {
+				screen.render(delta); // only render the screen
+
+				return null;
+			};
+
+			@Override
+			protected void initBuffers() {
+				// do nothing
+			}
+		};
+		sm.initialize(mult, 5, 5, false);
+
+		ManagedScreen firstScreen = new TestScreen() {
+			@Override
+			public void resize(int width, int height) {
+			}
+		};
+
+		ManagedScreen mainScreen = new TestScreen() {
+			boolean isShown = false;
+
+			@Override
+			public void show() {
+				assertFalse(isShown);
+				isShown = true;
+			};
+
+			@Override
+			public void hide() {
+				assertTrue(isShown);
+				isShown = false;
+			}
+
+			@Override
+			public void resize(int width, int height) {
+			}
+		};
+
+		sm.addScreen("first", firstScreen);
+		sm.addScreen("main", mainScreen);
+
+		sm.pushScreen("first", null);
+		sm.pushScreen("main", null);
+		sm.pushScreen("main", null);
+
+		sm.render(1F);
 	}
 
 }
