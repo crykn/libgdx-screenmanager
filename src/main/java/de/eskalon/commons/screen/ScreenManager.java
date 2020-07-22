@@ -126,7 +126,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	private boolean initialized = false;
 
-	private boolean hasDepth;
+	private boolean hasDepth; // needed, when the framebuffers are (re)created
 
 	public void initialize(BasicInputMultiplexer gameInputMultiplexer,
 			int width, int height, boolean hasDepth) {
@@ -298,7 +298,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		if (transition == null) {
 			if (!transitionQueue.isEmpty()) {
 				/*
-				 * Start the queued transition
+				 * START THE NEXT QUEUED TRANSITION
 				 */
 				Triple<T, S, Object[]> nextTransition = transitionQueue.poll();
 
@@ -327,11 +327,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 					this.gameInputMultiplexer.addProcessors(currentProcessors);
 				}
 
-				// render again so no frame is skipped
-				render(delta);
+				render(delta); // render again so no frame is skipped
 			} else {
 				/*
-				 * Render current screen; no transition is going on
+				 * RENDER THE CURRENT SCREEN; no transition is going on
 				 */
 				Gdx.gl.glClearColor(currScreen.getClearColor().r,
 						currScreen.getClearColor().g,
@@ -343,7 +342,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		} else {
 			if (!this.transition.isDone()) {
 				/*
-				 * render the current transition
+				 * RENDER THE CURRENT TRANSITION
 				 */
 				TextureRegion lastTextureRegion = screenToTexture(
 						this.lastScreen, this.lastFBO, delta);
@@ -354,7 +353,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 						currTextureRegion);
 			} else {
 				/*
-				 * the current transition is finished; remove it
+				 * THE CURRENT TRANSITION IS FINISHED; remove it
 				 */
 				this.transition = null;
 				this.lastScreen.hide();
@@ -362,8 +361,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 						this.currScreen.getInputProcessors());
 				this.gameInputMultiplexer.addProcessors(currentProcessors);
 
-				// render again so no frame is skipped
-				render(delta);
+				render(delta); // render again so no frame is skipped
 			}
 		}
 	}

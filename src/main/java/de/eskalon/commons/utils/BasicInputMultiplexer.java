@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.Array;
  * {@code true}, which indicates that the event was handled.
  * <p>
  * This class adds some convenience methods for quickly changing all of the
- * registered input processors.
+ * added input processors.
  * 
  * @author damios
  */

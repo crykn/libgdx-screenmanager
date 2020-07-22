@@ -144,7 +144,7 @@ public class ShaderTransition extends TimedTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		this.renderContext.begin();
-		this.program.begin();
+		this.program.bind();
 
 		// Set uniforms
 		this.program.setUniformMatrix(this.projTransLoc, camera.combined);
@@ -157,7 +157,6 @@ public class ShaderTransition extends TimedTransition {
 		// Render the screens using the shader
 		this.screenQuad.render(this.program, GL20.GL_TRIANGLE_STRIP);
 
-		this.program.end();
 		this.renderContext.end();
 	}
 

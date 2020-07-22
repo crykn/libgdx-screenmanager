@@ -32,7 +32,7 @@ import de.damios.guacamole.Preconditions;
 public class HorizontalSlicingTransition extends BlankTimedTransition {
 
 	private SpriteBatch batch;
-	private int sliceCount = 5;
+	private int sliceCount;
 
 	/**
 	 * @param batch

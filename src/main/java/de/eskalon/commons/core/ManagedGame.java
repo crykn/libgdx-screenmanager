@@ -58,7 +58,7 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		super.create();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		screenManager.initialize(getInputMultiplexer(), getWidth(),
+		screenManager.initialize(inputProcessor, getWidth(),
 				getHeight(), false);
 	}
 

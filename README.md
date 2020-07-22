@@ -1,12 +1,12 @@
 ## What is libgdx-screenmanager?
 
-[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build Status](https://travis-ci.com/crykn/libgdx-screenmanager.svg?branch=master)](https://travis-ci.com/crykn/libgdx-screenmanager)
+[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build Status](https://travis-ci.com/crykn/libgdx-screenmanager.svg?branch=master)](https://travis-ci.com/crykn/libgdx-screenmanager) [![GWT Compatible](https://img.shields.io/badge/GWT-compatible-informational)](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
 
 This library is a screen manager for libGDX games. It allows comfortably changing the rendered screen while using transition effects. The library's easy to use nature makes it possible to integrate libgdx-screenmanager into any project without much effort.
 
 ## Features
 
-* Allows easily **changing the rendered screen** (`game.getScreenManager().pushScreen("screen_name", "transition_name")`)
+* Allows easily **changing the rendered screen**: `game.getScreenManager().pushScreen("screen_name", "transition_name")`
 * Adds **screen transition effects** for when a screen is changed. The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/wiki/Available-transitions). Furthermore, transition shaders are supported as well (see the [GL Transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones).
 * **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
 * There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded

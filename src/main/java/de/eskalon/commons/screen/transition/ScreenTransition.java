@@ -26,8 +26,8 @@ import de.eskalon.commons.screen.ScreenManager;
  * Transitions are intended as objects that are created only once when the game
  * is started and are then reused.
  * <p>
- * The {@link #create()} method is called when the transition is first used. It
- * can also be initialized manually by calling
+ * The {@link #create()} method is called when the transition is first used. The
+ * transition can also be initialized manually by calling
  * {@link #initializeScreenTransition()}, which should normally be done by a
  * loading screen after the assets have been loaded.
  * 
