@@ -19,7 +19,7 @@ package de.eskalon.commons.screen;
  * A blank screen.
  * <p>
  * Is used internally when no screen has been
- * {@linkplain ScreenManager#pushScreen(String, String) pushed} yet.
+ * {@linkplain ScreenManager#pushScreen(String, String, Object...) pushed} yet.
  * 
  * @author damios
  */

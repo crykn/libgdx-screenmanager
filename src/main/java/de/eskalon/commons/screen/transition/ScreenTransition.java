@@ -33,7 +33,7 @@ import de.eskalon.commons.screen.ScreenManager;
  * 
  * @author damios
  * 
- * @see ScreenManager#pushScreen(String, String)
+ * @see ScreenManager#pushScreen(String, String, Object...)
  */
 public abstract class ScreenTransition implements Disposable {
 

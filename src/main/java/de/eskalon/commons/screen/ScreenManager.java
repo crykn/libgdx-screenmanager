@@ -52,7 +52,7 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
  * Screens and transitions can be added via
  * {@link #addScreen(String, ManagedScreen)} and
  * {@link #addScreenTransition(String, ScreenTransition)}. To actually show a
- * screen, push it via {@link #pushScreen(String, String)}.
+ * screen, push it via {@link #pushScreen(String, String, Object...)}.
  * <p>
  * As the screen manager is using framebuffers internally, screens and
  * transitions have to use a {@link NestableFrameBuffer} if they want to use
@@ -458,7 +458,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	/**
 	 * @return the current screen; is changed in the first render pass after
-	 *         {@link #pushScreen(String, String)} is called.
+	 *         {@link #pushScreen(String, String, Object...)} is called.
 	 */
 	@SuppressWarnings("unchecked")
 	public S getCurrentScreen() {
