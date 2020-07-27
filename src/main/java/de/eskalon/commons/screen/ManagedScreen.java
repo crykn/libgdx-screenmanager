@@ -70,6 +70,8 @@ public abstract class ManagedScreen implements Screen {
 
 	/**
 	 * Is responsible for initializing the screen. Is called <i>once</i>.
+	 * <p>
+	 * Right after this method {@link #resize(int, int)} is called.
 	 */
 	protected abstract void create();
 

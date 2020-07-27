@@ -59,6 +59,8 @@ public abstract class ScreenTransition implements Disposable {
 
 	/**
 	 * Is responsible for initializing the transition. Is called <i>once</i>.
+	 * <p>
+	 * Right after this method {@link #resize(int, int)} is called.
 	 */
 	protected abstract void create();
 
