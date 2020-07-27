@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.damios.guacamole.Preconditions;
+import de.eskalon.commons.screen.transition.BatchTransition;
 
 /**
  * A transition where the new screen is sliding in, while the last screen is
@@ -31,10 +32,9 @@ import de.damios.guacamole.Preconditions;
  * @since 0.5.1
  * @author damios
  */
-public class PushTransition extends BlankTimedTransition {
+public class PushTransition extends BatchTransition {
 
 	private SlidingDirection dir;
-	private SpriteBatch batch;
 
 	/**
 	 * @param batch
@@ -48,11 +48,9 @@ public class PushTransition extends BlankTimedTransition {
 	 */
 	public PushTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration, @Nullable Interpolation interpolation) {
-		super(duration, interpolation);
-		Preconditions.checkNotNull(batch);
+		super(batch, duration, interpolation);
 		Preconditions.checkNotNull(dir);
 
-		this.batch = batch;
 		this.dir = dir;
 	}
 
@@ -74,12 +72,10 @@ public class PushTransition extends BlankTimedTransition {
 			TextureRegion currScreen, float progress) {
 		batch.begin();
 
-		batch.draw(currScreen,
-				lastScreen.getRegionWidth() * dir.xPosFactor * (progress - 1),
-				lastScreen.getRegionHeight() * dir.yPosFactor * (progress - 1));
-		batch.draw(lastScreen,
-				lastScreen.getRegionWidth() * dir.xPosFactor * progress,
-				lastScreen.getRegionHeight() * dir.yPosFactor * progress);
+		batch.draw(currScreen, width * dir.xPosFactor * (progress - 1),
+				height * dir.yPosFactor * (progress - 1), width, height);
+		batch.draw(lastScreen, width * dir.xPosFactor * progress,
+				height * dir.yPosFactor * progress, width, height);
 
 		batch.end();
 	}
