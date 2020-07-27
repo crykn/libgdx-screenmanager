@@ -17,7 +17,6 @@ package de.eskalon.commons.screen.transition.impl;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -136,8 +135,6 @@ public class ShaderTransition extends TimedTransition {
 
 		this.renderContext = new RenderContext(
 				new DefaultTextureBinder(DefaultTextureBinder.ROUNDROBIN));
-
-		resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override

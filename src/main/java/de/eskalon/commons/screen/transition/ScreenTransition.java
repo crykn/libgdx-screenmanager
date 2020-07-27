@@ -16,6 +16,7 @@
 package de.eskalon.commons.screen.transition;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -52,6 +53,7 @@ public abstract class ScreenTransition implements Disposable {
 		if (!initialized) {
 			initialized = true;
 			create();
+			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		}
 	}
 
@@ -82,6 +84,9 @@ public abstract class ScreenTransition implements Disposable {
 	 * Called when the {@linkplain ApplicationListener#resize(int, int) game is
 	 * resized}, the transition was {@linkplain #isInitialized() initialized}
 	 * before and the new size is different to the previous one.
+	 * <p>
+	 * In addition, this method is called once right after the transition was
+	 * initialized ({@link #create()}).
 	 * 
 	 * @param width
 	 *            the new width in pixels

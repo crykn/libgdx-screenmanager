@@ -19,9 +19,11 @@ import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.damios.guacamole.Preconditions;
+import de.eskalon.commons.screen.transition.BatchTransition;
 
 /**
  * A transition where the new screen is sliding in in horizontal slices.
@@ -29,9 +31,8 @@ import de.damios.guacamole.Preconditions;
  * @since 0.3.0
  * @author damios
  */
-public class HorizontalSlicingTransition extends BlankTimedTransition {
+public class HorizontalSlicingTransition extends BatchTransition {
 
-	private SpriteBatch batch;
 	private int sliceCount;
 
 	/**
@@ -46,11 +47,10 @@ public class HorizontalSlicingTransition extends BlankTimedTransition {
 	 */
 	public HorizontalSlicingTransition(SpriteBatch batch, int sliceCount,
 			float duration, @Nullable Interpolation interpolation) {
-		super(duration, interpolation);
-		Preconditions.checkNotNull(batch);
+		super(batch, duration, interpolation);
 		Preconditions.checkArgument(sliceCount >= 2,
 				"The slice count has to be at least 2");
-		this.batch = batch;
+
 		this.sliceCount = sliceCount;
 	}
 
@@ -71,9 +71,9 @@ public class HorizontalSlicingTransition extends BlankTimedTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		batch.begin();
-		batch.draw(lastScreen, 0, 0);
+		batch.draw(lastScreen, 0, 0, width, height);
 
-		int sliceHeight = lastScreen.getRegionHeight() / sliceCount;
+		int sliceHeight = height / sliceCount;
 
 		for (int i = 0; i < sliceCount; i++) {
 			int y = i * sliceHeight;
@@ -81,14 +81,14 @@ public class HorizontalSlicingTransition extends BlankTimedTransition {
 			int offsetX = 0;
 
 			if (i % 2 == 0) {
-				offsetX = (int) (currScreen.getRegionWidth() * (progress - 1));
+				offsetX = (int) (width * (progress - 1));
 			} else {
-				offsetX = (int) (currScreen.getRegionWidth() * (1 - progress));
+				offsetX = (int) (width * (1 - progress));
 			}
 
-			batch.draw(currScreen.getTexture(), offsetX, y,
-					currScreen.getRegionWidth(), sliceHeight, 0, y,
-					currScreen.getRegionWidth(), sliceHeight, false, true);
+			batch.draw(currScreen.getTexture(), offsetX, y, width, sliceHeight,
+					0, HdpiUtils.toBackBufferY(y), HdpiUtils.toBackBufferX(width),
+					HdpiUtils.toBackBufferY(sliceHeight), false, true);
 		}
 		batch.end();
 	}

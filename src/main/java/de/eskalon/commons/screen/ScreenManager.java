@@ -32,6 +32,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -145,12 +146,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	protected void initBuffers() {
 		if (lastFBO != null)
 			lastFBO.dispose();
-		lastFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
-				currentHeight, hasDepth);
+		lastFBO = new NestableFrameBuffer(Format.RGBA8888,
+				HdpiUtils.toBackBufferX(currentWidth),
+				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
 		if (currFBO != null)
 			currFBO.dispose();
-		currFBO = new NestableFrameBuffer(Format.RGBA8888, currentWidth,
-				currentHeight, hasDepth);
+		currFBO = new NestableFrameBuffer(Format.RGBA8888,
+				HdpiUtils.toBackBufferX(currentWidth),
+				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
 	}
 
 	/**
@@ -348,7 +351,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 						this.lastScreen, this.lastFBO, delta);
 				TextureRegion currTextureRegion = screenToTexture(
 						this.currScreen, this.currFBO, delta);
-
+				
 				this.transition.render(delta, lastTextureRegion,
 						currTextureRegion);
 			} else {

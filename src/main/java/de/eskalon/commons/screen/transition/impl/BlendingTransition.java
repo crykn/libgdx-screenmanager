@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.damios.guacamole.Preconditions;
+import de.eskalon.commons.screen.transition.BatchTransition;
 
 /**
  * A transition that blends two screens together over a certain time interval.
@@ -30,15 +30,11 @@ import de.damios.guacamole.Preconditions;
  * @since 0.3.0
  * @author damios
  */
-public class BlendingTransition extends BlankTimedTransition {
-
-	private SpriteBatch batch;
+public class BlendingTransition extends BatchTransition {
 
 	public BlendingTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
-		super(duration, interpolation);
-		Preconditions.checkNotNull(batch);
-		this.batch = batch;
+		super(batch, duration, interpolation);
 	}
 
 	public BlendingTransition(SpriteBatch batch, float duration) {
@@ -52,12 +48,12 @@ public class BlendingTransition extends BlankTimedTransition {
 
 		// Blends the two screens
 		Color c = batch.getColor();
-		batch.draw(lastScreen, 0, 0);
+		batch.draw(lastScreen, 0, 0, width, height);
 
 		batch.setColor(c.r, c.g, c.b, progress);
-		batch.draw(currScreen, 0, 0);
+		batch.draw(currScreen, 0, 0, width, height);
 		batch.setColor(c.r, c.g, c.b, 1);
-		
+
 		batch.end();
 	}
 

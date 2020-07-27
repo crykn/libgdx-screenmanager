@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.damios.guacamole.Preconditions;
-import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingDirection;
 import de.eskalon.commons.screen.transition.impl.SlidingInTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
@@ -35,10 +34,9 @@ import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
  * @see SlidingInTransition
  * @see SlidingOutTransition
  */
-public class SlidingTransition extends BlankTimedTransition {
+public class SlidingTransition extends BatchTransition {
 
 	private SlidingDirection dir;
-	private SpriteBatch batch;
 	/**
 	 * {@code true} if the last screen should slide out; {@code false} if the
 	 * new screen should slide in.
@@ -48,11 +46,9 @@ public class SlidingTransition extends BlankTimedTransition {
 	public SlidingTransition(SpriteBatch batch, SlidingDirection dir,
 			boolean slideLastScreen, float duration,
 			@Nullable Interpolation interpolation) {
-		super(duration, interpolation);
-		Preconditions.checkNotNull(batch);
+		super(batch, duration, interpolation);
 		Preconditions.checkNotNull(dir);
 
-		this.batch = batch;
 		this.dir = dir;
 		this.slideLastScreen = slideLastScreen;
 	}
@@ -63,17 +59,13 @@ public class SlidingTransition extends BlankTimedTransition {
 		batch.begin();
 
 		if (slideLastScreen) { // slide out
-			batch.draw(currScreen, 0, 0);
-			batch.draw(lastScreen,
-					lastScreen.getRegionWidth() * dir.xPosFactor * progress,
-					lastScreen.getRegionHeight() * dir.yPosFactor * progress);
+			batch.draw(currScreen, 0, 0, width, height);
+			batch.draw(lastScreen, width * dir.xPosFactor * progress,
+					height * dir.yPosFactor * progress, width, height);
 		} else { // slide in
-			batch.draw(lastScreen, 0, 0);
-			batch.draw(currScreen,
-					lastScreen.getRegionWidth() * dir.xPosFactor
-							* (progress - 1),
-					lastScreen.getRegionHeight() * dir.yPosFactor
-							* (progress - 1));
+			batch.draw(lastScreen, 0, 0, width, height);
+			batch.draw(currScreen, width * dir.xPosFactor * (progress - 1),
+					height * dir.yPosFactor * (progress - 1), width, height);
 		}
 
 		batch.end();
