@@ -55,9 +55,9 @@ install {
 // DEPENDENCIES
 ext {
 	gdxVersion = "1.9.11"
-	guacamoleVersion = "0.2.0"
+	guacamoleVersion = "b6e8c0dbd1" // = 0.2.1
 	junitVersion = "5.6.0"
-	mockitoVersion = "3.2.4"
+	mockitoVersion = "3.4.4"
 }
 
 dependencies {

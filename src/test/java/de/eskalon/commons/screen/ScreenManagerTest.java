@@ -439,19 +439,19 @@ public class ScreenManagerTest extends LibgdxUnitTest {
 		sm.render(1);
 
 		// resize()
-		assertEquals(2, resizeCount); // the two screens were automatically
+		assertEquals(3, resizeCount); // the two screens were automatically
 										// resized when they were first shown
 		sm.resize(5, 5); // ignored
 		sm.resize(10, 10);
-		assertEquals(5, resizeCount);
+		assertEquals(6, resizeCount);
 		sm.resize(10, 10); // ignored
-		assertEquals(5, resizeCount);
+		assertEquals(6, resizeCount);
 
 		// only change width _or_ height
 		sm.resize(10, 15);
-		assertEquals(8, resizeCount);
+		assertEquals(9, resizeCount);
 		sm.resize(20, 15);
-		assertEquals(11, resizeCount);
+		assertEquals(12, resizeCount);
 
 		// pause() & resume()
 		sm.pause();
