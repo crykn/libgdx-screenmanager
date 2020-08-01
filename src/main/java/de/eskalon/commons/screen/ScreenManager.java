@@ -315,8 +315,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 				this.lastScreen = currScreen;
 				this.currScreen = nextTransition.y;
-				this.currScreen.pushParams = nextTransition.z.length == 0 ? null
-						: nextTransition.z;
+				this.currScreen.pushParams = (nextTransition.z == null
+						|| nextTransition.z.length == 0) ? null
+								: nextTransition.z;
 				this.currScreen.show();
 				this.transition = nextTransition.x;
 
@@ -351,7 +352,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 						this.lastScreen, this.lastFBO, delta);
 				TextureRegion currTextureRegion = screenToTexture(
 						this.currScreen, this.currFBO, delta);
-				
+
 				this.transition.render(delta, lastTextureRegion,
 						currTextureRegion);
 			} else {
