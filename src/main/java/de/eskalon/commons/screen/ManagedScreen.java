@@ -17,7 +17,11 @@ package de.eskalon.commons.screen;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
@@ -27,7 +31,7 @@ import de.eskalon.commons.core.ManagedGame;
  * A basic screen for use with a {@link ScreenManager}. Screens are intended as
  * objects that are created only once when the game is started.
  * <p>
- * A screen is always {@linkplain #show() shown} before when it is
+ * A screen is always {@linkplain #show() shown} before it is
  * {@linkplain #render(float) rendered}.
  * <p>
  * The {@link #create()} method is called when the screen is first shown. The
@@ -47,6 +51,13 @@ public abstract class ManagedScreen implements Screen {
 	 * @see #addInputProcessor(InputProcessor)
 	 */
 	private final Array<InputProcessor> inputProcessors = new Array<>(4);
+	/**
+	 * Contains any arguments given to
+	 * {@link ScreenManager#pushScreen(String, String, Object...)}. Is
+	 * {@code null}, if no arguments were provided.
+	 * <p>
+	 * These params are usually accessed in {@link #show()}.
+	 */
 	@Nullable
 	protected Object[] pushParams;
 
@@ -91,6 +102,9 @@ public abstract class ManagedScreen implements Screen {
 	 * Called when this screen becomes the
 	 * {@linkplain ScreenManager#getCurrentScreen() active screen}. At first,
 	 * the screen may be rendered as part of a transition.
+	 * <p>
+	 * If the {@link ScreenManager#pushScreen(String, String, Object...)} call
+	 * had any params set, those can be found in {@link #pushParams}.
 	 */
 	@Override
 	public void show() {
