@@ -6,18 +6,14 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 
 ## Features
 
-* Allows easily **changing the rendered screen**: `game.getScreenManager().pushScreen("screen_name", "transition_name")`
-* Adds **screen transition effects** for when a screen is changed. The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/wiki/Available-transitions). Furthermore, transition shaders are supported as well (see the [GL Transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones).
-* **Automatically registers/unregisters** the screen's **input processors** whenever the screen is shown/hidden
-* There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them when everything else has already been loaded
-* The whole library is well documented and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for  everything that isn't graphical
-
-
 ![](https://raw.githubusercontent.com/crykn/libgdx-screenmanager/master/showcase/gl_transitions_2.gif)
 > ###### A small example using different transitions. Look at the [showcases folder](https://github.com/crykn/libgdx-screenmanager/tree/master/showcase) for more gifs.
 
-<br/>
-
+* Allows easily **changing the rendered screen**: `game.getScreenManager().pushScreen("screen_name", "transition_name")`
+* Adds **screen transition effects** for when a screen is changed. The included transitions can be found [here](https://github.com/crykn/libgdx-screenmanager/wiki/Available-transitions). Furthermore, transition shaders are supported as well. See the [GL Transitions](https://gl-transitions.com/gallery) project for a collection of some very well made ones.
+* **Automatically registers/unregisters** a screen's **input processors** whenever the screen is shown/hidden
+* There are `create()` methods for screens and transitions that are called _once_ before a screen/transition is shown. This allows easily initializing them, when everything else has already been loaded
+* The whole library is [well documented](https://github.com/crykn/libgdx-screenmanager/wiki) and includes [tests](https://github.com/crykn/libgdx-screenmanager/tree/master/src/test/java) for  everything that isn't graphical
 
 ## Example code
 
