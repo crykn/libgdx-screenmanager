@@ -27,11 +27,12 @@ import com.badlogic.gdx.Graphics;
 class BasicApplication extends ApplicationAdapter {
 
 	/**
-	 * @see Graphics#getWidth()
+	 * @see #getWidth()
 	 */
 	protected int viewportWidth;
+
 	/**
-	 * @see Graphics#getHeight()
+	 * @see #getHeight()
 	 */
 	protected int viewportHeight;
 
@@ -42,14 +43,24 @@ class BasicApplication extends ApplicationAdapter {
 	}
 
 	/**
+	 * The width of the client area in logical pixels.
+	 * <p>
+	 * May be {@code 0}, when the window is minimized.
+	 * 
 	 * @return the viewport width
+	 * @see Graphics#getWidth()
 	 */
 	public int getWidth() {
 		return this.viewportWidth;
 	}
 
 	/**
+	 * The height of the client area in logical pixels.
+	 * <p>
+	 * May be {@code 0}, when the window is minimized.
+	 * 
 	 * @return the viewport height
+	 * @see Graphics#getHeight()
 	 */
 	public int getHeight() {
 		return this.viewportHeight;

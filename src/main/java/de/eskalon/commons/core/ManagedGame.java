@@ -58,8 +58,8 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		super.create();
 
 		Gdx.input.setInputProcessor(inputProcessor);
-		screenManager.initialize(inputProcessor, getWidth(),
-				getHeight(), false);
+		screenManager.initialize(inputProcessor, getWidth(), getHeight(),
+				false);
 	}
 
 	@Override
@@ -70,7 +70,12 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		screenManager.resize(width, height);
+
+		if (width != 0 && height != 0) // if the window is minimized on Windows,
+										// resize(0, 0) is called. However, a
+										// framebuffer with these dimensions
+										// cannot be created.
+			screenManager.resize(width, height);
 	}
 
 	@Override
