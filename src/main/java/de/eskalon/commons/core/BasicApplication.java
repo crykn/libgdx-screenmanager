@@ -18,6 +18,7 @@ package de.eskalon.commons.core;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.graphics.glutils.HdpiMode;
 
 /**
  * A basic game application. Takes care of setting some convenience variables.
@@ -43,24 +44,24 @@ class BasicApplication extends ApplicationAdapter {
 	}
 
 	/**
-	 * The width of the client area in logical pixels.
-	 * <p>
-	 * May be {@code 0}, when the window is minimized.
+	 * The width of the client area in pixels.
 	 * 
 	 * @return the viewport width
+	 * 
 	 * @see Graphics#getWidth()
+	 * @see HdpiMode
 	 */
 	public int getWidth() {
 		return this.viewportWidth;
 	}
 
 	/**
-	 * The height of the client area in logical pixels.
-	 * <p>
-	 * May be {@code 0}, when the window is minimized.
+	 * The height of the client area in pixels.
 	 * 
 	 * @return the viewport height
+	 * 
 	 * @see Graphics#getHeight()
+	 * @see HdpiMode
 	 */
 	public int getHeight() {
 		return this.viewportHeight;

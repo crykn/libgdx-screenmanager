@@ -15,6 +15,7 @@
 
 package de.eskalon.commons.core;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -67,15 +68,30 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		screenManager.render(Gdx.graphics.getDeltaTime());
 	}
 
+	/**
+	 * Called when the {@link Application} is resized. This can happen at any
+	 * point during a non-paused state, but will never happen before a call to
+	 * {@link #create()}.
+	 * <p>
+	 * {@code resize(0, 0)} calls, which may happen when the game is minimized
+	 * on Windows, are ignored.
+	 * 
+	 * @param width
+	 *            the new width in pixels
+	 * @param height
+	 *            the new height in pixels
+	 */
 	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
+		if (width == 0 || height == 0) // if the game is minimized on Windows,
+										// resize(0, 0) is called. This causes
+										// problems, as a framebuffer with these
+										// dimensions cannot be created.
+										// Therefore, it is simply ignored.
+			return;
 
-		if (width != 0 && height != 0) // if the window is minimized on Windows,
-										// resize(0, 0) is called. However, a
-										// framebuffer with these dimensions
-										// cannot be created.
-			screenManager.resize(width, height);
+		super.resize(width, height);
+		screenManager.resize(width, height);
 	}
 
 	@Override
