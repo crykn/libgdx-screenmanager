@@ -18,6 +18,7 @@ package de.eskalon.commons.screen.transition;
 import javax.annotation.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 
 import de.damios.guacamole.Preconditions;
@@ -40,6 +41,10 @@ public abstract class BatchTransition extends BlankTimedTransition {
 
 		this.batch = batch;
 	}
+
+	@Override
+	public abstract void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen, float progress);
 
 	@Override
 	public void resize(int width, int height) {
