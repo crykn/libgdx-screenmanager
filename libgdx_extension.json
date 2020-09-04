@@ -1,5 +1,6 @@
 {
   "formatVersion": 1,
+  "gdxVersion": "1.9.11"
   "name": "libgdx-screenmanager",
   "author": "damios",
   "description": "A screen manager for libgdx supporting transitions.",
