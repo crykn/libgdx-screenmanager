@@ -7,16 +7,16 @@
   "version": "0.6.2",
   "gwtCompatible": true,
   "coreDependencies": [
-  	"com.github.crykn:libgdx-screenmanager"
+    "com.github.crykn:libgdx-screenmanager"
   ],
   "gwtDependencies": [
-  	"com.github.crykn:libgdx-screenmanager",
-  	"com.github.crykn:libgdx-screenmanager:sources",
-  	"com.github.crykn:libgdx-screenmanager-gwt",
-  	"com.github.crykn:libgdx-screenmanager-gwt:sources"
+    "com.github.crykn:libgdx-screenmanager",
+    "com.github.crykn:libgdx-screenmanager:sources",
+    "com.github.crykn:libgdx-screenmanager-gwt",
+    "com.github.crykn:libgdx-screenmanager-gwt:sources"
   ],
   "gwtInherits": [
-  	"libgdx_screenmanager",
-  	"libgdx_screenmanager_gwt"
+    "libgdx_screenmanager",
+    "libgdx_screenmanager_gwt"
   ]
 }
