@@ -6,7 +6,6 @@
   "description": "A screen manager for libgdx supporting transitions.",
   "projectUrl": "https://github.com/crykn/libgdx-screenmanager",
   "version": "0.6.2",
-  "gwtCompatible": true,
   "coreDependencies": [
     "com.github.crykn:libgdx-screenmanager"
   ],
