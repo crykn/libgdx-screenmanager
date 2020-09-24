@@ -4,7 +4,7 @@
   "author": "damios",
   "description": "A screen manager for libgdx supporting transitions.",
   "projectUrl": "https://github.com/crykn/libgdx-screenmanager",
-  "dependencies": {
+  "states": {
     "1.9.10": {
       "version": "0.6.2",
       "core": [
