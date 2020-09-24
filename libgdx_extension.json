@@ -1,19 +1,40 @@
 {
   "formatVersion": 1,
   "name": "libgdx-screenmanager",
-  "author": "damios",
+  "authors": [
+    "damios"
+  ],
   "description": "A screen manager for libgdx supporting transitions.",
   "projectUrl": "https://github.com/crykn/libgdx-screenmanager",
   "states": {
-    "1.9.10": {
+    "1.9.11": {
       "version": "0.6.2",
-      "core": [
+      "coreDependencies": [
         "com.github.crykn:libgdx-screenmanager"
       ],
-      "android": [
+      "androidDependencies": [
         "org.xyz.android:whatever"
       ],
-      "gwt": [
+      "gwtDependencies": [
+        "com.github.crykn:libgdx-screenmanager",
+        "com.github.crykn:libgdx-screenmanager:sources",
+        "com.github.crykn:libgdx-screenmanager-gwt",
+        "com.github.crykn:libgdx-screenmanager-gwt:sources"
+      ],
+      "gwtInherits": [
+        "libgdx_screenmanager",
+        "libgdx_screenmanager_gwt"
+      ],
+      "androidPermissions": [
+        "I_DONT_KNOW"
+      ]
+    },
+    "1.9.10": {
+      "version": "0.5.1",
+      "coreDependencies": [
+        "com.github.crykn:libgdx-screenmanager"
+      ],
+      "gwtDependencies": [
         "com.github.crykn:libgdx-screenmanager",
         "com.github.crykn:libgdx-screenmanager:sources",
         "com.github.crykn:libgdx-screenmanager-gwt",
@@ -24,7 +45,7 @@
         "libgdx_screenmanager_gwt"
       ],
       "incompatiblePlatforms": [
-        "iOS"
+        "android"
       ]
     }
   }
