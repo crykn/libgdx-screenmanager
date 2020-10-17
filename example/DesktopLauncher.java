@@ -1,6 +1,6 @@
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 /**
  * Starts the application for the desktop-based builds.
@@ -8,16 +8,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class DesktopLauncher {
 
 	public static void main(String[] args) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = MyGdxGame.TITLE;
-		config.foregroundFPS = 0;
-		config.height = 720;
-		config.width = 1024;
-		config.resizable = true;
+		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setTitle(MyGdxGame.TITLE);
+		config.setWindowedMode(1024, 720);
 
 		try {
 			// Start the game
-			new LwjglApplication(new MyGdxGame(), config);
+			new Lwjgl3Application(new MyGdxGame(), config);
 		} catch (Exception e) {
 			System.err.println("An unexpected error occurred while starting the game: " + e.getLocalizedMessage());
 			System.exit(-1);
