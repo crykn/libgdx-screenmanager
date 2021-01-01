@@ -34,11 +34,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
  * <p>
  * The technical details: A GL Transition is a GLSL code that implements a
  * transition function which takes a {@code vec2 uv} pixel position and returns
- * a {@code vec4 color}. This color represents the mix of the from to the to
- * textures based on the variation of a contextual progress value from
- * {@code 0.0} to {@code 1.0}.
+ * a {@code vec4 color}. This color represents the mix of the {@code from} to
+ * the {@code to} textures based on the variation of a contextual progress value
+ * from {@code 0.0} to {@code 1.0}.
  * 
- * @version 0.4.0
+ * @since 0.4.0
  * @author damios
  *
  * @see <a href=
