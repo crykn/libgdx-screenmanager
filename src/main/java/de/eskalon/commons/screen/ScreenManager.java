@@ -381,7 +381,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 			this.currentWidth = width;
 			this.currentHeight = height;
 
-			// Screens & transitions are resized
+			// Resize screens & transitions
 			for (S s : screens.values()) {
 				if (s.isInitialized()) {
 					s.resize(width, height);
@@ -393,7 +393,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				}
 			}
 
-			// Buffers
+			// Recreate buffers
 			initBuffers();
 		}
 	}
