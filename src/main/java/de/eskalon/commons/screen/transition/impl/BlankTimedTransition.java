@@ -40,23 +40,23 @@ public class BlankTimedTransition extends TimedTransition {
 	}
 
 	@Override
-	protected void create() {
-		// not needed
-	}
-
-	@Override
-	public void dispose() {
-		// not needed
-	}
-
-	@Override
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		// do nothing
 	}
 
 	@Override
+	protected void create() {
+		// not needed
+	}
+
+	@Override
 	public void resize(int width, int height) {
+		// not needed
+	}
+
+	@Override
+	public void dispose() {
 		// not needed
 	}
 

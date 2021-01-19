@@ -41,11 +41,4 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 		Gdx.app.debug("Game", "Initialization finished.");
 	}
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-
-		this.batch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-	}
-
 }

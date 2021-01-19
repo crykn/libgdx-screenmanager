@@ -71,6 +71,7 @@ public class VerticalSlicingTransition extends BatchTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		batch.begin();
+
 		batch.draw(lastScreen, 0, 0, width, height);
 
 		int sliceWidth = width / sliceCount;
@@ -91,6 +92,7 @@ public class VerticalSlicingTransition extends BatchTransition {
 					HdpiUtils.toBackBufferX(sliceWidth),
 					HdpiUtils.toBackBufferY(height), false, true);
 		}
+
 		batch.end();
 	}
 

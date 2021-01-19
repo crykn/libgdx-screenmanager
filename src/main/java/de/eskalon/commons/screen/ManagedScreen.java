@@ -23,7 +23,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.core.ManagedGame;
 
@@ -124,6 +126,12 @@ public abstract class ManagedScreen implements Screen {
 	 * <p>
 	 * Before this method is called, the previously rendered stuff is cleared
 	 * with the {@linkplain #getClearColor() clear color}.
+	 * <p>
+	 * If you are using any {@link Viewport}s, be sure to
+	 * {@linkplain Viewport#apply() apply} them first. When using the same
+	 * {@link SpriteBatch} as the transitions, don't forget to
+	 * {@linkplain SpriteBatch#setProjectionMatrix(com.badlogic.gdx.math.Matrix4)
+	 * set the projection matrix} before using it.
 	 * 
 	 * @param delta
 	 *            the time in seconds since the last render pass

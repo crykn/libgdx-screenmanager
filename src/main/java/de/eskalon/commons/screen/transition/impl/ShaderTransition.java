@@ -25,6 +25,8 @@ import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.damios.guacamole.Preconditions;
 import de.damios.guacamole.gdx.graphics.QuadMeshGenerator;
@@ -57,8 +59,8 @@ import de.eskalon.commons.screen.transition.TimedTransition;
 public class ShaderTransition extends TimedTransition {
 
 	private ShaderProgram program;
+	protected Viewport viewport;
 
-	private OrthographicCamera camera;
 	private RenderContext renderContext;
 	/**
 	 * A screen filling quad.
@@ -74,13 +76,12 @@ public class ShaderTransition extends TimedTransition {
 	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
 	 * compiled} before {@link #create()} is called.
 	 * 
-	 * @param camera
 	 * @param duration
 	 * 
 	 * @see #ShaderTransition(OrthographicCamera, float, Interpolation)
 	 */
-	public ShaderTransition(OrthographicCamera camera, float duration) {
-		this(camera, duration, null);
+	public ShaderTransition(float duration) {
+		this(duration, null);
 	}
 
 	/**
@@ -89,20 +90,14 @@ public class ShaderTransition extends TimedTransition {
 	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
 	 * compiled} before {@link #create()} is called.
 	 * 
-	 * @param camera
-	 *            the camera
 	 * @param duration
 	 *            the duration of the transition
 	 * @param interpolation
 	 *            the interpolation to use
 	 */
-	public ShaderTransition(OrthographicCamera camera, float duration,
+	public ShaderTransition(float duration,
 			@Nullable Interpolation interpolation) {
 		super(duration, interpolation);
-
-		Preconditions.checkNotNull(camera, "The camera cannot be null");
-
-		this.camera = camera;
 	}
 
 	/**
@@ -128,6 +123,10 @@ public class ShaderTransition extends TimedTransition {
 		Preconditions.checkState(this.program != null,
 				"The shader has to be compiled before the transition can be created!");
 
+		this.viewport = new ScreenViewport(); // Takes care of rendering the
+												// transition over the whole
+												// screen
+
 		this.projTransLoc = this.program.getUniformLocation("u_projTrans");
 		this.lastScreenLoc = this.program.getUniformLocation("lastScreen");
 		this.currScreenLoc = this.program.getUniformLocation("currScreen");
@@ -140,11 +139,14 @@ public class ShaderTransition extends TimedTransition {
 	@Override
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
+		viewport.apply();
+
 		this.renderContext.begin();
 		this.program.bind();
 
 		// Set uniforms
-		this.program.setUniformMatrix(this.projTransLoc, camera.combined);
+		this.program.setUniformMatrix(this.projTransLoc,
+				viewport.getCamera().combined);
 		this.program.setUniformf(this.progressLoc, progress);
 		this.program.setUniformi(this.lastScreenLoc,
 				renderContext.textureBinder.bind(lastScreen.getTexture()));
@@ -159,6 +161,8 @@ public class ShaderTransition extends TimedTransition {
 
 	@Override
 	public void resize(int width, int height) {
+		viewport.update(width, height, true);
+
 		if (this.screenQuad != null)
 			this.screenQuad.dispose();
 		this.screenQuad = QuadMeshGenerator.createFullScreenQuad(width, height,
@@ -167,7 +171,8 @@ public class ShaderTransition extends TimedTransition {
 
 	@Override
 	public void dispose() {
-		this.program.dispose();
+		if (this.program != null)
+			this.program.dispose();
 		if (this.screenQuad != null)
 			this.screenQuad.dispose();
 	}

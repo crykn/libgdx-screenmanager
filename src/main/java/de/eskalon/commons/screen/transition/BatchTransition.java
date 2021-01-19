@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.damios.guacamole.Preconditions;
 import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
@@ -32,16 +34,48 @@ import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 public abstract class BatchTransition extends BlankTimedTransition {
 
 	protected SpriteBatch batch;
+	protected Viewport viewport;
 	protected int width, height;
 
+	/**
+	 * @param batch
+	 *            the batch used for rendering the transition. If it is used
+	 *            outside of the transitions, don't forget to set the project
+	 *            matrix!
+	 * @param duration
+	 * @param interpolation
+	 */
 	public BatchTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
 		super(duration, interpolation);
 		Preconditions.checkNotNull(batch);
 
 		this.batch = batch;
+		this.viewport = new ScreenViewport(); // Takes care of rendering the
+												// transition over the whole
+												// screen
 	}
 
+	@Override
+	public final void render(float delta, TextureRegion lastScreen,
+			TextureRegion currScreen) {
+		viewport.apply();
+		batch.setProjectionMatrix(viewport.getCamera().combined);
+		super.render(delta, lastScreen, currScreen);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * The batch's projection matrix is already set.
+	 * 
+	 * @param delta
+	 * @param lastScreen
+	 * @param currScreen
+	 * @param progress
+	 *            the progress of the transition; from {@code 0} (excl.) to
+	 *            {@code 1} (incl.)
+	 */
 	@Override
 	public abstract void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress);
@@ -50,6 +84,8 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+
+		viewport.update(width, height, true);
 	}
 
 }

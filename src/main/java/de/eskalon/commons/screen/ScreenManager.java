@@ -393,6 +393,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				}
 			}
 
+			// Buffers
 			initBuffers();
 		}
 	}

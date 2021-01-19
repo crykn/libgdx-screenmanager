@@ -66,7 +66,7 @@ public abstract class TimedTransition extends ScreenTransition {
 	}
 
 	@Override
-	public final void render(float delta, TextureRegion lastScreen,
+	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen) {
 		this.timePassed = this.timePassed + delta;
 

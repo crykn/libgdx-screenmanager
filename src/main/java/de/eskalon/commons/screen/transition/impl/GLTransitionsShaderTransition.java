@@ -147,13 +147,12 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
 	 * before {@link #create()} is called.
 	 * 
-	 * @param camera
 	 * @param duration
 	 * @param interpolation
 	 */
-	public GLTransitionsShaderTransition(OrthographicCamera camera,
-			float duration, @Nullable Interpolation interpolation) {
-		super(camera, duration, interpolation);
+	public GLTransitionsShaderTransition(float duration,
+			@Nullable Interpolation interpolation) {
+		super(duration, interpolation);
 	}
 
 	/**

@@ -71,6 +71,7 @@ public class HorizontalSlicingTransition extends BatchTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		batch.begin();
+
 		batch.draw(lastScreen, 0, 0, width, height);
 
 		int sliceHeight = height / sliceCount;
@@ -87,9 +88,11 @@ public class HorizontalSlicingTransition extends BatchTransition {
 			}
 
 			batch.draw(currScreen.getTexture(), offsetX, y, width, sliceHeight,
-					0, HdpiUtils.toBackBufferY(y), HdpiUtils.toBackBufferX(width),
+					0, HdpiUtils.toBackBufferY(y),
+					HdpiUtils.toBackBufferX(width),
 					HdpiUtils.toBackBufferY(sliceHeight), false, true);
 		}
+
 		batch.end();
 	}
 

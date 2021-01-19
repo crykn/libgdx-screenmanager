@@ -3,6 +3,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.screen.ManagedScreen;
 
@@ -10,6 +12,7 @@ public class BlueScreen extends ManagedScreen {
 
 	private MyGdxGame game;
 	private ShapeRenderer shapeRenderer;
+	private Viewport viewport;
 
 	public BlueScreen() {
 		this.game = (MyGdxGame) Gdx.app.getApplicationListener();
@@ -18,7 +21,6 @@ public class BlueScreen extends ManagedScreen {
 	@Override
 	protected void create() {
 		this.shapeRenderer = new ShapeRenderer();
-		this.shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, game.getWidth(), game.getHeight());
 		this.addInputProcessor(new InputAdapter() {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -30,10 +32,15 @@ public class BlueScreen extends ManagedScreen {
 				return true;
 			}
 		});
+
+		this.viewport = new ScreenViewport(); // a ScreenViewport provides the default behaviour
 	}
 
 	@Override
 	public void render(float delta) {
+		viewport.apply();
+		shapeRenderer.setProjectionMatrix(viewport.getCamera().combined);
+
 		/*
 		 * Render a blue triangle on a white background.
 		 */
@@ -51,15 +58,14 @@ public class BlueScreen extends ManagedScreen {
 
 	@Override
 	public void resize(int width, int height) {
-		this.shapeRenderer.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
-		this.shapeRenderer.updateMatrices();
+		viewport.update(width, height, true);
 	}
 
 	@Override
 	public void hide() {
 		// not needed
 	}
-	
+
 	@Override
 	public Color getClearColor() {
 		return Color.WHITE;
