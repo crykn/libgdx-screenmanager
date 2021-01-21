@@ -37,8 +37,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import de.damios.guacamole.Preconditions;
-import de.damios.guacamole.gdx.Log;
 import de.damios.guacamole.gdx.graphics.NestableFrameBuffer;
+import de.damios.guacamole.gdx.log.Logger;
+import de.damios.guacamole.gdx.log.LoggerService;
 import de.damios.guacamole.tuple.Triple;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
@@ -67,6 +68,8 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
  */
 public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		implements Disposable {
+
+	Logger LOG = LoggerService.getLogger(ScreenManager.class);
 
 	/**
 	 * This framebuffer is used to store the content of the previously active
@@ -284,10 +287,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	public void pushScreen(String name, @Nullable String transitionName,
 			Object... params) {
-		if (Log.isDebugEnabled())
-			Log.debug("ScreenManager",
-					"Screen '%s' was pushed, using the transition '%s'", name,
+		if (LoggerService.isDebugEnabled())
+			LOG.debug("Screen '%s' was pushed, using the transition '%s'", name,
 					transitionName == null ? "null" : transitionName);
+
 		transitionQueue.add(new Triple<T, S, Object[]>(
 				transitionName != null ? getScreenTransition(transitionName)
 						: null,
