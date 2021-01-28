@@ -343,7 +343,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 						currScreen.getClearColor().g,
 						currScreen.getClearColor().b,
 						currScreen.getClearColor().a);
-				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				Gdx.gl.glClear(
+						GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 				this.currScreen.render(delta);
 			}
 		} else {
@@ -504,7 +505,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		fbo.begin();
 		Gdx.gl.glClearColor(screen.getClearColor().r, screen.getClearColor().g,
 				screen.getClearColor().b, screen.getClearColor().a);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		screen.render(delta);
 		fbo.end();
 
