@@ -58,7 +58,7 @@ import de.eskalon.commons.screen.transition.TimedTransition;
  */
 public class ShaderTransition extends TimedTransition {
 
-	private ShaderProgram program;
+	protected ShaderProgram program;
 	protected Viewport viewport;
 
 	private RenderContext renderContext;

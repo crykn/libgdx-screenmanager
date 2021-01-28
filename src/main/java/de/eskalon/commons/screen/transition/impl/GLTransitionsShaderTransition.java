@@ -17,12 +17,11 @@ package de.eskalon.commons.screen.transition.impl;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
+
+import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.gdx.graphics.ShaderCompatibilityHelper;
 
 /**
  * A transition that is using shader code conforming to the GL Transition
@@ -48,7 +47,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 public class GLTransitionsShaderTransition extends ShaderTransition {
 
 	// @formatter:off
-	private static final String VERT_SHADER = "#version " + getVersion() + "\n" + 
+	private static final String VERT_SHADER =
 			"#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
@@ -66,25 +65,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"	v_texCoord0 = a_texCoord0;\n" + 
 			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
 			"}";
-	private static final String VERT_SHADER_GLSL_150 = "#version 150\n" + 
-			"#ifdef GL_ES\n" + 
-			"precision mediump float;\n" + 
-			"#endif\n" + 
-			"\n" + 
-			"in vec3 a_position;\n" + 
-			"in vec2 a_texCoord0;\n" + 
-			"\n" + 
-			"uniform mat4 u_projTrans;\n" + 
-			"\n" + 
-			"out vec3 v_position;\n" + 
-			"out vec2 v_texCoord0;\n" + 
-			"\n" + 
-			"void main() {\n" + 
-			"	v_position = a_position;\n" + 
-			"	v_texCoord0 = a_texCoord0;\n" + 
-			"	gl_Position = u_projTrans * vec4(a_position, 1.0);\n" + 
-			"}";
-	private static final String FRAG_SHADER_PREPEND = "#version " + getVersion() + "\n" + 
+	private static final String FRAG_SHADER_PREPEND =
 			"#ifdef GL_ES\n" + 
 			"precision mediump float;\n" + 
 			"#endif\n" + 
@@ -105,40 +86,21 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			"vec4 getFromColor(vec2 uv) {\n" + 
 			"		return texture2D(lastScreen, uv);\n" + 
 			"}\n";
-	private static final String FRAG_SHADER_PREPEND_GLSL_150  = "#version 150\n" + 
-			"#ifdef GL_ES\n" + 
-			"precision mediump float;\n" + 
-			"#endif\n" + 
-			"\n" + 
-			"in vec3 v_position;\n" + 
-			"in vec2 v_texCoord0;\n" + 
-			"\n" + 
-			"out vec4 out_Color;\n" + 
-			"\n" + 
-			"uniform sampler2D lastScreen;\n" + 
-			"uniform sampler2D currScreen;\n" + 
-			"uniform float progress;\n" + 
-			"\n" + 
-			"vec4 getToColor(vec2 uv) {\n" + 
-			"		return texture(currScreen, uv);\n" + 
-			"}\n" + 
-			"\n" + 
-			"vec4 getFromColor(vec2 uv) {\n" + 
-			"		return texture(lastScreen, uv);\n" + 
-			"}\n";
 	private static final String FRAG_SHADER_POSTPEND = "\nvoid main() {\n"
 			+ "	gl_FragColor = transition(v_texCoord0);\n" + 
 			"}\n";
-	private static final String FRAG_SHADER_POSTPEND_GLSL_150 = "\nvoid main() {\n"
-			+ "	out_Color = transition(v_texCoord0);\n" + 
-			"}\n";
 	// @formatter:on
 
-	private static String getVersion() {
-		if (Gdx.app.getType() == ApplicationType.Desktop
-				|| Gdx.app.getType() == ApplicationType.HeadlessDesktop)
-			return "120"; // Desktop
-		return "100"; // GLSL ES (Android, iOS, WebGL)
+	/**
+	 * Creates a shader transition using a GL Transition code.
+	 * <p>
+	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
+	 * before {@link #create()} is called.
+	 * 
+	 * @param duration
+	 */
+	public GLTransitionsShaderTransition(float duration) {
+		this(duration, null);
 	}
 
 	/**
@@ -173,20 +135,9 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 *            the GL Transitions shader code;
 	 */
 	public void compileGLTransition(String glTransitionsCode) {
-		// TODO use PlatformUtils.isMac (see
-		// https://github.com/libgdx/libgdx/pull/5960)
-
-		if (Gdx.gl30 != null && UIUtils.isMac) {
-			// Mac only supports the OpenGL 3.2 _core_ profile, which is not
-			// backward compatible
-			super.compileShader(
-					VERT_SHADER_GLSL_150, FRAG_SHADER_PREPEND_GLSL_150
-							+ glTransitionsCode + FRAG_SHADER_POSTPEND_GLSL_150,
-					true);
-		} else {
-			super.compileShader(VERT_SHADER, FRAG_SHADER_PREPEND
-					+ glTransitionsCode + FRAG_SHADER_POSTPEND, true);
-		}
+		compileShader(VERT_SHADER,
+				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
+				true);
 	}
 
 	/**
@@ -195,7 +146,10 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	@Deprecated
 	@Override
 	public void compileShader(String vert, String frag, boolean ignorePrepend) {
-		super.compileShader(vert, frag, ignorePrepend);
+		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
+		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
+
+		this.program = ShaderCompatibilityHelper.fromString(vert, frag);
 	}
 
 }
