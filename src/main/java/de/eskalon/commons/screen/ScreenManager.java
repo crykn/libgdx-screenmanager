@@ -87,14 +87,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * The screen that was shown before the {@linkplain #currScreen current
 	 * screen}.
 	 */
-	@Nullable
-	private ManagedScreen lastScreen;
+	private @Nullable ManagedScreen lastScreen;
 
 	/**
 	 * The current screen.
 	 */
-	@Nullable
-	private ManagedScreen currScreen;
+	private @Nullable ManagedScreen currScreen;
 
 	/**
 	 * The input processors of the {@linkplain #currScreen current screen}.
@@ -109,8 +107,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * The transition effect currently rendered.
 	 */
-	@Nullable
-	private T transition;
+	private @Nullable T transition;
 
 	/**
 	 * A map with all initialized screens.
@@ -133,10 +130,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	private boolean hasDepth; // needed, when the framebuffers are (re)created
 
 	public void initialize(BasicInputMultiplexer gameInputMultiplexer,
-			int width, int height, boolean hasDepth) {
+			int screenWidth, int screenHeight, boolean hasDepth) {
 		this.gameInputMultiplexer = gameInputMultiplexer;
-		this.currentWidth = width;
-		this.currentHeight = height;
+		this.currentWidth = screenWidth;
+		this.currentHeight = screenHeight;
 		this.hasDepth = hasDepth;
 		this.blankScreen = new BlankScreen();
 		this.currScreen = this.blankScreen;
@@ -456,8 +453,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 *         {@linkplain #getCurrentScreen() current screen}
 	 */
 	@SuppressWarnings("unchecked")
-	@Nullable
-	public S getLastScreen() {
+	public @Nullable S getLastScreen() {
 		if (lastScreen == blankScreen)
 			return null; // return null, as the blank screen is not the right
 							// type

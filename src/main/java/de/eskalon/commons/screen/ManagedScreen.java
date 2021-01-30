@@ -60,8 +60,7 @@ public abstract class ManagedScreen implements Screen {
 	 * <p>
 	 * These params are usually accessed in {@link #show()}.
 	 */
-	@Nullable
-	protected Object[] pushParams;
+	protected @Nullable Object[] pushParams;
 
 	private boolean initialized = false;
 

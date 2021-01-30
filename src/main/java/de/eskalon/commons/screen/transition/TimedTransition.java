@@ -29,8 +29,7 @@ import de.damios.guacamole.Preconditions;
  */
 public abstract class TimedTransition extends ScreenTransition {
 
-	@Nullable
-	protected Interpolation interpolation;
+	protected @Nullable Interpolation interpolation;
 	protected float duration;
 	protected float timePassed;
 
