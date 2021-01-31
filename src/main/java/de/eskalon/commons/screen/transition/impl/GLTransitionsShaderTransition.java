@@ -92,7 +92,8 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	// @formatter:on
 
 	/**
-	 * Creates a shader transition using a GL Transition code.
+	 * Creates a shader transition with code conforming to the GL Transitions
+	 * spec.
 	 * <p>
 	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
 	 * before {@link #create()} is called.
@@ -104,7 +105,8 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	}
 
 	/**
-	 * Creates a shader transition using a GL Transition code.
+	 * Creates a shader transition with code conforming to the GL Transitions
+	 * spec.
 	 * <p>
 	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
 	 * before {@link #create()} is called.
