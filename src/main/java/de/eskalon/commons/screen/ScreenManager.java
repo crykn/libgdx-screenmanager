@@ -24,10 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,6 +33,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ScreenUtils;
 
 import de.damios.guacamole.Preconditions;
 import de.damios.guacamole.gdx.graphics.NestableFrameBuffer;
@@ -336,12 +335,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				/*
 				 * RENDER THE CURRENT SCREEN; no transition is going on
 				 */
-				Gdx.gl.glClearColor(currScreen.getClearColor().r,
-						currScreen.getClearColor().g,
-						currScreen.getClearColor().b,
-						currScreen.getClearColor().a);
-				Gdx.gl.glClear(
-						GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+				ScreenUtils.clear(currScreen.getClearColor(), true);
 				this.currScreen.render(delta);
 			}
 		} else {
@@ -499,9 +493,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	TextureRegion screenToTexture(ManagedScreen screen, FrameBuffer fbo,
 			float delta) {
 		fbo.begin();
-		Gdx.gl.glClearColor(screen.getClearColor().r, screen.getClearColor().g,
-				screen.getClearColor().b, screen.getClearColor().a);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		ScreenUtils.clear(screen.getClearColor(), true);
 		screen.render(delta);
 		fbo.end();
 
