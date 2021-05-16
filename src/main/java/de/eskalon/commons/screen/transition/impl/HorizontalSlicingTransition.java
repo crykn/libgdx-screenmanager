@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 
 import de.damios.guacamole.Preconditions;
 import de.eskalon.commons.screen.transition.BatchTransition;
@@ -74,7 +75,7 @@ public class HorizontalSlicingTransition extends BatchTransition {
 
 		batch.draw(lastScreen, 0, 0, width, height);
 
-		int sliceHeight = height / sliceCount;
+		int sliceHeight = MathUtils.ceil(height / (float) sliceCount);
 
 		for (int i = 0; i < sliceCount; i++) {
 			int y = i * sliceHeight;
