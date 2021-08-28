@@ -62,7 +62,7 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
  * @author damios
  * 
  * @see <a href=
- *      "https://github.com/crykn/libgdx-screenmanager/wiki/A-screen's-lifecycle">The
+ *      "https://github.com/crykn/libgdx-screenmanager/wiki/Screen-Lifecycle">The
  *      wiki entry detailing a screen's life-cycle</a>
  */
 public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
@@ -260,16 +260,16 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	/**
 	 * Pushes a screen to be the active screen. If there is still a transition
-	 * is ongoing, the pushed one is queued. The screen has to be added to the
+	 * ongoing, the pushed one is queued. The screen has to be added to the
 	 * manager beforehand via {@link #addScreen(String, ManagedScreen)}.
 	 * <p>
 	 * {@link Screen#show()} is called on the pushed screen and
 	 * {@link Screen#hide()} is called on the previously
 	 * {@linkplain #getLastScreen() active screen}, as soon as the transition is
-	 * finished. This is always done on the rendering thread (in
-	 * {@link #render(float)}).
+	 * finished. This is always done on the rendering thread (when
+	 * {@link #render(float)} is called next).
 	 * <p>
-	 * If the same screen is pushed twice in a row, the second one is being
+	 * If the same screen is pushed twice in a row, the second call is being
 	 * ignored.
 	 *
 	 * @param name
@@ -293,6 +293,13 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				getScreen(name), params));
 	}
 
+	/**
+	 * Renders the screens and transitions.
+	 * 
+	 * @param delta
+	 *            the time delta since the last {@link #render(float)} call; in
+	 *            seconds
+	 */
 	public void render(float delta) {
 		Preconditions.checkState(initialized,
 				"The screen manager has to be initalized first!");

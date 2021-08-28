@@ -26,21 +26,25 @@ import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
 
 /**
- * A game class that utilizes a {@linkplain ScreenManager screen manager}.
+ * A game class that utilizes a {@linkplain ScreenManager screen manager}. Use
+ * the {@linkplain #getScreenManager() provided instance} to
+ * {@linkplain ScreenManager#addScreen(String, ManagedScreen) register screens}
+ * and {@linkplain ScreenManager#addScreenTransition(String, ScreenTransition)
+ * transitions}, as well as to
+ * {@linkplain ScreenManager#pushScreen(String, String, Object...) push those
+ * screens}.
  * <p>
  * Input listeners have to be added via the game's {@linkplain #inputProcessor
  * input multiplexer}.
  * 
  * @author damios
- * 
- * @see ScreenManager How to register screens and tranistions.
  */
 public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		extends BasicApplication {
 
 	/**
-	 * The input multiplexer of the game. Must be used to add input listeners
-	 * instead of {@link Input#setInputProcessor(InputProcessor)}.
+	 * The input multiplexer of the game. Must (!) be used to add input
+	 * listeners instead of {@link Input#setInputProcessor(InputProcessor)}.
 	 */
 	protected final BasicInputMultiplexer inputProcessor = new BasicInputMultiplexer();
 	/**

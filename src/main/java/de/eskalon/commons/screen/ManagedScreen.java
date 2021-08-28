@@ -31,21 +31,32 @@ import de.eskalon.commons.core.ManagedGame;
 
 /**
  * A basic screen for use with a {@link ScreenManager}. Screens are intended as
- * objects that are created only once when the game is started.
+ * objects that are created once (when the game is started) and are then reused.
  * <p>
- * A screen is always {@linkplain #show() shown} before it is
- * {@linkplain #render(float) rendered}.
+ * A screen starts rendering after it has been
+ * {@linkplain ScreenManager#pushScreen(String, String, Object...) pushed}.
+ * Every time a screen is pushed {@link #show()} is called before the rendering
+ * commences, allowing you to (re)set the screen's state.
  * <p>
- * The {@link #create()} method is called when the screen is first shown. The
- * screen can also be initialized manually by calling
+ * When the screen is shown for the first time, in addition to {@link #show()}
+ * the {@link #create()} method is called. This method is intended to be used to
+ * load any assets the screen may need or to setup the screen's UI. The screen
+ * can also be {@linkplain #create() initialized} manually by calling
  * {@link #initializeScreen()}, which should normally be done by a loading
- * screen after the assets have been loaded.
+ * screen after the game's assets have been loaded centrally.
  * <p>
  * Use {@link #addInputProcessor(InputProcessor)} to add input processors that
  * are automatically registered and unregistered whenever the screen is
  * {@linkplain #show() shown}/{@linkplain #hide() hidden}.
  * 
  * @author damios
+ * 
+ * @see <a href=
+ *      "https://github.com/crykn/libgdx-screenmanager/wiki/Screen-Lifecycle">The
+ *      wiki entry detailing a screen's life-cycle</a>
+ * @see <a href=
+ *      "https://github.com/crykn/libgdx-screenmanager/wiki/Lifecycle-Example">An
+ *      example lifecycle for a screen</a>
  */
 public abstract class ManagedScreen implements Screen {
 
@@ -56,7 +67,7 @@ public abstract class ManagedScreen implements Screen {
 	/**
 	 * Contains any arguments given to
 	 * {@link ScreenManager#pushScreen(String, String, Object...)}. Is
-	 * {@code null}, if no arguments were provided.
+	 * {@code null} if no arguments were provided.
 	 * <p>
 	 * These params are usually accessed in {@link #show()}.
 	 */
@@ -70,7 +81,8 @@ public abstract class ManagedScreen implements Screen {
 
 	/**
 	 * Can be called manually to {@linkplain #create() initialize} the screen -
-	 * otherwise this is done when the screen is first shown.
+	 * otherwise this is done when the screen is first {@linkplain #show()
+	 * shown}.
 	 */
 	public void initializeScreen() {
 		if (!initialized) {
@@ -130,7 +142,19 @@ public abstract class ManagedScreen implements Screen {
 	 * {@linkplain Viewport#apply() apply} them first. When using the same
 	 * {@link SpriteBatch} as the transitions, don't forget to
 	 * {@linkplain SpriteBatch#setProjectionMatrix(com.badlogic.gdx.math.Matrix4)
-	 * set the projection matrix} before using it.
+	 * set the projection matrix} before using it. For example:
+	 * 
+	 * <pre>
+	 * {@code
+	 * viewport.apply();
+	 * spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+	 * 
+	 * // And then render your stuff: 
+	 * spriteBatch.begin(); 
+	 * // ...
+	 * spriteBatch.end();
+	 * }
+	 * </pre>
 	 * 
 	 * @param delta
 	 *            the time in seconds since the last render pass
@@ -181,7 +205,7 @@ public abstract class ManagedScreen implements Screen {
 	 * @see #pause()
 	 * @see <a href=
 	 *      "http://bitiotic.com/blog/2013/05/23/libgdx-and-android-application-lifecycle/">Some
-	 *      information on the android life-cycle</a>
+	 *      information on the android lifecycle</a>
 	 */
 	@Override
 	public void resume() {

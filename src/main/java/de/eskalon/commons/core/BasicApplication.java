@@ -21,7 +21,8 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.glutils.HdpiMode;
 
 /**
- * A basic game application. Takes care of setting some convenience variables.
+ * A basic game application. Takes care of setting some simple convenience
+ * variables.
  * 
  * @author damios
  */
