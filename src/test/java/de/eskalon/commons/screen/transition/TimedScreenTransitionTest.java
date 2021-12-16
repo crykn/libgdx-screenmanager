@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class TimedScreenTransitionTest {
+import de.eskalon.commons.LibgdxUnitTest;
+
+public class TimedScreenTransitionTest extends LibgdxUnitTest {
 
 	@Test
 	public void test() {
