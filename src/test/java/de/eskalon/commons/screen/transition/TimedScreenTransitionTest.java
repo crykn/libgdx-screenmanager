@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.LibgdxUnitTest;
 
-public class TimedScreenTransitionTest extends LibgdxUnitTest{
+public class TimedScreenTransitionTest extends LibgdxUnitTest {
 
 	@Test
 	public void test() {
