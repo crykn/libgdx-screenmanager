@@ -4,7 +4,7 @@ apply plugin: "idea"
 apply plugin: "jacoco"
 apply plugin: "maven"
 
-version '0.6.7'
+version '0.6.8'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -53,8 +53,8 @@ install {
 
 // DEPENDENCIES
 ext {
-	gdxVersion = "1.10.0"
-	guacamoleVersion = "0.3.1"
+	gdxVersion = "1.11.0"
+	guacamoleVersion = "0.3.2"
 	
 	// Test dependencies
 	junitVersion = "5.6.0"
