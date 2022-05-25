@@ -74,29 +74,29 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * This framebuffer is used to store the content of the previously active
 	 * screen while a transition is played.
 	 */
-	private FrameBuffer lastFBO;
+	protected FrameBuffer lastFBO;
 
 	/**
 	 * This framebuffer is used to store the content of the active screen while
 	 * a transition is played.
 	 */
-	private FrameBuffer currFBO;
+	protected FrameBuffer currFBO;
 
 	/**
 	 * The screen that was shown before the {@linkplain #currScreen current
 	 * screen}.
 	 */
-	private @Nullable ManagedScreen lastScreen;
+	protected @Nullable ManagedScreen lastScreen;
 
 	/**
 	 * The current screen.
 	 */
-	private @Nullable ManagedScreen currScreen;
+	protected @Nullable ManagedScreen currScreen;
 
 	/**
 	 * The input processors of the {@linkplain #currScreen current screen}.
 	 */
-	private Array<InputProcessor> currentProcessors = new Array<>();
+	protected Array<InputProcessor> currentProcessors = new Array<>();
 
 	/**
 	 * The blank screen used internally when no screen has been pushed yet.
@@ -106,7 +106,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * The transition effect currently rendered.
 	 */
-	private @Nullable T transition;
+	protected @Nullable T transition;
 
 	/**
 	 * A map with all initialized screens.
@@ -118,13 +118,13 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	private final Map<String, T> transitions = new ConcurrentHashMap<>();
 
-	private final Queue<Triple<T, S, Object[]>> transitionQueue = new LinkedList<>();
+	protected final Queue<Triple<T, S, Object[]>> transitionQueue = new LinkedList<>();
 
-	private BasicInputMultiplexer gameInputMultiplexer;
+	protected BasicInputMultiplexer gameInputMultiplexer;
 
 	private int currentWidth, currentHeight;
 
-	private boolean initialized = false;
+	protected boolean initialized = false;
 
 	private boolean hasDepth; // needed, when the framebuffers are (re)created
 
