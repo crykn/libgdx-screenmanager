@@ -41,14 +41,14 @@ public class PushTransition extends BatchTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction of the push
-	 * @param duration
-	 *            the duration over which the transition should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the transition should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
 	public PushTransition(SpriteBatch batch, SlidingDirection dir,
-			float duration, @Nullable Interpolation interpolation) {
-		super(batch, duration, interpolation);
+			float durationInSeconds, @Nullable Interpolation interpolation) {
+		super(batch, durationInSeconds, interpolation);
 		Preconditions.checkNotNull(dir);
 
 		this.dir = dir;
@@ -59,12 +59,12 @@ public class PushTransition extends BatchTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction of the push
-	 * @param duration
-	 *            the duration over which the transition should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the transition should happen
 	 */
 	public PushTransition(SpriteBatch batch, SlidingDirection dir,
-			float duration) {
-		this(batch, dir, duration, null);
+			float durationInSeconds) {
+		this(batch, dir, durationInSeconds, null);
 	}
 
 	@Override

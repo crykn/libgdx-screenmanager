@@ -37,14 +37,14 @@ public class SlidingInTransition extends SlidingTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction the new screen should slide to
-	 * @param duration
-	 *            the duration over which the slide should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the slide should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
 	public SlidingInTransition(SpriteBatch batch, SlidingDirection dir,
-			float duration, @Nullable Interpolation interpolation) {
-		super(batch, dir, false, duration, interpolation);
+			float durationInSeconds, @Nullable Interpolation interpolation) {
+		super(batch, dir, false, durationInSeconds, interpolation);
 	}
 
 	/**
@@ -52,12 +52,12 @@ public class SlidingInTransition extends SlidingTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction the new screen should slide to
-	 * @param duration
-	 *            the duration over which the slide should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the slide should happen
 	 */
 	public SlidingInTransition(SpriteBatch batch, SlidingDirection dir,
-			float duration) {
-		this(batch, dir, duration, null);
+			float durationInSeconds) {
+		this(batch, dir, durationInSeconds, null);
 	}
 
 }

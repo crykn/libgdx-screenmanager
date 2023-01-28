@@ -42,12 +42,12 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	 *            the batch used for rendering the transition. If it is used
 	 *            outside of the transitions, don't forget to set the project
 	 *            matrix!
-	 * @param duration
+	 * @param durationInSeconds
 	 * @param interpolation
 	 */
-	public BatchTransition(SpriteBatch batch, float duration,
+	public BatchTransition(SpriteBatch batch, float durationInSeconds,
 			@Nullable Interpolation interpolation) {
-		super(duration, interpolation);
+		super(durationInSeconds, interpolation);
 		Preconditions.checkNotNull(batch);
 
 		this.batch = batch;

@@ -23,18 +23,18 @@ import com.badlogic.gdx.math.Interpolation;
 import de.damios.guacamole.Preconditions;
 
 /**
- * A screen transition that lasts for a certain duration.
+ * A screen transition that lasts for a certain duration (in seconds).
  * 
  * @author damios
  */
 public abstract class TimedTransition extends ScreenTransition {
 
 	protected @Nullable Interpolation interpolation;
-	protected float duration;
+	protected float durationInSeconds;
 	protected float timePassed;
 
 	/**
-	 * @param duration
+	 * @param durationInSeconds
 	 *            the transition's duration in seconds
 	 * @param interpolation
 	 *            the interpolation to use
@@ -43,19 +43,19 @@ public abstract class TimedTransition extends ScreenTransition {
 	 *      "https://github.com/libgdx/libgdx/wiki/Interpolation#visual-display-of-interpolations">A
 	 *      visual representation of the different interpolation modes</a>
 	 */
-	public TimedTransition(float duration,
+	public TimedTransition(float durationInSeconds,
 			@Nullable Interpolation interpolation) {
-		Preconditions.checkArgument(duration > 0);
+		Preconditions.checkArgument(durationInSeconds > 0);
 		this.interpolation = interpolation;
-		this.duration = duration;
+		this.durationInSeconds = durationInSeconds;
 	}
 
 	/**
-	 * @param duration
+	 * @param durationInSeconds
 	 *            the transition's duration in seconds
 	 */
-	public TimedTransition(float duration) {
-		this(duration, null);
+	public TimedTransition(float durationInSeconds) {
+		this(durationInSeconds, null);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public abstract class TimedTransition extends ScreenTransition {
 			TextureRegion currScreen) {
 		this.timePassed = this.timePassed + delta;
 
-		float progress = this.timePassed / duration;
+		float progress = this.timePassed / durationInSeconds;
 		if (interpolation != null)
 			progress = interpolation.apply(progress);
 
@@ -91,7 +91,7 @@ public abstract class TimedTransition extends ScreenTransition {
 
 	@Override
 	public boolean isDone() {
-		if (this.timePassed >= this.duration) {
+		if (this.timePassed >= this.durationInSeconds) {
 			return true;
 		}
 		return false;

@@ -98,10 +98,10 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
 	 * before {@link #create()} is called.
 	 * 
-	 * @param duration
+	 * @param durationInSeconds
 	 */
-	public GLTransitionsShaderTransition(float duration) {
-		this(duration, null);
+	public GLTransitionsShaderTransition(float durationInSeconds) {
+		this(durationInSeconds, null);
 	}
 
 	/**
@@ -111,12 +111,12 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
 	 * before {@link #create()} is called.
 	 * 
-	 * @param duration
+	 * @param durationInSeconds
 	 * @param interpolation
 	 */
-	public GLTransitionsShaderTransition(float duration,
+	public GLTransitionsShaderTransition(float durationInSeconds,
 			@Nullable Interpolation interpolation) {
-		super(duration, interpolation);
+		super(durationInSeconds, interpolation);
 	}
 
 	/**

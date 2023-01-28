@@ -41,14 +41,14 @@ public class VerticalSlicingTransition extends BatchTransition {
 	 *            the sprite batch used to render
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
-	 * @param duration
-	 *            the duration over which the transition should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the transition should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
 	public VerticalSlicingTransition(SpriteBatch batch, int sliceCount,
-			float duration, @Nullable Interpolation interpolation) {
-		super(batch, duration, interpolation);
+			float durationInSeconds, @Nullable Interpolation interpolation) {
+		super(batch, durationInSeconds, interpolation);
 		Preconditions.checkArgument(sliceCount >= 2,
 				"The slice count has to be at least 2");
 
@@ -60,12 +60,12 @@ public class VerticalSlicingTransition extends BatchTransition {
 	 *            the sprite batch used to render
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
-	 * @param duration
-	 *            the duration over which the transition should happen
+	 * @param durationInSeconds
+	 *            the duration (in seconds) over which the transition should happen
 	 */
 	public VerticalSlicingTransition(SpriteBatch batch, int sliceCount,
-			float duration) {
-		this(batch, sliceCount, duration, null);
+			float durationInSeconds) {
+		this(batch, sliceCount, durationInSeconds, null);
 	}
 
 	@Override
