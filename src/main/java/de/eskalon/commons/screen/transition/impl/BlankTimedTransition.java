@@ -23,20 +23,30 @@ import com.badlogic.gdx.math.Interpolation;
 import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
- * A blank screen transition going on for a given duration (in seconds).
+ * A blank screen transition going on for a given duration.
  * 
  * @since 0.3.0
  * @author damios
  */
 public class BlankTimedTransition extends TimedTransition {
 
-	public BlankTimedTransition(float durationInSeconds,
+	/**
+	 * @param duration
+	 *            the transition's duration in seconds
+	 * @param interpolation
+	 *            the interpolation to use
+	 */
+	public BlankTimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
-		super(durationInSeconds, interpolation);
+		super(duration, interpolation);
 	}
 
-	public BlankTimedTransition(float durationInSeconds) {
-		this(durationInSeconds, null);
+	/**
+	 * @param duration
+	 *            the transition's duration in seconds
+	 */
+	public BlankTimedTransition(float duration) {
+		this(duration, null);
 	}
 
 	@Override

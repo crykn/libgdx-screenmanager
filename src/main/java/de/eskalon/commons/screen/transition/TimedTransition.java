@@ -23,18 +23,18 @@ import com.badlogic.gdx.math.Interpolation;
 import de.damios.guacamole.Preconditions;
 
 /**
- * A screen transition that lasts for a certain duration (in seconds).
+ * A screen transition that lasts for a certain duration.
  * 
  * @author damios
  */
 public abstract class TimedTransition extends ScreenTransition {
 
 	protected @Nullable Interpolation interpolation;
-	protected float durationInSeconds;
+	protected float duration;
 	protected float timePassed;
 
 	/**
-	 * @param durationInSeconds
+	 * @param duration
 	 *            the transition's duration in seconds
 	 * @param interpolation
 	 *            the interpolation to use
@@ -43,19 +43,19 @@ public abstract class TimedTransition extends ScreenTransition {
 	 *      "https://github.com/libgdx/libgdx/wiki/Interpolation#visual-display-of-interpolations">A
 	 *      visual representation of the different interpolation modes</a>
 	 */
-	public TimedTransition(float durationInSeconds,
+	public TimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
-		Preconditions.checkArgument(durationInSeconds > 0);
+		Preconditions.checkArgument(duration > 0);
 		this.interpolation = interpolation;
-		this.durationInSeconds = durationInSeconds;
+		this.duration = duration;
 	}
 
 	/**
-	 * @param durationInSeconds
+	 * @param duration
 	 *            the transition's duration in seconds
 	 */
-	public TimedTransition(float durationInSeconds) {
-		this(durationInSeconds, null);
+	public TimedTransition(float duration) {
+		this(duration, null);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public abstract class TimedTransition extends ScreenTransition {
 			TextureRegion currScreen) {
 		this.timePassed = this.timePassed + delta;
 
-		float progress = this.timePassed / durationInSeconds;
+		float progress = this.timePassed / duration;
 		if (interpolation != null)
 			progress = interpolation.apply(progress);
 
@@ -80,8 +80,11 @@ public abstract class TimedTransition extends ScreenTransition {
 	 * The render method to use in the timed transition.
 	 * 
 	 * @param delta
+	 *            the {@linkplain #interpolation interpolated} time delta
 	 * @param lastScreen
+	 *            the old screen as a texture region
 	 * @param currScreen
+	 *            the screen the manager is transitioning to as a texture region
 	 * @param progress
 	 *            the progress of the transition; from {@code 0} (excl.) to
 	 *            {@code 1} (incl.)
@@ -91,7 +94,7 @@ public abstract class TimedTransition extends ScreenTransition {
 
 	@Override
 	public boolean isDone() {
-		if (this.timePassed >= this.durationInSeconds) {
+		if (this.timePassed >= this.duration) {
 			return true;
 		}
 		return false;

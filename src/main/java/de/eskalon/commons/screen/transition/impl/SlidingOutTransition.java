@@ -37,14 +37,14 @@ public class SlidingOutTransition extends SlidingTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction the last screen should slide to
-	 * @param durationInSeconds
+	 * @param duration
 	 *            the duration (in seconds) over which the slide should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
 	public SlidingOutTransition(SpriteBatch batch, SlidingDirection dir,
-			float durationInSeconds, @Nullable Interpolation interpolation) {
-		super(batch, dir, true, durationInSeconds, interpolation);
+			float duration, @Nullable Interpolation interpolation) {
+		super(batch, dir, true, duration, interpolation);
 	}
 
 	/**
@@ -52,12 +52,12 @@ public class SlidingOutTransition extends SlidingTransition {
 	 *            the sprite batch used to render
 	 * @param dir
 	 *            the direction the last screen should slide to
-	 * @param durationInSeconds
+	 * @param duration
 	 *            the duration (in seconds) over which the slide should happen
 	 */
 	public SlidingOutTransition(SpriteBatch batch, SlidingDirection dir,
-			float durationInSeconds) {
-		this(batch, dir, durationInSeconds, null);
+			float duration) {
+		this(batch, dir, duration, null);
 	}
 
 }

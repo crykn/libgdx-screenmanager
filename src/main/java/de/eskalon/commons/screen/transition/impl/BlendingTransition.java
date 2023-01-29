@@ -32,13 +32,31 @@ import de.eskalon.commons.screen.transition.BatchTransition;
  */
 public class BlendingTransition extends BatchTransition {
 
-	public BlendingTransition(SpriteBatch batch, float durationInSeconds,
+	/**
+	 * @param batch
+	 *            the batch used for rendering the transition. If it is used
+	 *            outside of the transitions, don't forget to set the projection
+	 *            matrix before using it again!
+	 * @param duration
+	 *            the transition's duration in seconds
+	 * @param interpolation
+	 *            the interpolation to use
+	 */
+	public BlendingTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
-		super(batch, durationInSeconds, interpolation);
+		super(batch, duration, interpolation);
 	}
 
-	public BlendingTransition(SpriteBatch batch, float durationInSeconds) {
-		this(batch, durationInSeconds, null);
+	/**
+	 * @param batch
+	 *            the batch used for rendering the transition. If it is used
+	 *            outside of the transitions, don't forget to set the projection
+	 *            matrix before using it again!
+	 * @param duration
+	 *            the transition's duration in seconds
+	 */
+	public BlendingTransition(SpriteBatch batch, float duration) {
+		this(batch, duration, null);
 	}
 
 	@Override

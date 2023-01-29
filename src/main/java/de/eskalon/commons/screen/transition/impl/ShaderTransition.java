@@ -76,12 +76,13 @@ public class ShaderTransition extends TimedTransition {
 	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
 	 * compiled} before {@link #create()} is called.
 	 * 
-	 * @param durationInSeconds
+	 * @param duration
+	 *            the transition's duration in seconds
 	 * 
 	 * @see #ShaderTransition(OrthographicCamera, float, Interpolation)
 	 */
-	public ShaderTransition(float durationInSeconds) {
-		this(durationInSeconds, null);
+	public ShaderTransition(float duration) {
+		this(duration, null);
 	}
 
 	/**
@@ -90,14 +91,14 @@ public class ShaderTransition extends TimedTransition {
 	 * The shader {@linkplain #compileShader(String, String, boolean) has to be
 	 * compiled} before {@link #create()} is called.
 	 * 
-	 * @param durationInSeconds
-	 *            the duration (in seconds) of the transition
+	 * @param duration
+	 *            the transition's duration in seconds
 	 * @param interpolation
 	 *            the interpolation to use
 	 */
-	public ShaderTransition(float durationInSeconds,
+	public ShaderTransition(float duration,
 			@Nullable Interpolation interpolation) {
-		super(durationInSeconds, interpolation);
+		super(duration, interpolation);
 	}
 
 	/**

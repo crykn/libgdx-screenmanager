@@ -44,9 +44,9 @@ public class SlidingTransition extends BatchTransition {
 	private boolean slideLastScreen;
 
 	public SlidingTransition(SpriteBatch batch, SlidingDirection dir,
-			boolean slideLastScreen, float durationInSeconds,
+			boolean slideLastScreen, float duration,
 			@Nullable Interpolation interpolation) {
-		super(batch, durationInSeconds, interpolation);
+		super(batch, duration, interpolation);
 		Preconditions.checkNotNull(dir);
 
 		this.dir = dir;
