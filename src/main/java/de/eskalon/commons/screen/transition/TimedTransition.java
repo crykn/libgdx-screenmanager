@@ -80,8 +80,11 @@ public abstract class TimedTransition extends ScreenTransition {
 	 * The render method to use in the timed transition.
 	 * 
 	 * @param delta
+	 *            the {@linkplain #interpolation interpolated} time delta
 	 * @param lastScreen
+	 *            the old screen as a texture region
 	 * @param currScreen
+	 *            the screen the manager is transitioning to as a texture region
 	 * @param progress
 	 *            the progress of the transition; from {@code 0} (excl.) to
 	 *            {@code 1} (incl.)

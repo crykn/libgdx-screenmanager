@@ -38,7 +38,7 @@ public class SlidingInTransition extends SlidingTransition {
 	 * @param dir
 	 *            the direction the new screen should slide to
 	 * @param duration
-	 *            the duration over which the slide should happen
+	 *            the duration (in seconds) over which the slide should happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
@@ -53,7 +53,7 @@ public class SlidingInTransition extends SlidingTransition {
 	 * @param dir
 	 *            the direction the new screen should slide to
 	 * @param duration
-	 *            the duration over which the slide should happen
+	 *            the duration (in seconds) over which the slide should happen
 	 */
 	public SlidingInTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration) {

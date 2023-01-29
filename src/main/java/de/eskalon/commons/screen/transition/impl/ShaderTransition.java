@@ -77,6 +77,7 @@ public class ShaderTransition extends TimedTransition {
 	 * compiled} before {@link #create()} is called.
 	 * 
 	 * @param duration
+	 *            the transition's duration in seconds
 	 * 
 	 * @see #ShaderTransition(OrthographicCamera, float, Interpolation)
 	 */
@@ -91,7 +92,7 @@ public class ShaderTransition extends TimedTransition {
 	 * compiled} before {@link #create()} is called.
 	 * 
 	 * @param duration
-	 *            the duration of the transition
+	 *            the transition's duration in seconds
 	 * @param interpolation
 	 *            the interpolation to use
 	 */

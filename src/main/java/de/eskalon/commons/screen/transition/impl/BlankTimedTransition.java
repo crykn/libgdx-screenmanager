@@ -30,11 +30,21 @@ import de.eskalon.commons.screen.transition.TimedTransition;
  */
 public class BlankTimedTransition extends TimedTransition {
 
+	/**
+	 * @param duration
+	 *            the transition's duration in seconds
+	 * @param interpolation
+	 *            the interpolation to use
+	 */
 	public BlankTimedTransition(float duration,
 			@Nullable Interpolation interpolation) {
 		super(duration, interpolation);
 	}
 
+	/**
+	 * @param duration
+	 *            the transition's duration in seconds
+	 */
 	public BlankTimedTransition(float duration) {
 		this(duration, null);
 	}

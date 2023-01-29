@@ -42,7 +42,8 @@ public class PushTransition extends BatchTransition {
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration
-	 *            the duration over which the transition should happen
+	 *            the duration (in seconds) over which the transition should
+	 *            happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
@@ -60,7 +61,8 @@ public class PushTransition extends BatchTransition {
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration
-	 *            the duration over which the transition should happen
+	 *            the duration (in seconds) over which the transition should
+	 *            happen
 	 */
 	public PushTransition(SpriteBatch batch, SlidingDirection dir,
 			float duration) {

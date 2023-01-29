@@ -99,6 +99,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * before {@link #create()} is called.
 	 * 
 	 * @param duration
+	 *            the transition's duration in seconds
 	 */
 	public GLTransitionsShaderTransition(float duration) {
 		this(duration, null);
@@ -112,7 +113,9 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * before {@link #create()} is called.
 	 * 
 	 * @param duration
+	 *            the transition's duration in seconds
 	 * @param interpolation
+	 *            the interpolation to use
 	 */
 	public GLTransitionsShaderTransition(float duration,
 			@Nullable Interpolation interpolation) {

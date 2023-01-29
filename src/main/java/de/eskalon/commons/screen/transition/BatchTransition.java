@@ -40,10 +40,12 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	/**
 	 * @param batch
 	 *            the batch used for rendering the transition. If it is used
-	 *            outside of the transitions, don't forget to set the project
-	 *            matrix!
+	 *            outside of the transitions, don't forget to set the projection
+	 *            matrix before using it again!
 	 * @param duration
+	 *            the transition's duration in seconds
 	 * @param interpolation
+	 *            the interpolation to use
 	 */
 	public BatchTransition(SpriteBatch batch, float duration,
 			@Nullable Interpolation interpolation) {
@@ -70,8 +72,11 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	 * The batch's projection matrix is already set.
 	 * 
 	 * @param delta
+	 *            the {@linkplain #interpolation interpolated} time delta
 	 * @param lastScreen
+	 *            the old screen as a texture region
 	 * @param currScreen
+	 *            the screen the manager is transitioning to as a texture region
 	 * @param progress
 	 *            the progress of the transition; from {@code 0} (excl.) to
 	 *            {@code 1} (incl.)

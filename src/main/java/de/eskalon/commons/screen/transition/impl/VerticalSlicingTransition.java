@@ -42,7 +42,8 @@ public class VerticalSlicingTransition extends BatchTransition {
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration
-	 *            the duration over which the transition should happen
+	 *            the duration (in seconds) over which the transition should
+	 *            happen
 	 * @param interpolation
 	 *            the interpolation used
 	 */
@@ -61,7 +62,8 @@ public class VerticalSlicingTransition extends BatchTransition {
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration
-	 *            the duration over which the transition should happen
+	 *            the duration (in seconds) over which the transition should
+	 *            happen
 	 */
 	public VerticalSlicingTransition(SpriteBatch batch, int sliceCount,
 			float duration) {
