@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.backends.headless.mock.graphics.MockGraphics;
 
 import de.eskalon.commons.LibgdxUnitTest;
 import de.eskalon.commons.screen.ManagedScreen;
@@ -21,7 +22,7 @@ public class ManagedGameTest extends LibgdxUnitTest {
 
 	@Test
 	@SuppressWarnings({ "rawtypes" })
-	public void testConstrcutor() {
+	public void testConstructor() {
 		ManagedGame game = new ManagedGame();
 
 		// Screen Manager
@@ -54,17 +55,11 @@ public class ManagedGameTest extends LibgdxUnitTest {
 	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testCorrespondingScreenManagerMethods() {
-		ManagedGame game = new ManagedGame() {
-			@Override
-			public int getWidth() {
-				return 5;
-			}
+		Gdx.graphics = Mockito.spy(MockGraphics.class);
+		Mockito.when(Gdx.graphics.getWidth()).thenReturn(5);
+		Mockito.when(Gdx.graphics.getHeight()).thenReturn(7);
 
-			@Override
-			public int getHeight() {
-				return 7;
-			}
-		};
+		ManagedGame game = new ManagedGame();
 		game.screenManager = new ScreenManager<ManagedScreen, ScreenTransition>() {
 
 			@Override

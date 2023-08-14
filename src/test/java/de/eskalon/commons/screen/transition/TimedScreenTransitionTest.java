@@ -19,10 +19,6 @@ public class TimedScreenTransitionTest extends LibgdxUnitTest {
 			}
 
 			@Override
-			protected void create() {
-			}
-
-			@Override
 			public void dispose() {
 			}
 
@@ -44,7 +40,7 @@ public class TimedScreenTransitionTest extends LibgdxUnitTest {
 		t.render(1, null, null);
 		assertTrue(t.isDone());
 
-		t.reset();
+		t.show();
 		assertTrue(!t.isDone());
 	}
 

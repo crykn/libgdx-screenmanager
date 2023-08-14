@@ -27,7 +27,7 @@ import de.eskalon.commons.screen.transition.impl.SlidingInTransition;
 import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 
 /**
- * The base class for sliding screen transitions.
+ * The base class for sliding screen transitions. Can be reused.
  *
  * @author damios
  * 

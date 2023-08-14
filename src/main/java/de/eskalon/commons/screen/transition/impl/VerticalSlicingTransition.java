@@ -27,7 +27,8 @@ import de.damios.guacamole.Preconditions;
 import de.eskalon.commons.screen.transition.BatchTransition;
 
 /**
- * A transition where the new screen is sliding in in vertical slices.
+ * A transition where the new screen is sliding in in vertical slices. Can be
+ * reused.
  * 
  * @since 0.3.0
  * @author damios
@@ -38,7 +39,8 @@ public class VerticalSlicingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration
@@ -58,7 +60,8 @@ public class VerticalSlicingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration

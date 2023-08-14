@@ -20,22 +20,19 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 
-import de.damios.guacamole.Preconditions;
-import de.damios.guacamole.gdx.graphics.ShaderCompatibilityHelper;
-
 /**
- * A transition that is using shader code conforming to the GL Transition
- * Specification v1.
- * <p>
- * This allows using the shaders provided at
+ * A transition that is using shader code conforming to the <i>GL Transition
+ * Specification v1</i>. This allows using the shaders provided at
  * <a href= "https://gl-transitions.com/gallery">gl-transitions.com</a> without
  * having to adapt their code.
  * <p>
- * The technical details: A GL Transition is a GLSL code that implements a
- * transition function which takes a {@code vec2 uv} pixel position and returns
- * a {@code vec4 color}. This color represents the mix of the {@code from} to
- * the {@code to} textures based on the variation of a contextual progress value
- * from {@code 0.0} to {@code 1.0}.
+ * What is a GL Transition? It is a GLSL code that implements a
+ * {@code transition} function which takes a {@code vec2 uv} pixel position and
+ * returns a {@code vec4 color}. This color represents the mix of the
+ * {@code from} to the {@code to} textures based on the variation of a
+ * contextual progress value from {@code 0.0} to {@code 1.0}.
+ * <p>
+ * This transition can be reused.
  * 
  * @since 0.4.0
  * @author damios
@@ -93,68 +90,58 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 
 	/**
 	 * Creates a shader transition with code conforming to the GL Transitions
-	 * spec.
+	 * spec. Please note that this entails the shader being compiled which needs
+	 * to happen on the rendering thread!
 	 * <p>
-	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
-	 * before {@link #create()} is called.
-	 * 
-	 * @param duration
-	 *            the transition's duration in seconds
-	 */
-	public GLTransitionsShaderTransition(float duration) {
-		this(duration, null);
-	}
-
-	/**
-	 * Creates a shader transition with code conforming to the GL Transitions
-	 * spec.
-	 * <p>
-	 * The shader {@linkplain #compileGLTransition(String) has to be compiled}
-	 * before {@link #create()} is called.
-	 * 
-	 * @param duration
-	 *            the transition's duration in seconds
-	 * @param interpolation
-	 *            the interpolation to use
-	 */
-	public GLTransitionsShaderTransition(float duration,
-			@Nullable Interpolation interpolation) {
-		super(duration, interpolation);
-	}
-
-	/**
-	 * The GL Transitions shader code has to be set via this method.
-	 * <p>
-	 * Do not forget to uncomment/set the uniforms that act as transition
-	 * parameters! Please note that in GLSL EL (Web, Android, iOS) uniforms
-	 * cannot be set from within the shader code, so this has to be done in Java
-	 * via {@link #getProgram()} instead!
-	 * <p>
-	 * Furthermore, do not forget to replace {@code ratio} in the code with your
-	 * screen ratio (width / height).
+	 * Do not forget to set the transition shader's uniforms. In GLSL EL (Web,
+	 * Android, iOS) uniforms cannot be set from within the shader code, so this
+	 * has to be done in Java via {@link #getProgram()}{@code #setUniform...}
+	 * instead! Furthermore, do not forget to replace {@code ratio} in the code
+	 * with your screen ratio (width / height). Check out the <a href=
+	 * "https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions#some-example-code">wiki</a>
+	 * for an in-depth explanation and example.
 	 * <p>
 	 * Ignores code in {@link ShaderProgram#prependFragmentCode} and
 	 * {@link ShaderProgram#prependVertexCode}.
 	 * 
 	 * @param glTransitionsCode
-	 *            the GL Transitions shader code;
+	 *            the GL Transitions shader code
+	 * @param duration
+	 *            the transition's duration in seconds
 	 */
-	public void compileGLTransition(String glTransitionsCode) {
-		compileShader(VERT_SHADER,
-				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
-				true);
+	public GLTransitionsShaderTransition(String glTransitionsCode,
+			float duration) {
+		this(glTransitionsCode, duration, null);
 	}
 
 	/**
-	 * @deprecated Call {@link #compileGLTransition(String)} instead!
+	 * Creates a shader transition with code conforming to the GL Transitions
+	 * spec. Please note that this entails the shader being compiled which needs
+	 * to happen on the rendering thread!
+	 * <p>
+	 * Do not forget to set the transition shader's uniforms. In GLSL EL (Web,
+	 * Android, iOS) uniforms cannot be set from within the shader code, so this
+	 * has to be done in Java via {@link #getProgram()}{@code #setUniform...}
+	 * instead! Furthermore, do not forget to replace {@code ratio} in the code
+	 * with your screen ratio (width / height). Check out the <a href=
+	 * "https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions#some-example-code">wiki</a>
+	 * for an in-depth explanation and example.
+	 * <p>
+	 * Ignores code in {@link ShaderProgram#prependFragmentCode} and
+	 * {@link ShaderProgram#prependVertexCode}.
+	 * 
+	 * @param glTransitionsCode
+	 *            the GL Transitions shader code
+	 * @param duration
+	 *            the transition's duration in seconds
+	 * @param interpolation
+	 *            the interpolation to use
 	 */
-	@Deprecated
-	@Override
-	public void compileShader(String vert, String frag, boolean ignorePrepend) {
-		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
-		Preconditions.checkNotNull(frag, "The fragment shader cannot be null.");
-
-		this.program = ShaderCompatibilityHelper.fromString(vert, frag);
+	public GLTransitionsShaderTransition(String glTransitionsCode,
+			float duration, @Nullable Interpolation interpolation) {
+		super(VERT_SHADER,
+				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
+				true, duration, interpolation);
 	}
 
 }

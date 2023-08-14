@@ -18,30 +18,32 @@ package de.eskalon.commons.screen;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 
+import de.damios.guacamole.Preconditions;
+
 /**
- * Convenience implementation of {@link ManagedScreen} inspired by
- * {@link ScreenAdapter}. Inherit from this class and only override the methods
- * that you need.
+ * An implementation of {@link ManagedScreen} that automatically disposes this
+ * screen after it was {@linkplain #hide() hidden}. This means that an instance
+ * of this screen can only be pushed once! If this condition is violated, an
+ * {@link IllegalStateException} is thrown in {@link #show()}.
  * <p>
  * Check out the documentation of {@link ManagedScreen}!
  * 
- * @author Frosty-J
+ * @author damios
  */
-public class ManagedScreenAdapter extends ManagedScreen {
+public abstract class AutoDisposingManagedScreen extends ManagedScreen {
+
+	protected boolean disposed = false;
 
 	@Override
-	public void render(float delta) {
-		// don't do anything by default
+	public void show() {
+		Preconditions.checkState(!disposed,
+				"This screen has already been disposed and cannot be reused!");
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		// don't do anything by default
-	}
-
-	@Override
-	public void dispose() {
-		// don't do anything by default
+	public void hide() {
+		disposed = true;
+		dispose();
 	}
 
 }

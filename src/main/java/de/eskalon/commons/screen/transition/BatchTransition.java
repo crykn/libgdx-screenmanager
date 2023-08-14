@@ -27,11 +27,12 @@ import de.damios.guacamole.Preconditions;
 import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 
 /**
- * The base class for all transitions using a {@link SpriteBatch}.
+ * The base class for all transitions using a {@link SpriteBatch}. Can be
+ * reused.
  * 
  * @author damios
  */
-public abstract class BatchTransition extends BlankTimedTransition {
+public abstract class BatchTransition extends TimedTransition {
 
 	protected SpriteBatch batch;
 	protected Viewport viewport;
@@ -41,7 +42,8 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	 * @param batch
 	 *            the batch used for rendering the transition. If it is used
 	 *            outside of the transitions, don't forget to set the projection
-	 *            matrix before using it again!
+	 *            matrix before using it again! The batch is <i>not</i> disposed
+	 *            by the transition.
 	 * @param duration
 	 *            the transition's duration in seconds
 	 * @param interpolation
@@ -69,10 +71,12 @@ public abstract class BatchTransition extends BlankTimedTransition {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * The batch's projection matrix is already set.
+	 * The viewport was already applied and the batch's projection matrix is
+	 * set.
 	 * 
 	 * @param delta
-	 *            the {@linkplain #interpolation interpolated} time delta
+	 *            the {@linkplain #interpolation interpolated} time delta in
+	 *            seconds
 	 * @param lastScreen
 	 *            the old screen as a texture region
 	 * @param currScreen
@@ -91,6 +95,11 @@ public abstract class BatchTransition extends BlankTimedTransition {
 		this.height = height;
 
 		viewport.update(width, height, true);
+	}
+
+	@Override
+	public void dispose() {
+		// there isn't anything to dispose
 	}
 
 }

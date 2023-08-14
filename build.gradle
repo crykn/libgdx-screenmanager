@@ -1,10 +1,9 @@
 apply plugin: "java-library"
 apply plugin: "eclipse"
 apply plugin: "idea"
-apply plugin: "jacoco"
 apply plugin: "maven"
 
-version '0.6.9'
+version '0.7.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -65,8 +64,7 @@ dependencies {
 	implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 	api "com.github.crykn.guacamole:gdx:$guacamoleVersion" // is exposed because of NestableFrameBuffer
 	
-	//testCompile "org.junit.platform:junit-platform-launcher:1.2.0" // needed for a bug in older eclipse versions
-
+	testImplementation "org.junit.platform:junit-platform-launcher:1.2.0" // needed for a bug in older eclipse versions
 	testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 	testImplementation "org.mockito:mockito-core:$mockitoVersion"
 	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -74,25 +72,18 @@ dependencies {
 	testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
-// TESTS & CI
+// TESTS
 test {
+	useJUnitPlatform()
     testLogging {
         events "failed"
         exceptionFormat "full"
     }
-    
-    finalizedBy(tasks.jacocoTestReport)
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-
-check.dependsOn jacocoTestReport
-
+// Clearing Eclipse project data in root folder
 tasks.eclipse.doLast {
-    delete ".project"
+	delete '.project'
+	delete '.classpath'
+	delete '.settings/'
 }

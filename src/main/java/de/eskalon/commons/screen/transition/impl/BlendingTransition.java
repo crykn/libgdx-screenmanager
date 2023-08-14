@@ -26,6 +26,7 @@ import de.eskalon.commons.screen.transition.BatchTransition;
 
 /**
  * A transition that blends two screens together over a certain time interval.
+ * Can be reused.
  *
  * @since 0.3.0
  * @author damios
@@ -36,7 +37,8 @@ public class BlendingTransition extends BatchTransition {
 	 * @param batch
 	 *            the batch used for rendering the transition. If it is used
 	 *            outside of the transitions, don't forget to set the projection
-	 *            matrix before using it again!
+	 *            matrix before using it again! The batch is <i>not</i> disposed
+	 *            by the transition.
 	 * @param duration
 	 *            the transition's duration in seconds
 	 * @param interpolation
@@ -51,7 +53,8 @@ public class BlendingTransition extends BatchTransition {
 	 * @param batch
 	 *            the batch used for rendering the transition. If it is used
 	 *            outside of the transitions, don't forget to set the projection
-	 *            matrix before using it again!
+	 *            matrix before using it again! The batch is <i>not</i> disposed
+	 *            by the transition.
 	 * @param duration
 	 *            the transition's duration in seconds
 	 */

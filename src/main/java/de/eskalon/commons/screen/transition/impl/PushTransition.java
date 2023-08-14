@@ -27,7 +27,7 @@ import de.eskalon.commons.screen.transition.BatchTransition;
 /**
  * A transition where the new screen is sliding in, while the last screen is
  * sliding out. Thus, the new screen is pushing the last screen out, so to
- * speak.
+ * speak. This transition can be reused.
  * 
  * @since 0.5.1
  * @author damios
@@ -38,7 +38,8 @@ public class PushTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration
@@ -57,7 +58,8 @@ public class PushTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration
