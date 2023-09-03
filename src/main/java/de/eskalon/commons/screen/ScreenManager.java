@@ -233,12 +233,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 		if (transition == null) {
 			if (!transitionQueue.isEmpty()) {
-				/*
-				 * START THE NEXT QUEUED TRANSITION
-				 */
+				/* Start the next queued transition */
 				Pair<Supplier<T>, Supplier<S>> nextTransition = transitionQueue
 						.poll();
-
 				ManagedScreen tmp = nextTransition.y.get();
 				if (tmp == currScreen) {
 					if (LoggerService.isDebugEnabled())
@@ -251,57 +248,57 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 					return;
 				}
 
-				this.gameInputMultiplexer.removeProcessors(currentProcessors);
-
-				this.lastScreen = currScreen;
-				this.currScreen = tmp;
-				this.currScreen.show();
-				this.currScreen.resize(currentWidth, currentHeight);
-				this.transition = nextTransition.x.get();
-
-				if (this.transition != null) {
-					this.transition.show();
-					this.transition.resize(currentWidth, currentHeight);
-				} else { // a screen was pushed without transition
-					this.lastScreen.hide();
-					this.lastScreen = null;
-
-					this.currentProcessors = new Array<>(
-							this.currScreen.getInputProcessors());
-					this.gameInputMultiplexer.addProcessors(currentProcessors);
-				}
-
+				initializeTransition(tmp, nextTransition.x.get());
 				render(delta); // render again so no frame is skipped
 			} else {
-				/*
-				 * RENDER THE CURRENT SCREEN; no transition is going on
-				 */
+				/* Render the current screen; no transition is going on */
 				ScreenUtils.clear(currScreen.getClearColor(), true);
 				this.currScreen.render(delta);
 			}
 		} else {
 			if (!this.transition.isDone()) {
-				/*
-				 * RENDER THE CURRENT TRANSITION
-				 */
+				/* Render the current transition */
 				this.transition.render(delta,
 						screenToTexture(this.lastScreen, this.lastFBO, delta),
 						screenToTexture(this.currScreen, this.currFBO, delta));
 			} else {
-				/*
-				 * THE CURRENT TRANSITION IS FINISHED; remove it
-				 */
-				this.transition.hide();
-				this.transition = null;
-				this.lastScreen.hide();
-				this.lastScreen = null;
-				this.currentProcessors = new Array<>(
-						this.currScreen.getInputProcessors());
-				this.gameInputMultiplexer.addProcessors(currentProcessors);
-
+				/* The current transition is finished; remove it */
+				finalizeTransition();
 				render(delta); // render again so no frame is skipped
 			}
 		}
+	}
+
+	protected void initializeTransition(ManagedScreen newScreen, T transition) {
+		this.gameInputMultiplexer.removeProcessors(currentProcessors);
+
+		this.lastScreen = currScreen;
+		this.currScreen = newScreen;
+		this.currScreen.show();
+		this.currScreen.resize(currentWidth, currentHeight);
+		this.transition = transition;
+
+		if (this.transition != null) {
+			this.transition.show();
+			this.transition.resize(currentWidth, currentHeight);
+		} else { // a screen was pushed without transition
+			this.lastScreen.hide();
+			this.lastScreen = null;
+
+			this.currentProcessors = new Array<>(
+					this.currScreen.getInputProcessors());
+			this.gameInputMultiplexer.addProcessors(currentProcessors);
+		}
+	}
+
+	protected void finalizeTransition() {
+		this.transition.hide();
+		this.transition = null;
+		this.lastScreen.hide();
+		this.lastScreen = null;
+		this.currentProcessors = new Array<>(
+				this.currScreen.getInputProcessors());
+		this.gameInputMultiplexer.addProcessors(currentProcessors);
 	}
 
 	/**
