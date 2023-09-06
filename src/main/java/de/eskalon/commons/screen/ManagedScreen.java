@@ -38,8 +38,7 @@ import de.eskalon.commons.screen.transition.ScreenTransition;
  * {@linkplain #show() shown}/{@linkplain #hide() hidden}.
  * <p>
  * Note that only under certain conditions {@link #dispose()} is called
- * automatically. If you want screens to take care of disposing themselves, use
- * an {@link AutoDisposingManagedScreen}.
+ * automatically. Check out the method's javadoc for more information!
  * 
  * @author damios
  * 
@@ -191,15 +190,18 @@ public abstract class ManagedScreen implements Screen {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * Is automatically called for a screen that was pushed, but is not yet
-	 * {@linkplain #hide() hidden}, regardless of whether the screen was
-	 * actually rendered. This means {@link #dispose()} is called for: the
-	 * current screen, a screen which is rendered as part of a transition, as
-	 * well as any screens still queued to be shown. Users are responsible for
-	 * disposing screens on which {@link #hide()} has been called previously
-	 * (and which were not pushed a second time).
-	 * 
-	 * @see AutoDisposingManagedScreen
+	 * Is called automatically in two cases:
+	 * <ul>
+	 * <li>when the screen manager is disposed and this screen was pushed, but
+	 * not yet {@linkplain #hide() hidden}; it does not matter whether the
+	 * screen was actually rendered. In other words, {@link #dispose()} is
+	 * called for the current screen, a screen which is rendered as part of a
+	 * transition, as well as any screens still queued to be shown.</li>
+	 * <li>If users want automatic disposing for screens on which
+	 * {@link #hide()} has been called previously (and which were not pushed a
+	 * second time), this can be enabled via
+	 * {@link ScreenManager#setAutoDispose(boolean, boolean)}.</li>
+	 * </ul>
 	 */
 	@Override
 	public abstract void dispose();

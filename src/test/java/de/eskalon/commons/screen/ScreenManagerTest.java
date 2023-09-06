@@ -354,13 +354,16 @@ public class ScreenManagerTest extends ScreenManagerUnitTest {
 		sm.pushScreen(s2, t1);
 		sm.render(1);
 
+		assertEquals(3, resizeCount); // the two screens and the transition were
+										// automatically resized when they were
+										// first shown
+
 		sm.pushScreen(s3, t2); // these are never rendered, because t1 never
 								// ends
 
 		// resize()
-		assertEquals(3, resizeCount); // the two screens were automatically
-										// resized when they were first shown
-		sm.resize(0, 0); // ignored
+		assertEquals(3, resizeCount); // nothing changes just by pushing another
+										// screen
 		sm.resize(5, 5); // ignored
 		sm.resize(10, 10);
 		assertEquals(6, resizeCount);

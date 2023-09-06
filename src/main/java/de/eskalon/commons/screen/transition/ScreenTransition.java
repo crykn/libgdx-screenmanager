@@ -26,7 +26,7 @@ import de.eskalon.commons.screen.ScreenManager;
  * A transition effect between two screen for use with a {@link ScreenManager}.
  * <p>
  * Note that only under certain conditions {@link #dispose()} is called
- * automatically.
+ * automatically. Check out the method's javadoc for more information!
  * 
  * @author damios
  * 
@@ -96,12 +96,18 @@ public abstract class ScreenTransition implements Disposable {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * Is automatically called for a transition that was pushed, but is not yet
-	 * {@linkplain #hide() hidden}, regardless of whether the transition was
-	 * actually rendered. This means {@link #dispose()} is only called for the
-	 * ongoing transition as well as any transitions still queued to be shown.
-	 * Users are responsible for disposing transitions on which {@link #hide()}
-	 * has been called previously (and which were not pushed a second time).
+	 * Is called automatically in two cases:
+	 * <ul>
+	 * <li>when the screen manager is disposed and this transition was pushed,
+	 * but not yet {@linkplain #hide() hidden}; it does not matter whether the
+	 * transition was actually rendered. In other words, {@link #dispose()} is
+	 * called for the ongoing transition as well as any transitions still queued
+	 * to be shown.</li>
+	 * <li>If users want automatic disposing for transitions on which
+	 * {@link #hide()} has been called previously (and which were not pushed a
+	 * second time), this can be enabled via
+	 * {@link ScreenManager#setAutoDispose(boolean, boolean)}.</li>
+	 * </ul>
 	 */
 	@Override
 	public abstract void dispose();

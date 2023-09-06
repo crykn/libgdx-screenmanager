@@ -8,12 +8,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
+import de.eskalon.commons.utils.ScreenFboUtils;
 
 public class ScreenManagerTest2 extends ScreenManagerUnitTest {
 
@@ -232,23 +237,7 @@ public class ScreenManagerTest2 extends ScreenManagerUnitTest {
 	public void testIdenticalDoublePush() {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
 
-		// Mock initBuffers() & screenToTexture() as they are using open gl
-		// stuff
-		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
-			@Override
-			TextureRegion screenToTexture(ManagedScreen screen,
-					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
-					float delta) {
-				screen.render(delta); // only render the screen
-
-				return null;
-			};
-
-			@Override
-			protected void initBuffers() {
-				// do nothing
-			}
-		};
+		ScreenManager sm = getMockedScreenManager();
 		sm.initialize(mult, 5, 5, false);
 
 		ManagedScreen firstScreen = new ManagedScreenAdapter();
