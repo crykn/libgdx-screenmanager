@@ -247,7 +247,6 @@ public class ScreenManagerTest2 extends ScreenManagerUnitTest {
 
 			@Override
 			public void show() {
-				System.out.println("SHOW");
 				assertFalse(isShown);
 				isShown = true;
 			};
