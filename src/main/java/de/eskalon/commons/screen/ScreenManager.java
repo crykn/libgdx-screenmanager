@@ -25,8 +25,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.utils.Array;
@@ -274,7 +272,8 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 				this.lastScreen = currScreen;
 				this.currScreen = tmp;
-				this.transition = nextTransition.x.get();
+				this.transition = nextTransition.x == null ? null
+						: nextTransition.x.get();
 
 				this.gameInputMultiplexer.removeProcessors(currentProcessors);
 
@@ -464,6 +463,13 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 							// type
 
 		return (S) currScreen;
+	}
+
+	/**
+	 * @return {@code true} when a transition is currently rendered
+	 */
+	public boolean isTransitioning() {
+		return transition != null;
 	}
 
 }
