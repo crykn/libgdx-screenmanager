@@ -16,6 +16,7 @@
 package de.eskalon.commons.screen.transition;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -111,5 +112,13 @@ public abstract class ScreenTransition implements Disposable {
 	 */
 	@Override
 	public abstract void dispose();
+
+	/**
+	 * @return the color to clear the screen with before the rendering is
+	 *         started
+	 */
+	public Color getClearColor() {
+		return Color.BLACK;
+	}
 
 }

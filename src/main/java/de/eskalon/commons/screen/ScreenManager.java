@@ -299,6 +299,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		} else {
 			if (!this.transition.isDone()) {
 				/* Render the current transition */
+				ScreenUtils.clear(this.transition.getClearColor(), true);
 				this.transition.render(delta,
 						ScreenFboUtils.screenToTexture(this.lastScreen,
 								this.lastFBO, delta),
