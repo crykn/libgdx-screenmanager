@@ -82,12 +82,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * The screen that was shown before the {@linkplain #currScreen current
 	 * screen}.
 	 */
-	private @Nullable ManagedScreen lastScreen;
+	protected @Nullable ManagedScreen lastScreen;
 
 	/**
 	 * The current screen.
 	 */
-	private @Nullable ManagedScreen currScreen;
+	protected @Nullable ManagedScreen currScreen;
 
 	/**
 	 * The input processors of the {@linkplain #currScreen current screen}.
@@ -102,9 +102,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * The transition effect currently rendered.
 	 */
-	private @Nullable T transition;
+	protected @Nullable T transition;
 
-	private final Queue<Pair<Supplier<T>, Supplier<S>>> transitionQueue = new LinkedList<>();
+	protected final Queue<Pair<Supplier<T>, Supplier<S>>> transitionQueue = new LinkedList<>();
 
 	private BasicInputMultiplexer gameInputMultiplexer;
 
