@@ -420,10 +420,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 		// Queued screens & transitions
 		for (Pair<Supplier<T>, Supplier<S>> pair : transitionQueue) {
-			pair.x.get().dispose();
+			pair.y.get().dispose();
 
-			if (pair.y != null)
-				pair.y.get().dispose();
+			if (pair.x != null)
+				pair.x.get().dispose();
 		}
 		transitionQueue.clear();
 
