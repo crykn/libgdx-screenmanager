@@ -1,3 +1,5 @@
+package com.mygame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -7,6 +9,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.transition.impl.HorizontalSlicingTransition;
+import de.eskalon.commons.screen.transition.impl.SlidingDirection;
+import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 
 public class BlueScreen extends ManagedScreen {
 
@@ -16,24 +21,27 @@ public class BlueScreen extends ManagedScreen {
 
 	public BlueScreen() {
 		this.game = (MyGdxGame) Gdx.app.getApplicationListener();
-	}
 
-	@Override
-	protected void create() {
 		this.shapeRenderer = new ShapeRenderer();
 		this.addInputProcessor(new InputAdapter() {
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+			public boolean touchDown(int screenX, int screenY, int pointer,
+					int button) {
 				/*
 				 * Switch using two transitions that are queued.
 				 */
-				game.getScreenManager().pushScreen("blank", "slicing_transition");
-				game.getScreenManager().pushScreen("green", "sliding_out_transition");
+				game.getScreenManager().pushScreen(new BlankScreen(),
+						new HorizontalSlicingTransition(game.getBatch(), 5,
+								1F));
+				game.getScreenManager().pushScreen(new GreenScreen(),
+						new SlidingOutTransition(game.getBatch(),
+								SlidingDirection.DOWN, 0.35F));
 				return true;
 			}
 		});
 
-		this.viewport = new ScreenViewport(); // a ScreenViewport provides the default behaviour
+		this.viewport = new ScreenViewport(); // a ScreenViewport provides the
+												// default behaviour
 	}
 
 	@Override
@@ -46,14 +54,9 @@ public class BlueScreen extends ManagedScreen {
 		 */
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.triangle(50, 50, game.getWidth() - 50, 50, game.getWidth() / 2, game.getHeight() - 50);
+		shapeRenderer.triangle(50, 50, Gdx.graphics.getWidth() - 50, 50,
+				Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 50);
 		shapeRenderer.end();
-	}
-
-	@Override
-	public void dispose() {
-		if (isInitialized())
-			shapeRenderer.dispose();
 	}
 
 	@Override
@@ -62,8 +65,8 @@ public class BlueScreen extends ManagedScreen {
 	}
 
 	@Override
-	public void hide() {
-		// not needed
+	public void dispose() {
+		shapeRenderer.dispose();
 	}
 
 	@Override

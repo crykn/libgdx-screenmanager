@@ -1,12 +1,16 @@
+package com.mygame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.screen.ManagedScreen;
+import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
 public class GreenScreen extends ManagedScreen {
 
@@ -16,24 +20,25 @@ public class GreenScreen extends ManagedScreen {
 
 	public GreenScreen() {
 		this.game = (MyGdxGame) Gdx.app.getApplicationListener();
-	}
 
-	@Override
-	protected void create() {
 		this.shapeRenderer = new ShapeRenderer();
 		this.addInputProcessor(new InputAdapter() {
 			@Override
-			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+			public boolean touchDown(int screenX, int screenY, int pointer,
+					int button) {
 				/*
 				 * Switch using a blending transition.
 				 */
-				game.getScreenManager().pushScreen("blue", "blending_transition");
+				game.getScreenManager().pushScreen(new BlueScreen(),
+						new BlendingTransition(game.getBatch(), 1F,
+								Interpolation.pow2In));
 				return true;
 			}
 		});
 
 		// This screen uses a viewport; resize the window to see the effects
-		viewport = new FitViewport(game.getWidth(), game.getHeight());
+		viewport = new FitViewport(Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -60,13 +65,7 @@ public class GreenScreen extends ManagedScreen {
 
 	@Override
 	public void dispose() {
-		if (isInitialized())
-			shapeRenderer.dispose();
-	}
-
-	@Override
-	public void hide() {
-		// not needed
+		shapeRenderer.dispose();
 	}
 
 }

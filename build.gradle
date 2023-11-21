@@ -41,10 +41,20 @@ artifacts {
     archives javadocJar
 }	
 
+// EXAMPLES
+sourceSets {
+    example {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+        java {
+        }
+    }
+}
+
 // DEPENDENCIES
 ext {
-	gdxVersion = "1.12.0"
-	guacamoleVersion = "0.3.3"
+	gdxVersion = "1.12.1"
+	guacamoleVersion = "v0.3.4"
 	
 	// Test dependencies
 	junitVersion = "5.10.0"
@@ -61,7 +71,11 @@ dependencies {
 	testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 	testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+	
+	exampleImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+	exampleImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
+
 
 // TESTS
 test {

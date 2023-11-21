@@ -1,3 +1,5 @@
+package com.mygame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -22,23 +24,18 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 		// Do some basic stuff
 		this.batch = new SpriteBatch();
 
-		// Add screens
-		this.screenManager.addScreen("green", new GreenScreen());
-		this.screenManager.addScreen("blue", new BlueScreen());
-		this.screenManager.addScreen("blank", new BlankScreen());
-
-		// Add transitions
-		BlendingTransition blendingTransition = new BlendingTransition(batch, 1F, Interpolation.pow2In);
-		screenManager.addScreenTransition("blending_transition", blendingTransition);
-		SlidingOutTransition slidingOutTransition = new SlidingOutTransition(batch, SlidingDirection.DOWN, 0.35F);
-		screenManager.addScreenTransition("sliding_out_transition", slidingOutTransition);
-		HorizontalSlicingTransition slicingTransition = new HorizontalSlicingTransition(batch, 5, 1F);
-		screenManager.addScreenTransition("slicing_transition", slicingTransition);
+		// Enable automatic disposing
+		this.screenManager.setAutoDispose(true, true);
 
 		// Push the first screen using a blending transition
-		this.screenManager.pushScreen("green", "blending_transition");
+		this.screenManager.pushScreen(new GreenScreen(),
+				new BlendingTransition(batch, 1F, Interpolation.pow2In));
 
 		Gdx.app.debug("Game", "Initialization finished.");
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
 	}
 
 }
