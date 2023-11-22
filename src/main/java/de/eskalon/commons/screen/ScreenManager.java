@@ -112,7 +112,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	private boolean initialized = false;
 
-	private boolean hasDepth; // needed, when the framebuffers are (re)created
+	protected boolean hasDepth; // needed, when the framebuffers are (re)created
 	protected boolean autoDisposeScreens = false;
 	protected boolean autoDisposeTransitions = false;
 
