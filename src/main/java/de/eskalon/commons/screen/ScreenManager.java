@@ -15,20 +15,16 @@
 
 package de.eskalon.commons.screen;
 
-import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.HdpiUtils;
 import com.badlogic.gdx.utils.Array;
@@ -36,12 +32,14 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.annotations.Beta;
 import de.damios.guacamole.gdx.graphics.NestableFrameBuffer;
 import de.damios.guacamole.gdx.log.Logger;
 import de.damios.guacamole.gdx.log.LoggerService;
-import de.damios.guacamole.tuple.Triple;
+import de.damios.guacamole.tuple.Pair;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
+import de.eskalon.commons.utils.ScreenFboUtils;
 
 /**
  * A screen manager that handles the different screens of a game and their
@@ -50,14 +48,12 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
  * Has to be {@linkplain #initialize(BasicInputMultiplexer, int, int)
  * initialized} before it can be used.
  * <p>
- * Screens and transitions can be added via
- * {@link #addScreen(String, ManagedScreen)} and
- * {@link #addScreenTransition(String, ScreenTransition)}. To actually show a
- * screen, push it via {@link #pushScreen(String, String, Object...)}.
+ * To actually show a screen, push it via
+ * {@link #pushScreen(ManagedScreen, ScreenTransition)}.
  * <p>
  * As the screen manager is using framebuffers internally, screens and
  * transitions have to use a {@link NestableFrameBuffer} if they want to use
- * framebuffers as well.
+ * framebuffers as well!
  * 
  * @author damios
  * 
@@ -68,19 +64,19 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
 public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		implements Disposable {
 
-	Logger LOG = LoggerService.getLogger(ScreenManager.class);
+	private Logger LOG = LoggerService.getLogger(ScreenManager.class);
 
 	/**
 	 * This framebuffer is used to store the content of the previously active
 	 * screen while a transition is played.
 	 */
-	protected FrameBuffer lastFBO;
+	private FrameBuffer lastFBO;
 
 	/**
 	 * This framebuffer is used to store the content of the active screen while
 	 * a transition is played.
 	 */
-	protected FrameBuffer currFBO;
+	private FrameBuffer currFBO;
 
 	/**
 	 * The screen that was shown before the {@linkplain #currScreen current
@@ -96,7 +92,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * The input processors of the {@linkplain #currScreen current screen}.
 	 */
-	protected Array<InputProcessor> currentProcessors = new Array<>();
+	private Array<InputProcessor> currentProcessors = new Array<>();
 
 	/**
 	 * The blank screen used internally when no screen has been pushed yet.
@@ -108,25 +104,17 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 */
 	protected @Nullable T transition;
 
-	/**
-	 * A map with all initialized screens.
-	 */
-	private final Map<String, S> screens = new ConcurrentHashMap<>();
+	protected final Queue<Pair<Supplier<T>, Supplier<S>>> transitionQueue = new LinkedList<>();
 
-	/**
-	 * A map with all screen transitions.
-	 */
-	private final Map<String, T> transitions = new ConcurrentHashMap<>();
+	private BasicInputMultiplexer gameInputMultiplexer;
 
-	protected final Queue<Triple<T, S, Object[]>> transitionQueue = new LinkedList<>();
+	protected int currentWidth, currentHeight;
 
-	protected BasicInputMultiplexer gameInputMultiplexer;
+	private boolean initialized = false;
 
-	private int currentWidth, currentHeight;
-
-	protected boolean initialized = false;
-
-	private boolean hasDepth; // needed, when the framebuffers are (re)created
+	protected boolean hasDepth; // needed, when the framebuffers are (re)created
+	protected boolean autoDisposeScreens = false;
+	protected boolean autoDisposeTransitions = false;
 
 	public void initialize(BasicInputMultiplexer gameInputMultiplexer,
 			int screenWidth, int screenHeight, boolean hasDepth) {
@@ -145,12 +133,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	protected void initBuffers() {
 		if (lastFBO != null)
 			lastFBO.dispose();
-		lastFBO = new NestableFrameBuffer(Format.RGBA8888,
-				HdpiUtils.toBackBufferX(currentWidth),
-				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
+		lastFBO = createFrameBuffer();
 		if (currFBO != null)
 			currFBO.dispose();
-		currFBO = new NestableFrameBuffer(Format.RGBA8888,
+		currFBO = createFrameBuffer();
+	}
+
+	protected NestableFrameBuffer createFrameBuffer() {
+		return new NestableFrameBuffer(Format.RGBA8888,
 				HdpiUtils.toBackBufferX(currentWidth),
 				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
 	}
@@ -158,6 +148,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * Sets the {@code hasDepth} attribute of the internal framebuffers and
 	 * recreates them.
+	 * <p>
+	 * If you want more granular control over the framebuffers used within the
+	 * screen manager, just override {@link #createFrameBuffer()}.
 	 * 
 	 * @param hasDepth
 	 */
@@ -168,100 +161,31 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Adds a screen. If a screen with the same name was added before, it is
-	 * replaced.
-	 *
-	 * @param name
-	 *            the name of the screen
-	 * @param screen
-	 *            the screen
+	 * Enables automatic disposing for screens and/or transitions. If set to
+	 * {@code true}, {@code dispose()} is called right after {@code hide()}.
+	 * 
+	 * @param autoDisposeScreens
+	 *            if set to {@code true}, screens are automatically
+	 *            {@linkplain ManagedScreen#dispose() disposed} after they are
+	 *            {@linkplain ManagedScreen#hide() hidden}; {@code false} by
+	 *            default
+	 * @param autoDisposeTransitions
+	 *            if set to {@code true}, transitions are automatically
+	 *            {@linkplain ScreenTransition#dispose() disposed} after they
+	 *            are {@linkplain ScreenTransition#hide() hidden}; {@code false}
+	 *            by default
 	 */
-	public void addScreen(String name, S screen) {
-		Preconditions.checkNotNull(screen, "screen cannot be null");
-		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
-
-		screens.put(name, screen);
-	}
-
-	/**
-	 * Retrieves a screen.
-	 *
-	 * @param name
-	 *            the name of the screen
-	 * @return the screen
-	 * @throws NoSuchElementException
-	 *             when the screen isn't found
-	 */
-	public S getScreen(String name) {
-		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
-
-		S screen = this.screens.get(name);
-
-		if (screen == null) {
-			throw new NoSuchElementException("No screen with the name '" + name
-					+ "' could be found. Add the screen via #addScreen(String, ManagedScreen) first.");
-		}
-
-		return screen;
-	}
-
-	/**
-	 * @return all registered screens.
-	 */
-	public Collection<S> getScreens() {
-		return screens.values();
-	}
-
-	/**
-	 * Adds a transition. If a transition with the same name was added before,
-	 * it is replaced.
-	 *
-	 * @param name
-	 *            the name of the transition
-	 * @param transition
-	 *            the transition
-	 */
-	public void addScreenTransition(String name, T transition) {
-		Preconditions.checkNotNull(transition, "screen cannot be null");
-		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
-
-		transitions.put(name, transition);
-	}
-
-	/**
-	 * Retrieves a transition.
-	 *
-	 * @param name
-	 *            the name of the transition
-	 * @return the transition
-	 * @throws NoSuchElementException
-	 *             when the transition isn't found
-	 */
-	public T getScreenTransition(String name) {
-		Preconditions.checkArgument(!name.isEmpty(), "name cannot be empty");
-
-		T transition = this.transitions.get(name);
-
-		if (transition == null) {
-			throw new NoSuchElementException("No transition with the name '"
-					+ name
-					+ "' could be found. Add the transition via #addScreenTransition(String, ScreenTransition) first.");
-		}
-
-		return transition;
-	}
-
-	/**
-	 * @return all registered transitions.
-	 */
-	public Collection<T> getScreenTransitions() {
-		return transitions.values();
+	public void setAutoDispose(boolean autoDisposeScreens,
+			boolean autoDisposeTransitions) {
+		this.autoDisposeScreens = autoDisposeScreens;
+		this.autoDisposeTransitions = autoDisposeTransitions;
 	}
 
 	/**
 	 * Pushes a screen to be the active screen. If there is still a transition
-	 * ongoing, the pushed one is queued. The screen has to be added to the
-	 * manager beforehand via {@link #addScreen(String, ManagedScreen)}.
+	 * ongoing, the pushed one is queued. If screen and transition should be
+	 * instantiated lazily, use {@link #pushScreen(Supplier, Supplier)}. This is
+	 * useful, when the constructors need to run on the rendering thread.
 	 * <p>
 	 * {@link Screen#show()} is called on the pushed screen and
 	 * {@link Screen#hide()} is called on the previously
@@ -272,25 +196,55 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	 * If the same screen is pushed twice in a row, the second call is being
 	 * ignored.
 	 *
-	 * @param name
-	 *            the name of screen to be pushed
-	 * @param transitionName
+	 * @param screen
+	 *            the screen to be pushed
+	 * @param transition
 	 *            the transition effect; can be {@code null}
-	 * @param params
-	 *            an array of params given to the
-	 *            {@linkplain ManagedScreen#pushParams screen}; can be
-	 *            {@code null}
+	 * 
+	 * @see #pushScreen(Supplier, Supplier)
 	 */
-	public void pushScreen(String name, @Nullable String transitionName,
-			Object... params) {
-		if (LoggerService.isDebugEnabled())
-			LOG.debug("Screen '%s' was pushed, using the transition '%s'", name,
-					transitionName == null ? "null" : transitionName);
+	public void pushScreen(S screen, @Nullable T transition) {
+		Preconditions.checkNotNull(screen, "screen cannot be null");
 
-		transitionQueue.add(new Triple<T, S, Object[]>(
-				transitionName != null ? getScreenTransition(transitionName)
-						: null,
-				getScreen(name), params));
+		if (LoggerService.isDebugEnabled())
+			LOG.debug("Screen '%s' was pushed, using the transition '%s'",
+					screen.getClass().getSimpleName(),
+					transition == null ? "null"
+							: transition.getClass().getSimpleName());
+
+		pushScreen(() -> screen, () -> transition);
+	}
+
+	/**
+	 * Pushes a screen to be the active screen. If there is still a transition
+	 * ongoing, the pushed one is queued.
+	 * <p>
+	 * The provided {@link Supplier}s are called on the rendering thread, which
+	 * is useful if the screen's or transition's constructors perform OpenGL
+	 * operations. This has the advantage that OpenGL calls can be done in the
+	 * constructors without using {@link Application#postRunnable(Runnable)} or
+	 * moving code to
+	 * {@link ManagedScreen#show()}/{@link ScreenTransition#show()}.
+	 * <p>
+	 * If the same screen is pushed twice in a row, the second call is being
+	 * ignored.
+	 * 
+	 * @param screenSupplier
+	 *            a {@link Supplier} for the screen to be pushed
+	 * @param transitionSupplier
+	 *            a {@link Supplier} for the transition effect; can be
+	 *            {@code null}
+	 * 
+	 * @see #pushScreen(ManagedScreen, ScreenTransition)
+	 */
+	@Beta
+	public void pushScreen(Supplier<S> screenSupplier,
+			@Nullable Supplier<T> transitionSupplier) {
+		Preconditions.checkNotNull(screenSupplier,
+				"screenSupplier cannot be null");
+
+		transitionQueue.add(new Pair<Supplier<T>, Supplier<S>>(
+				transitionSupplier, screenSupplier));
 	}
 
 	/**
@@ -306,31 +260,35 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 		if (transition == null) {
 			if (!transitionQueue.isEmpty()) {
-				/*
-				 * START THE NEXT QUEUED TRANSITION
-				 */
-				Triple<T, S, Object[]> nextTransition = transitionQueue.poll();
+				/* Start the next queued transition */
+				Pair<Supplier<T>, Supplier<S>> nextTransition = transitionQueue
+						.poll();
+				ManagedScreen tmp = nextTransition.y.get();
+				if (tmp == currScreen) { // one can't push the same screen twice
+											// in a row
+					if (LoggerService.isDebugEnabled())
+						LOG.debug(
+								"Screens cannot be pushed twice; the second call to push '%s' was ignored",
+								tmp.getClass().getSimpleName());
 
-				if (nextTransition.y == currScreen) {
-					render(delta); // one can't push the same screen twice in a
-									// row
+					render(delta); // render again so no frame is skipped
 					return;
 				}
 
+				this.lastScreen = currScreen;
+				this.currScreen = tmp;
+				this.transition = nextTransition.x == null ? null
+						: nextTransition.x.get();
+
 				this.gameInputMultiplexer.removeProcessors(currentProcessors);
 
-				this.lastScreen = currScreen;
-				this.currScreen = nextTransition.y;
-				this.currScreen.pushParams = (nextTransition.z == null
-						|| nextTransition.z.length == 0) ? null
-								: nextTransition.z;
-				this.currScreen.show();
-				this.transition = nextTransition.x;
+				initializeScreen(this.currScreen);
 
 				if (this.transition != null) {
-					this.transition.reset();
+					initializeTransition(this.transition);
 				} else { // a screen was pushed without transition
-					this.lastScreen.hide();
+					finalizeScreen(this.lastScreen);
+					this.lastScreen = null;
 
 					this.currentProcessors = new Array<>(
 							this.currScreen.getInputProcessors());
@@ -339,30 +297,27 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 				render(delta); // render again so no frame is skipped
 			} else {
-				/*
-				 * RENDER THE CURRENT SCREEN; no transition is going on
-				 */
+				/* Render the current screen; no transition is going on */
 				ScreenUtils.clear(currScreen.getClearColor(), true);
 				this.currScreen.render(delta);
 			}
 		} else {
 			if (!this.transition.isDone()) {
-				/*
-				 * RENDER THE CURRENT TRANSITION
-				 */
-				TextureRegion lastTextureRegion = screenToTexture(
-						this.lastScreen, this.lastFBO, delta);
-				TextureRegion currTextureRegion = screenToTexture(
-						this.currScreen, this.currFBO, delta);
-
-				this.transition.render(delta, lastTextureRegion,
-						currTextureRegion);
+				/* Render the current transition */
+				ScreenUtils.clear(this.transition.getClearColor(), true);
+				this.transition.render(delta,
+						ScreenFboUtils.screenToTexture(this.lastScreen,
+								this.lastFBO, delta),
+						ScreenFboUtils.screenToTexture(this.currScreen,
+								this.currFBO, delta));
 			} else {
-				/*
-				 * THE CURRENT TRANSITION IS FINISHED; remove it
-				 */
+				/* The current transition is finished; remove it */
+				finalizeTransition(this.transition);
 				this.transition = null;
-				this.lastScreen.hide();
+
+				finalizeScreen(this.lastScreen);
+				this.lastScreen = null;
+
 				this.currentProcessors = new Array<>(
 						this.currScreen.getInputProcessors());
 				this.gameInputMultiplexer.addProcessors(currentProcessors);
@@ -372,28 +327,47 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		}
 	}
 
+	protected void initializeScreen(ManagedScreen newScreen) {
+		newScreen.show();
+		newScreen.resize(currentWidth, currentHeight);
+	}
+
+	protected void initializeTransition(T newTransition) {
+		newTransition.show();
+		newTransition.resize(currentWidth, currentHeight);
+	}
+
+	protected void finalizeScreen(ManagedScreen oldScreen) {
+		oldScreen.hide();
+		if (autoDisposeScreens)
+			oldScreen.dispose();
+	}
+
+	protected void finalizeTransition(T oldTransition) {
+		oldTransition.hide();
+		if (autoDisposeTransitions)
+			oldTransition.dispose();
+	}
+
 	/**
 	 * @see ManagedScreen#resize(int, int)
 	 */
 	public void resize(int width, int height) {
 		Preconditions.checkState(initialized,
-				"The screen manager has to be initalized first!");
+				"The screen manager has to be initialized first!");
 
 		if (currentWidth != width || currentHeight != height) {
-			this.currentWidth = width;
-			this.currentHeight = height;
+			currentWidth = width;
+			currentHeight = height;
 
 			// Resize screens & transitions
-			for (S s : screens.values()) {
-				if (s.isInitialized()) {
-					s.resize(width, height);
-				}
-			}
-			for (T t : transitions.values()) {
-				if (t.isInitialized()) {
-					t.resize(width, height);
-				}
-			}
+			currScreen.resize(width, height);
+
+			if (lastScreen != null)
+				lastScreen.resize(width, height);
+
+			if (transition != null)
+				transition.resize(width, height);
 
 			// Recreate buffers
 			initBuffers();
@@ -407,7 +381,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		Preconditions.checkState(initialized,
 				"The screen manager has to be initalized first!");
 
-		if (inTransition())
+		if (lastScreen != null)
 			lastScreen.pause();
 
 		currScreen.pause();
@@ -420,38 +394,60 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 		Preconditions.checkState(initialized,
 				"The screen manager has to be initalized first!");
 
-		if (inTransition())
+		if (lastScreen != null)
 			lastScreen.resume();
 
 		currScreen.resume();
 	}
 
 	/**
-	 * Disposes the screens, the transitions and the internally used
-	 * framebuffers.
+	 * Disposes the screen manager and any screen and transitions pushed, which
+	 * were not yet {@linkplain ManagedScreen#hide() hidden}, regardless of
+	 * whether they already started being rendered.
 	 */
 	@Override
 	public void dispose() {
-		this.lastScreen = null;
-		this.currScreen = null;
-
-		if (lastFBO != null)
-			lastFBO.dispose();
-		if (currFBO != null)
-			currFBO.dispose();
-
-		for (S s : screens.values()) {
-			s.dispose();
+		// Current screens & transitions
+		if (lastScreen != null) {
+			lastScreen.dispose();
+			lastScreen = null;
 		}
 
-		for (T t : transitions.values()) {
-			t.dispose();
+		if (currScreen != null) {
+			currScreen.dispose();
+			currScreen = null;
+		}
+
+		if (transition != null) {
+			transition.dispose();
+			transition = null;
+		}
+
+		// Queued screens & transitions
+		for (Pair<Supplier<T>, Supplier<S>> pair : transitionQueue) {
+			pair.y.get().dispose();
+
+			if (pair.x != null)
+				pair.x.get().dispose();
+		}
+		transitionQueue.clear();
+
+		// FBOs
+		if (lastFBO != null) {
+			lastFBO.dispose();
+			lastFBO = null;
+		}
+
+		if (currFBO != null) {
+			currFBO.dispose();
+			currFBO = null;
 		}
 	}
 
 	/**
-	 * @return the {@linkplain ManagedScreen screen} that was shown before the
-	 *         {@linkplain #getCurrentScreen() current screen}
+	 * @return is {@code null} if no transition is going on; otherwise returns
+	 *         the previous {@linkplain ManagedScreen screen} that is still
+	 *         rendered as part of the transition
 	 */
 	@SuppressWarnings("unchecked")
 	public @Nullable S getLastScreen() {
@@ -463,11 +459,11 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * @return the current screen; is changed in the first render pass after
-	 *         {@link #pushScreen(String, String, Object...)} is called.
+	 * @return the current screen; is {@code null} before the first screen was
+	 *         pushed
 	 */
 	@SuppressWarnings("unchecked")
-	public S getCurrentScreen() {
+	public @Nullable S getCurrentScreen() {
 		if (currScreen == blankScreen)
 			return null; // return null, as the blank screen is not the right
 							// type
@@ -476,41 +472,10 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * @return whether the manager is currently transitioning from the
-	 *         {@linkplain #getLastScreen() last screen} towards the
-	 *         {@linkplain #getCurrentScreen() current screen}
+	 * @return {@code true} when a transition is currently rendered
 	 */
-	public boolean inTransition() {
-		return this.transition != null;
-	}
-
-	/**
-	 * Renders a {@linkplain ManagedScreen screen} into a texture region using
-	 * the given {@linkplain FrameBuffer framebuffer}.
-	 * 
-	 * @param screen
-	 *            the screen to be rendered
-	 * @param fbo
-	 *            the framebuffer the screen gets rendered into
-	 * @param delta
-	 *            the time delta
-	 * 
-	 * @return a texture which contains the rendered screen
-	 */
-	TextureRegion screenToTexture(ManagedScreen screen, FrameBuffer fbo,
-			float delta) {
-		fbo.begin();
-		ScreenUtils.clear(screen.getClearColor(), true);
-		screen.render(delta);
-		fbo.end();
-
-		Texture texture = fbo.getColorBufferTexture();
-
-		// flip the texture
-		TextureRegion textureRegion = new TextureRegion(texture);
-		textureRegion.flip(false, true);
-
-		return textureRegion;
+	public boolean isTransitioning() {
+		return transition != null;
 	}
 
 }

@@ -18,36 +18,10 @@ package de.eskalon.commons.screen;
 /**
  * A blank screen.
  * <p>
- * Is used internally when no screen has been
- * {@linkplain ScreenManager#pushScreen(String, String, Object...) pushed} yet.
+ * Is used internally when no screen has been pushed yet.
  * 
  * @author damios
  */
-class BlankScreen extends ManagedScreen {
-
-	@Override
-	protected void create() {
-		// do nothing
-	}
-
-	@Override
-	public void render(float delta) {
-		// do nothing
-	}
-
-	@Override
-	public void hide() {
-		// do nothing
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		// do nothing
-	}
-
-	@Override
-	public void dispose() {
-		// do nothing
-	}
+class BlankScreen extends ManagedScreenAdapter {
 
 }

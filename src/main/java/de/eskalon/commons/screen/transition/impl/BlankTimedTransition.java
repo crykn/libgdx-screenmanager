@@ -23,7 +23,7 @@ import com.badlogic.gdx.math.Interpolation;
 import de.eskalon.commons.screen.transition.TimedTransition;
 
 /**
- * A blank screen transition going on for a given duration.
+ * A blank screen transition going on for a given duration. Can be reused.
  * 
  * @since 0.3.0
  * @author damios
@@ -53,11 +53,6 @@ public class BlankTimedTransition extends TimedTransition {
 	public void render(float delta, TextureRegion lastScreen,
 			TextureRegion currScreen, float progress) {
 		// do nothing
-	}
-
-	@Override
-	protected void create() {
-		// not needed
 	}
 
 	@Override

@@ -8,11 +8,13 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL32;
 
 /**
  * This class is the base class for all game tests. It takes care of starting
- * the game headlessly and mocking {@linkplain Gdx#gl20 open gl}.
+ * the game headlessly and mocking {@linkplain Gdx#gl32 OpenGL}.
+ * 
+ * @version 0.2.0
  */
 public abstract class LibgdxUnitTest {
 
@@ -25,7 +27,7 @@ public abstract class LibgdxUnitTest {
 
 		// Use Mockito to mock the OpenGL methods since we are running
 		// headlessly
-		Gdx.gl20 = Mockito.mock(GL20.class);
+		Gdx.gl20 = Gdx.gl30 = Gdx.gl31 = Gdx.gl32 = Mockito.mock(GL32.class);
 		Gdx.gl = Gdx.gl20;
 	}
 

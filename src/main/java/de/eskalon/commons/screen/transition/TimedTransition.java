@@ -24,6 +24,8 @@ import de.damios.guacamole.Preconditions;
 
 /**
  * A screen transition that lasts for a certain duration.
+ * <p>
+ * The transition is reset on {@link #show()} and can thus be reused.
  * 
  * @author damios
  */
@@ -59,8 +61,7 @@ public abstract class TimedTransition extends ScreenTransition {
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
+	public void show() {
 		this.timePassed = 0;
 	}
 
@@ -80,7 +81,8 @@ public abstract class TimedTransition extends ScreenTransition {
 	 * The render method to use in the timed transition.
 	 * 
 	 * @param delta
-	 *            the {@linkplain #interpolation interpolated} time delta
+	 *            the {@linkplain #interpolation interpolated} time delta in
+	 *            seconds
 	 * @param lastScreen
 	 *            the old screen as a texture region
 	 * @param currScreen

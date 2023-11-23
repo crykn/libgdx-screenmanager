@@ -1,16 +1,8 @@
+package com.mygame;
+
 import de.eskalon.commons.screen.ManagedScreen;
 
 public class BlankScreen extends ManagedScreen {
-
-	@Override
-	protected void create() {
-		// do nothing
-	}
-
-	@Override
-	public void hide() {
-		// do nothing
-	}
 
 	@Override
 	public void render(float delta) {

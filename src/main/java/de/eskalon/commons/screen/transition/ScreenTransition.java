@@ -16,59 +16,54 @@
 package de.eskalon.commons.screen.transition;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
 
 /**
  * A transition effect between two screen for use with a {@link ScreenManager}.
- * Transitions are intended as objects that are created only once when the game
- * is started and are then reused.
  * <p>
- * The {@link #create()} method is called when the transition is first used. The
- * transition can also be initialized manually by calling
- * {@link #initializeScreenTransition()}, which should normally be done by a
- * loading screen after the assets have been loaded.
+ * Note that only under certain conditions {@link #dispose()} is called
+ * automatically. Check out the method's javadoc for more information!
  * 
  * @author damios
  * 
- * @see ScreenManager#pushScreen(String, String, Object...)
+ * @see ScreenManager#pushScreen(ManagedScreen, ScreenTransition)
  */
 public abstract class ScreenTransition implements Disposable {
 
-	private boolean initialized = false;
-
-	public boolean isInitialized() {
-		return initialized;
-	}
-
 	/**
-	 * Can be called manually to {@linkplain #create() initialize} the
-	 * transition - otherwise this is done when the transition is first
-	 * rendered.
-	 */
-	public void initializeScreenTransition() {
-		if (!initialized) {
-			initialized = true;
-			create();
-			resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		}
-	}
-
-	/**
-	 * Is responsible for initializing the transition. Is called <i>once</i>.
+	 * Called before this transition starts rendering. If you want to reuse
+	 * transition instances, this is the place where the transition should be
+	 * reset.
 	 * <p>
-	 * Right after this method {@link #resize(int, int)} is called.
+	 * Right after this method, {@link #resize(int, int)} is called.
+	 * <p>
+	 * Behaves similar to {@link ManagedScreen#show()}.
 	 */
-	protected abstract void create();
+	public void show() {
+		// don't do anything by default
+	}
+
+	/**
+	 * Called after this transition stops rendering. This is the last chance to
+	 * obtain {@linkplain ScreenManager#getLastScreen() the last screen} which
+	 * was rendered as part of the transition.
+	 * <p>
+	 * Behaves similar to {@link ManagedScreen#hide()}.
+	 */
+	public void hide() {
+		// don't do anything by default
+	}
 
 	/**
 	 * Takes care of actually rendering the transition.
 	 * 
 	 * @param delta
-	 *            the time delta
+	 *            the time delta in seconds
 	 * @param lastScreen
 	 *            the old screen as a texture region
 	 * @param currScreen
@@ -78,17 +73,19 @@ public abstract class ScreenTransition implements Disposable {
 			TextureRegion currScreen);
 
 	/**
-	 * @return whether the transition is done
+	 * @return whether the transition is done; after that is the case, the
+	 *         transition stops and {@link #hide()} is called
 	 */
 	public abstract boolean isDone();
 
 	/**
 	 * Called when the {@linkplain ApplicationListener#resize(int, int) game is
-	 * resized}, the transition was {@linkplain #isInitialized() initialized}
-	 * before and the new size is different to the previous one.
+	 * resized} while this transition is rendered and the new size is different
+	 * to the previous one.
 	 * <p>
-	 * In addition, this method is called once right after the transition was
-	 * initialized ({@link #create()}).
+	 * In addition, this method is called right after {@link #show()}.
+	 * <p>
+	 * Behaves similar to {@link ManagedScreen#resize(int, int)}.
 	 * 
 	 * @param width
 	 *            the new width in pixels
@@ -98,12 +95,30 @@ public abstract class ScreenTransition implements Disposable {
 	public abstract void resize(int width, int height);
 
 	/**
-	 * Is called to reset the transition for another use.
-	 * 
-	 * This is done right before the transition is to be used.
+	 * {@inheritDoc}
+	 * <p>
+	 * Is called automatically in two cases:
+	 * <ul>
+	 * <li>when the screen manager is disposed and this transition was pushed,
+	 * but not yet {@linkplain #hide() hidden}; it does not matter whether the
+	 * transition was actually rendered. In other words, {@link #dispose()} is
+	 * called for the ongoing transition as well as any transitions still queued
+	 * to be shown.</li>
+	 * <li>If users want automatic disposing for transitions on which
+	 * {@link #hide()} has been called previously (and which were not pushed a
+	 * second time), this can be enabled via
+	 * {@link ScreenManager#setAutoDispose(boolean, boolean)}.</li>
+	 * </ul>
 	 */
-	public void reset() {
-		initializeScreenTransition();
+	@Override
+	public abstract void dispose();
+
+	/**
+	 * @return the color to clear the screen with before the rendering is
+	 *         started
+	 */
+	public Color getClearColor() {
+		return Color.BLACK;
 	}
 
 }

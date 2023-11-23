@@ -8,16 +8,19 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import de.eskalon.commons.LibgdxUnitTest;
-import de.eskalon.commons.screen.ScreenManagerTest.TestScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
+import de.eskalon.commons.utils.ScreenFboUtils;
 
-public class ScreenManagerTest2 extends LibgdxUnitTest {
+public class ScreenManagerTest2 extends ScreenManagerUnitTest {
 
 	private int i = 0;
 	private int k = 0;
@@ -31,43 +34,24 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 	 * transition is rendering as well as whether the input handlers are
 	 * unregistered while transitioning.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	@Test
 	public void testScreenLifecycleWhileTransition()
 			throws TimeoutException, InterruptedException {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
-
-		// Mock initBuffers() & screenToTexture() as they are using open gl
-		// stuff
-		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
-			@Override
-			TextureRegion screenToTexture(ManagedScreen screen,
-					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
-					float delta) {
-				screen.render(delta); // only render the screen
-
-				return null;
-			};
-
-			@Override
-			protected void initBuffers() {
-				// do nothing
-			}
-		};
+		ScreenManager<ManagedScreen, ScreenTransition> sm = getMockedScreenManager();
 		sm.initialize(mult, 5, 5, false);
 
 		ManagedScreen testScreen = new ManagedScreen() {
-			@Override
-			public void show() {
-				initializeScreen(); // instead of super.show();
 
-				assertEquals(0, i);
-				i = 1;
+			{
+				addInputProcessor(new InputAdapter());
 			}
 
 			@Override
-			protected void create() {
-				addInputProcessor(new InputAdapter());
+			public void show() {
+				assertEquals(0, i);
+				i = 1;
 			}
 
 			@Override
@@ -114,19 +98,17 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 		};
 
 		ManagedScreen test2Screen = new ManagedScreen() {
-			@Override
-			public void show() {
-				initializeScreen(); // instead of super.show();
 
-				assertEquals(1, i);
-				i = 2;
+			{
+				addInputProcessor(new InputAdapter());
+				addInputProcessor(new InputAdapter());
+				addInputProcessor(new InputAdapter());
 			}
 
 			@Override
-			protected void create() {
-				addInputProcessor(new InputAdapter());
-				addInputProcessor(new InputAdapter());
-				addInputProcessor(new InputAdapter());
+			public void show() {
+				assertEquals(1, i);
+				i = 2;
 			}
 
 			@Override
@@ -166,16 +148,15 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 		};
 
-		String screenName = "Test";
-		String screen2Name = "Test2";
-
-		sm.addScreen(screenName, testScreen);
-		sm.addScreen(screen2Name, test2Screen);
-
 		ScreenTransition transition = new ScreenTransition() {
+
+			{
+				assertEquals(0, k);
+				k = 1;
+			}
+
 			@Override
-			public void reset() {
-				super.reset();
+			public void show() {
 				assertEquals(1, k);
 				k = 2;
 			}
@@ -200,12 +181,6 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 
 			@Override
-			protected void create() {
-				assertEquals(0, k);
-				k = 1;
-			}
-
-			@Override
 			public void resize(int width, int height) {
 			}
 
@@ -214,15 +189,8 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 		};
 
-		String transitionName = "Transition";
-
-		sm.addScreenTransition(transitionName, transition);
-
-		assertEquals(1, sm.getScreenTransitions().size());
-		assertEquals(transition, sm.getScreenTransition(transitionName));
-
 		// Push the first screen
-		sm.pushScreen(screenName, null);
+		sm.pushScreen(testScreen, null);
 		assertEquals(null, sm.getCurrentScreen());
 		sm.render(1F);
 		assertEquals(1, i);
@@ -232,22 +200,21 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 		assertEquals(null, sm.getLastScreen());
 
 		// Push the second screen using a transition
-		sm.pushScreen(screen2Name, transitionName);
+		sm.pushScreen(test2Screen, transition);
 		sm.render(1F);
 		assertEquals(5, i);
 
 		assertEquals(0, mult.getProcessors().size);
 		assertEquals(test2Screen, sm.getCurrentScreen());
 		assertEquals(testScreen, sm.getLastScreen());
-		assertTrue(sm.inTransition());
 		assertTrue(!transition.isDone());
 
-		// Render enough so the transition is marked as done
+		// Let a few seconds pass, so the transition finishes
 		sm.render(15);
 
 		assertEquals(0, mult.getProcessors().size);
-		assertEquals(test2Screen, sm.getCurrentScreen()); // didnt change
-		assertEquals(testScreen, sm.getLastScreen()); // didnt change
+		assertEquals(test2Screen, sm.getCurrentScreen()); // didn't change
+		assertEquals(testScreen, sm.getLastScreen()); // didn't change
 		assertTrue(transition.isDone());
 
 		assertEquals(7, i);
@@ -259,46 +226,23 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 		i = 11; // end
 
 		assertEquals(3, mult.getProcessors().size);
-		assertTrue(!sm.inTransition());
-
-		// Try to initialize the transition a second time
-		transition.initializeScreenTransition();
+		assertEquals(null, sm.getLastScreen());
 	}
 
 	/**
-	 * Tests that pushing the same screen twice in sucession is ignored.
+	 * Tests that pushing the same screen twice in succession is ignored.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testIdenticalDoublePush() {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
 
-		// Mock initBuffers() & screenToTexture() as they are using open gl
-		// stuff
-		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
-			@Override
-			TextureRegion screenToTexture(ManagedScreen screen,
-					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
-					float delta) {
-				screen.render(delta); // only render the screen
-
-				return null;
-			};
-
-			@Override
-			protected void initBuffers() {
-				// do nothing
-			}
-		};
+		ScreenManager sm = getMockedScreenManager();
 		sm.initialize(mult, 5, 5, false);
 
-		ManagedScreen firstScreen = new TestScreen() {
-			@Override
-			public void resize(int width, int height) {
-			}
-		};
+		ManagedScreen firstScreen = new ManagedScreenAdapter();
 
-		ManagedScreen mainScreen = new TestScreen() {
+		ManagedScreen mainScreen = new ManagedScreenAdapter() {
 			boolean isShown = false;
 
 			@Override
@@ -318,13 +262,13 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 		};
 
-		sm.addScreen("first", firstScreen);
-		sm.addScreen("main", mainScreen);
+		sm.pushScreen(firstScreen, null);
+		sm.render(1F);
 
-		sm.pushScreen("first", null);
-		sm.pushScreen("main", null);
-		sm.pushScreen("main", null);
+		sm.pushScreen(mainScreen, null);
+		sm.render(1F);
 
+		sm.pushScreen(mainScreen, null);
 		sm.render(1F);
 	}
 
@@ -332,31 +276,14 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 	 * Tests whether a screen's input processor is removed from the game, even
 	 * though it was deleted from the screen's list of processors beforehand.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	@Test
 	public void testRemovingProcessor() {
 		BasicInputMultiplexer mult = new BasicInputMultiplexer();
-
-		// Mock initBuffers() & screenToTexture() as they are using open gl
-		// stuff
-		ScreenManager<ManagedScreen, ScreenTransition> sm = new ScreenManager() {
-			@Override
-			TextureRegion screenToTexture(ManagedScreen screen,
-					com.badlogic.gdx.graphics.glutils.FrameBuffer FBO,
-					float delta) {
-				screen.render(delta); // only render the screen
-
-				return null;
-			};
-
-			@Override
-			protected void initBuffers() {
-				// do nothing
-			}
-		};
+		ScreenManager<ManagedScreen, ScreenTransition> sm = getMockedScreenManager();
 		sm.initialize(mult, 5, 5, false);
 
-		ManagedScreen mainScreen = new TestScreen() {
+		ManagedScreen mainScreen = new ManagedScreenAdapter() {
 			boolean doneOnce = false;
 
 			@Override
@@ -379,20 +306,17 @@ public class ScreenManagerTest2 extends LibgdxUnitTest {
 			}
 		};
 
-		ManagedScreen secondScreen = new TestScreen() {
+		ManagedScreen secondScreen = new ManagedScreenAdapter() {
 			@Override
 			public void resize(int width, int height) {
 			}
 		};
 
-		sm.addScreen("main", mainScreen);
-		sm.addScreen("second", secondScreen);
-
-		sm.pushScreen("main", null);
+		sm.pushScreen(mainScreen, null);
 		sm.render(1F);
 		assertEquals(2, mult.size());
 
-		sm.pushScreen("second", null);
+		sm.pushScreen(secondScreen, null);
 		sm.render(1F);
 		assertEquals(0, mult.size());
 	}

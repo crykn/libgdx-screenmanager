@@ -1,3 +1,4 @@
+package com.mygame;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -16,7 +17,9 @@ public class DesktopLauncher {
 			// Start the game
 			new Lwjgl3Application(new MyGdxGame(), config);
 		} catch (Exception e) {
-			System.err.println("An unexpected error occurred while starting the game: " + e.getLocalizedMessage());
+			System.err.println(
+					"An unexpected error occurred while starting the game:");
+			e.printStackTrace();
 			System.exit(-1);
 		}
 	}

@@ -24,8 +24,8 @@ import com.badlogic.gdx.utils.Array;
  * {@link InputProcessor}s. Delegation for an event stops if a processor returns
  * {@code true}, which indicates that the event was handled.
  * <p>
- * This class adds some convenience methods for quickly changing all of the
- * added input processors.
+ * This class adds some convenience methods for quickly adding/removing multiple
+ * input processors at once.
  * 
  * @author damios
  */

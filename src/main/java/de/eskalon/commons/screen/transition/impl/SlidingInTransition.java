@@ -23,7 +23,7 @@ import com.badlogic.gdx.math.Interpolation;
 import de.eskalon.commons.screen.transition.SlidingTransition;
 
 /**
- * A transition where the new screen is sliding in.
+ * A transition where the new screen is sliding in. Can be reused.
  * 
  * @since 0.3.0
  * @author damios
@@ -34,7 +34,8 @@ public class SlidingInTransition extends SlidingTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param dir
 	 *            the direction the new screen should slide to
 	 * @param duration
@@ -49,7 +50,8 @@ public class SlidingInTransition extends SlidingTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render
+	 *            the sprite batch used to render; is <i>not</i> disposed by the
+	 *            transition
 	 * @param dir
 	 *            the direction the new screen should slide to
 	 * @param duration
