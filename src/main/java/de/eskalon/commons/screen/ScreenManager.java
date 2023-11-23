@@ -133,12 +133,14 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	protected void initBuffers() {
 		if (lastFBO != null)
 			lastFBO.dispose();
-		lastFBO = new NestableFrameBuffer(Format.RGBA8888,
-				HdpiUtils.toBackBufferX(currentWidth),
-				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
+		lastFBO = createFrameBuffer();
 		if (currFBO != null)
 			currFBO.dispose();
-		currFBO = new NestableFrameBuffer(Format.RGBA8888,
+		currFBO = createFrameBuffer();
+	}
+
+	protected NestableFrameBuffer createFrameBuffer() {
+		return new NestableFrameBuffer(Format.RGBA8888,
 				HdpiUtils.toBackBufferX(currentWidth),
 				HdpiUtils.toBackBufferY(currentHeight), hasDepth);
 	}
