@@ -148,6 +148,9 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	/**
 	 * Sets the {@code hasDepth} attribute of the internal framebuffers and
 	 * recreates them.
+	 * <p>
+	 * If you want more granular control over the framebuffers used within the
+	 * screen manager, just override {@link #createFrameBuffer()}.
 	 * 
 	 * @param hasDepth
 	 */
