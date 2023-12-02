@@ -151,15 +151,17 @@ public abstract class ManagedScreen implements Screen {
 	 * rendered.
 	 * <p>
 	 * The game is usually paused when it is not active or visible on-screen.
-	 * <u>On Android</u>, this is the case when the home button is pressed or an
-	 * incoming call is received. <u>On desktop</u>, this method is called when
-	 * the game is minimized. However, {@link #pause()} is <i>not</i> called,
-	 * when the game just loses focus. This has to be detected with a
-	 * Lwjgl3WindowListener. <u>On iOS</u>, this method is called when the app
-	 * is about to move from the active to inactive state, e.g. when an incoming
-	 * call is received. <u>On web</u>, pause events are tied to the
-	 * {@code hidden} document property, which determines whether the page is
-	 * not even partially visible.
+	 * <u>On Android</u>, this is mostly the case when the home button is
+	 * pressed, an incoming call is received or the game no longer has the focus
+	 * in multi-window mode. <u>On desktop</u>, this method is called when the
+	 * game is minimized. Set
+	 * {@code Lwjgl3ApplicationConfiguration#pauseWhenLostFocus} to {@code true}
+	 * if you want {@link #pause()} to be called when the game loses focus as
+	 * well. <u>On iOS</u>, this method is called when the app is about to move
+	 * from the active to inactive state, e.g. when an incoming call is
+	 * received. <u>On web</u>, pause events are tied to the {@code hidden}
+	 * document property, which determines whether the page is not even
+	 * partially visible.
 	 * 
 	 * @see #resume()
 	 */
