@@ -29,7 +29,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.annotations.Beta;
 import de.damios.guacamole.gdx.graphics.QuadMeshGenerator;
+import de.damios.guacamole.gdx.graphics.ShaderCompatibilityHelper;
 import de.damios.guacamole.gdx.graphics.ShaderProgramFactory;
 import de.eskalon.commons.screen.transition.TimedTransition;
 
@@ -97,6 +99,14 @@ public class ShaderTransition extends TimedTransition {
 	 * Creates a shader transition. Please note that this entails the shader
 	 * being compiled which needs to happen on the rendering thread!
 	 * 
+	 * @param vert
+	 *            the vertex shader code
+	 * @param frag
+	 *            the fragment shader code
+	 * @param ignorePrepend
+	 *            whether to ignore the code in
+	 *            {@link ShaderProgram#prependFragmentCode} and
+	 *            {@link ShaderProgram#prependVertexCode}
 	 * @param duration
 	 *            the transition's duration in seconds
 	 * @param interpolation
@@ -104,6 +114,13 @@ public class ShaderTransition extends TimedTransition {
 	 */
 	public ShaderTransition(String vert, String frag, boolean ignorePrepend,
 			float duration, @Nullable Interpolation interpolation) {
+		this(vert, frag, ignorePrepend, duration, interpolation, false);
+	}
+
+	@Beta
+	public ShaderTransition(String vert, String frag, boolean ignorePrepend,
+			float duration, @Nullable Interpolation interpolation,
+			boolean useCompatibilityHandler) {
 		super(duration, interpolation);
 
 		Preconditions.checkNotNull(vert, "The vertex shader cannot be null.");
@@ -114,8 +131,13 @@ public class ShaderTransition extends TimedTransition {
 												// screen
 
 		// Compile the shader; this needs to happen on the rendering thread!
-		this.program = ShaderProgramFactory.fromString(vert, frag, true,
-				ignorePrepend);
+		if (useCompatibilityHandler)
+			this.program = ShaderCompatibilityHelper.fromString(vert, frag); // ignorePrepend
+																				// is
+																				// ignored
+		else
+			this.program = ShaderProgramFactory.fromString(vert, frag, true,
+					ignorePrepend);
 
 		this.projTransLoc = this.program.getUniformLocation("u_projTrans");
 		this.lastScreenLoc = this.program.getUniformLocation("lastScreen");

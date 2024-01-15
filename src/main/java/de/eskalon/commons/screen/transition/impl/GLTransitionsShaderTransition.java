@@ -20,6 +20,8 @@ import javax.annotation.Nullable;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Interpolation;
 
+import de.damios.guacamole.gdx.graphics.ShaderCompatibilityHelper;
+
 /**
  * A transition that is using shader code conforming to the <i>GL Transition
  * Specification v1</i>. This allows using the shaders provided at
@@ -101,8 +103,11 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * "https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions#some-example-code">wiki</a>
 	 * for an in-depth explanation and example.
 	 * <p>
-	 * Ignores code in {@link ShaderProgram#prependFragmentCode} and
-	 * {@link ShaderProgram#prependVertexCode}.
+	 * Code in {@link ShaderProgram#prependFragmentCode} and
+	 * {@link ShaderProgram#prependVertexCode} is ignored. The provided shader
+	 * is {@linkplain ShaderCompatibilityHelper#fromString(String, String)
+	 * automatically ported} from from version 120 (~ OpenGL 2.1) to version 150
+	 * (~ OpenGL 3.2) if needed.
 	 * 
 	 * @param glTransitionsCode
 	 *            the GL Transitions shader code
@@ -127,8 +132,11 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 	 * "https://github.com/crykn/libgdx-screenmanager/wiki/How-to-use-GL-Transitions#some-example-code">wiki</a>
 	 * for an in-depth explanation and example.
 	 * <p>
-	 * Ignores code in {@link ShaderProgram#prependFragmentCode} and
-	 * {@link ShaderProgram#prependVertexCode}.
+	 * Code in {@link ShaderProgram#prependFragmentCode} and
+	 * {@link ShaderProgram#prependVertexCode} is ignored. The provided shader
+	 * is {@linkplain ShaderCompatibilityHelper#fromString(String, String)
+	 * automatically ported} from from version 120 (~ OpenGL 2.1) to version 150
+	 * (~ OpenGL 3.2) if needed.
 	 * 
 	 * @param glTransitionsCode
 	 *            the GL Transitions shader code
@@ -141,7 +149,7 @@ public class GLTransitionsShaderTransition extends ShaderTransition {
 			float duration, @Nullable Interpolation interpolation) {
 		super(VERT_SHADER,
 				FRAG_SHADER_PREPEND + glTransitionsCode + FRAG_SHADER_POSTPEND,
-				true, duration, interpolation);
+				true, duration, interpolation, true);
 	}
 
 }
