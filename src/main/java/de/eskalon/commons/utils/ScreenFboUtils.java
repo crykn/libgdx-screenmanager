@@ -15,11 +15,16 @@
 
 package de.eskalon.commons.utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import de.damios.guacamole.Preconditions;
+import de.damios.guacamole.annotations.Beta;
+import de.damios.guacamole.gdx.graphics.GLUtils;
 import de.eskalon.commons.screen.ManagedScreen;
 
 public class ScreenFboUtils {
@@ -55,6 +60,22 @@ public class ScreenFboUtils {
 		textureRegion.flip(false, true);
 
 		return textureRegion;
+	}
+
+	@Beta
+	public static int[] retrieveFboStatus() {
+		int previousFBOHandle = GLUtils.getBoundFboHandle();
+		int[] previousViewport = GLUtils.getViewport();
+
+		return new int[] { previousFBOHandle, previousViewport[0],
+				previousViewport[1], previousViewport[2], previousViewport[3] };
+	}
+
+	@Beta
+	public static void restoreFboStatus(int[] status) {
+		Preconditions.checkArgument(status.length == 5);
+		Gdx.gl20.glBindFramebuffer(GL20.GL_FRAMEBUFFER, status[0]);
+		Gdx.gl20.glViewport(status[1], status[2], status[3], status[4]);
 	}
 
 }
