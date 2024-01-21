@@ -1,6 +1,6 @@
 ## What is libgdx-screenmanager?
 
-[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build](https://img.shields.io/github/actions/workflow/status/crykn/libgdx-screenmanager/build-and-test.yml?label=Build)](https://github.com/crykn/libgdx-screenmanager/actions) [![GWT Compatible](https://img.shields.io/badge/GWT-compatible-informational)](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT)
+[![Release](https://jitpack.io/v/crykn/libgdx-screenmanager.svg)](https://jitpack.io/#crykn/libgdx-screenmanager) [![Build](https://img.shields.io/github/actions/workflow/status/crykn/libgdx-screenmanager/build-and-test.yml?label=Build)](https://github.com/crykn/libgdx-screenmanager/actions) [![GWT Compatible](https://img.shields.io/badge/GWT-compatible-informational)](https://github.com/crykn/libgdx-screenmanager/wiki/How-to-get-it-working-with-GWT) [![Discord Support](https://img.shields.io/discord/348229412858101762?logo=discord&label=Support)](https://discord.com/channels/348229412858101762/1169354297830547628)
 
 This library is a screen manager for libGDX games. It allows comfortably changing the rendered screen while using transition effects. The library's easy to use nature makes it possible to integrate libgdx-screenmanager into any project without much effort.
 
