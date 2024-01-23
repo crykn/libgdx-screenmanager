@@ -351,6 +351,7 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 
 	/**
 	 * @see ManagedScreen#resize(int, int)
+	 * @see ScreenTransition#resize(int, int)
 	 */
 	public void resize(int width, int height) {
 		Preconditions.checkState(initialized,
@@ -401,9 +402,12 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 	}
 
 	/**
-	 * Disposes the screen manager and any screen and transitions pushed, which
-	 * were not yet {@linkplain ManagedScreen#hide() hidden}, regardless of
-	 * whether they already started being rendered.
+	 * Disposes the screen manager as well as any screens and transitions, which
+	 * were pushed but not yet {@linkplain ManagedScreen#hide() hidden},
+	 * regardless of whether they already started being rendered.
+	 * 
+	 * @see ManagedScreen#dispose()
+	 * @see ScreenTransition#dispose()
 	 */
 	@Override
 	public void dispose() {

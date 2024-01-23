@@ -114,6 +114,15 @@ public class ManagedGame<S extends ManagedScreen, T extends ScreenTransition>
 		return screenManager;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Please note that, on Android, data stored in static variables may persist
+	 * past this stage and thus may still be accessible when the application is
+	 * run again. To prevent this, make sure to set all static variables to
+	 * {@code null} upon disposal of the application
+	 * 
+	 */
 	@Override
 	public void dispose() {
 		screenManager.dispose();
