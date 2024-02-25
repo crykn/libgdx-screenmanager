@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
+import com.badlogic.gdx.utils.Null;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
 
@@ -115,9 +116,9 @@ public abstract class ScreenTransition implements Disposable {
 
 	/**
 	 * @return the color to clear the screen with before the rendering is
-	 *         started
+	 *         started, or null to not clear the screen
 	 */
-	public Color getClearColor() {
+	public @Null Color getClearColor() {
 		return Color.BLACK;
 	}
 

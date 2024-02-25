@@ -22,6 +22,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.eskalon.commons.core.ManagedGame;
@@ -214,9 +215,9 @@ public abstract class ManagedScreen implements Screen {
 
 	/**
 	 * @return the color to clear the screen with before the rendering is
-	 *         started
+	 *         started, or null to not clear the screen
 	 */
-	public Color getClearColor() {
+	public @Null Color getClearColor() {
 		return Color.BLACK;
 	}
 
