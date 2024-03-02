@@ -298,13 +298,15 @@ public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
 				render(delta); // render again so no frame is skipped
 			} else {
 				/* Render the current screen; no transition is going on */
-				ScreenUtils.clear(currScreen.getClearColor(), true);
+				if (currScreen.getClearColor() != null)
+					ScreenUtils.clear(currScreen.getClearColor(), true);
 				this.currScreen.render(delta);
 			}
 		} else {
 			if (!this.transition.isDone()) {
 				/* Render the current transition */
-				ScreenUtils.clear(this.transition.getClearColor(), true);
+				if (this.transition.getClearColor() != null)
+					ScreenUtils.clear(this.transition.getClearColor(), true);
 				this.transition.render(delta,
 						ScreenFboUtils.screenToTexture(this.lastScreen,
 								this.lastFBO, delta),

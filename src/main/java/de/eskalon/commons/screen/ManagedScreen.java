@@ -15,6 +15,8 @@
 
 package de.eskalon.commons.screen;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.InputProcessor;
@@ -214,9 +216,9 @@ public abstract class ManagedScreen implements Screen {
 
 	/**
 	 * @return the color to clear the screen with before the rendering is
-	 *         started
+	 *         started, or {@code null} to not clear the screen
 	 */
-	public Color getClearColor() {
+	public @Nullable Color getClearColor() {
 		return Color.BLACK;
 	}
 

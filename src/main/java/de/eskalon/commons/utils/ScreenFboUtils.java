@@ -49,7 +49,8 @@ public class ScreenFboUtils {
 	public static TextureRegion screenToTexture(ManagedScreen screen,
 			FrameBuffer fbo, float delta) {
 		fbo.begin();
-		ScreenUtils.clear(screen.getClearColor(), true);
+		if (screen.getClearColor() != null)
+			ScreenUtils.clear(screen.getClearColor(), true);
 		screen.render(delta);
 		fbo.end();
 

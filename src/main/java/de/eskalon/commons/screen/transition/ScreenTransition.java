@@ -15,6 +15,8 @@
 
 package de.eskalon.commons.screen.transition;
 
+import javax.annotation.Nullable;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -115,9 +117,9 @@ public abstract class ScreenTransition implements Disposable {
 
 	/**
 	 * @return the color to clear the screen with before the rendering is
-	 *         started
+	 *         started, or {@code null} to not clear the screen
 	 */
-	public Color getClearColor() {
+	public @Nullable Color getClearColor() {
 		return Color.BLACK;
 	}
 
