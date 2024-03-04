@@ -133,33 +133,7 @@ public class ScreenManagerTest extends ScreenManagerUnitTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void testExceptions() {
 		ScreenManager sm = getMockedScreenManager();
-		ManagedScreen testScreen = new ManagedScreenAdapter() {
-			@Override
-			public void resize(int width, int height) {
-			}
-		};
-
-		ScreenTransition testTransition = new ScreenTransition() {
-			@Override
-			public void dispose() {
-			}
-
-			@Override
-			public void render(float delta, TextureRegion lastScreen,
-					TextureRegion currScreen) {
-			}
-
-			@Override
-			public boolean isDone() {
-				return false;
-			}
-
-			@Override
-			public void resize(int width, int height) {
-			}
-
-		};
-
+		
 		// Screen manager not initalized
 		assertThrows(IllegalStateException.class, () -> {
 			sm.render(1f);
@@ -195,12 +169,6 @@ public class ScreenManagerTest extends ScreenManagerUnitTest {
 	public void testApplicationListenerEvents() {
 		ScreenManager sm = getMockedScreenManager();
 		sm.initialize(Mockito.spy(new BasicInputMultiplexer()), 5, 5, false);
-
-		String screen1Name = "s1";
-		String screen2Name = "s2";
-		String screen3Name = "s3";
-		String transition1Name = "t1";
-		String transition2Name = "t2";
 
 		/*
 		 * The last screen; rendered as part of a transition.

@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen.transition;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;

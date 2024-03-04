@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;

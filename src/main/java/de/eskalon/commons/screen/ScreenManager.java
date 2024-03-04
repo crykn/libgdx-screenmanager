@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.InputProcessor;
@@ -61,7 +61,7 @@ import de.eskalon.commons.utils.ScreenFboUtils;
  *      "https://github.com/crykn/libgdx-screenmanager/wiki/Screen-Lifecycle">The
  *      wiki entry detailing a screen's life-cycle</a>
  */
-public class ScreenManager<S extends ManagedScreen, T extends ScreenTransition>
+public class ScreenManager<S extends ManagedScreen, @Nullable T extends ScreenTransition>
 		implements Disposable {
 
 	private Logger LOG = LoggerService.getLogger(ScreenManager.class);

@@ -8,9 +8,6 @@ import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.screen.transition.impl.BlendingTransition;
-import de.eskalon.commons.screen.transition.impl.HorizontalSlicingTransition;
-import de.eskalon.commons.screen.transition.impl.SlidingDirection;
-import de.eskalon.commons.screen.transition.impl.SlidingOutTransition;
 
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 

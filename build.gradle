@@ -2,7 +2,7 @@ apply plugin: "java-library"
 apply plugin: "eclipse"
 apply plugin: "idea"
 
-version '0.7.0'
+version '0.7.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -54,7 +54,7 @@ sourceSets {
 // DEPENDENCIES
 ext {
 	gdxVersion = "1.12.1"
-	guacamoleVersion = "4c7fd97c21" // =v.0.3.6
+	guacamoleVersion = "92d161f06c" // =v.0.3.6
 	
 	// Test dependencies
 	junitVersion = "5.10.0"

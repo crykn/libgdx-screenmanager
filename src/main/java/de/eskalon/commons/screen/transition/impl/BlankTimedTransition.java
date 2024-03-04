@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen.transition.impl;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;

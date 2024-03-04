@@ -8,17 +8,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
-import de.eskalon.commons.utils.ScreenFboUtils;
 
 public class ScreenManagerTest2 extends ScreenManagerUnitTest {
 

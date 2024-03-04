@@ -15,7 +15,6 @@
 
 package de.eskalon.commons.screen;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 
 /**

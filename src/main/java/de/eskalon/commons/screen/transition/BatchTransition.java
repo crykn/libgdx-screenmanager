@@ -15,7 +15,7 @@
 
 package de.eskalon.commons.screen.transition;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.damios.guacamole.Preconditions;
-import de.eskalon.commons.screen.transition.impl.BlankTimedTransition;
 
 /**
  * The base class for all transitions using a {@link SpriteBatch}. Can be
