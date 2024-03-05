@@ -61,8 +61,10 @@ import de.eskalon.commons.utils.Supplier;
  *      "https://github.com/crykn/libgdx-screenmanager/wiki/Screen-Lifecycle">The
  *      wiki entry detailing a screen's life-cycle</a>
  */
-public class ScreenManager<S extends ManagedScreen, @Nullable T extends ScreenTransition>
+public class ScreenManager<S extends ManagedScreen, /* @Nullable */ T extends ScreenTransition>
 		implements Disposable {
+	// On GWT, @Nullable can't be used in type parameters yet; see
+	// https://github.com/jspecify/jspecify/issues/184
 
 	private Logger LOG = LoggerService.getLogger(ScreenManager.class);
 
