@@ -17,7 +17,6 @@ package de.eskalon.commons.screen;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.function.Supplier;
 
 import org.jspecify.annotations.Nullable;
 
@@ -40,6 +39,7 @@ import de.damios.guacamole.tuple.Pair;
 import de.eskalon.commons.screen.transition.ScreenTransition;
 import de.eskalon.commons.utils.BasicInputMultiplexer;
 import de.eskalon.commons.utils.ScreenFboUtils;
+import de.eskalon.commons.utils.Supplier;
 
 /**
  * A screen manager that handles the different screens of a game and their
