@@ -18,7 +18,7 @@ This library is a screen manager for libGDX games. It allows comfortably changin
 
 The following example shows how to use libgdx-screenmanager in your code. You can find the full example [here](https://github.com/crykn/libgdx-screenmanager/tree/master/src/example). 
 
-The library is very easy to use: The game has to extend `ManagedGame`, all screen have to inherit from `ManagedScreen`. To push a screen, `game.getScreenManager().pushScreen(screen, transition)` has to be called. If no transition should be used, just call `pushScreen(screen, null)`.
+The library is very easy to use: The game has to extend `ManagedGame`, all screens have to inherit from `ManagedScreen`. To push a screen, `game.getScreenManager().pushScreen(screen, transition)` has to be called. If no transition should be used, just call `pushScreen(screen, null)`.
 
 ```java
 public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
