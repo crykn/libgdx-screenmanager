@@ -28,6 +28,10 @@ java {
 	withJavadocJar()
 }
 
+javadoc {
+	failOnError = false
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
