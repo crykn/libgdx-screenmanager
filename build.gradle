@@ -53,8 +53,8 @@ sourceSets {
 
 // DEPENDENCIES
 ext {
-	gdxVersion = "1.12.1"
-	guacamoleVersion = "92d161f06c" // =v.0.3.6
+	gdxVersion = "1.13.5"
+	guacamoleVersion = "v0.3.6"
 	
 	// Test dependencies
 	junitVersion = "5.10.0"
