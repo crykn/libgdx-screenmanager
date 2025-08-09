@@ -1,7 +1,9 @@
 apply plugin: "java-library"
 apply plugin: "eclipse"
 apply plugin: "idea"
+apply plugin: 'maven-publish'
 
+group = 'com.github.jitpack'
 version '0.7.1'
 
 sourceCompatibility = 1.8
@@ -21,25 +23,18 @@ repositories {
 }
 
 // PUBLISH SOURCES & JAVADOC
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+	withSourcesJar()
+	withJavadocJar()
 }
 
-javadoc {
-    failOnError = false
-    options.addStringOption('Xdoclint:none', '-quiet')
+publishing {
+    publications {
+        maven(MavenPublication) {
+		from components.java
+        }
+    }
 }
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = "javadoc"
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}	
 
 // EXAMPLES
 sourceSets {
