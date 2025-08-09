@@ -29,7 +29,7 @@ import de.eskalon.commons.utils.BasicInputMultiplexer;
 /**
  * A game class that utilizes a {@linkplain ScreenManager screen manager}. Use
  * the {@linkplain #getScreenManager() provided instance} to
- * {@linkplain ScreenManager#pushScreen(String, String, Object...) push
+ * {@linkplain ScreenManager#pushScreen(ManagedScreen, ScreenTransition) push
  * screens}.
  * <p>
  * Input listeners have to be added via the game's {@linkplain #inputProcessor

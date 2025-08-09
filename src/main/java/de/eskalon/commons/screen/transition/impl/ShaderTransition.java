@@ -19,7 +19,6 @@ import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -88,7 +87,7 @@ public class ShaderTransition extends TimedTransition {
 	 * @param duration
 	 *            the transition's duration in seconds
 	 * 
-	 * @see #ShaderTransition(OrthographicCamera, float, Interpolation)
+	 * @see #ShaderTransition(String, String, boolean, float, Interpolation)
 	 */
 	public ShaderTransition(String vert, String frag, boolean ignorePrepend,
 			float duration) {

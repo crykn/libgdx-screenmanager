@@ -45,7 +45,7 @@ import de.eskalon.commons.utils.Supplier;
  * A screen manager that handles the different screens of a game and their
  * transitions.
  * <p>
- * Has to be {@linkplain #initialize(BasicInputMultiplexer, int, int)
+ * Has to be {@linkplain #initialize(BasicInputMultiplexer, int, int, boolean)
  * initialized} before it can be used.
  * <p>
  * To actually show a screen, push it via
