@@ -18,6 +18,7 @@ package de.eskalon.commons.screen.transition.impl;
 import org.jspecify.annotations.Nullable;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
@@ -35,10 +36,8 @@ public class BlendingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the batch used for rendering the transition. If it is used
-	 *            outside of the transitions, don't forget to set the projection
-	 *            matrix before using it again! The batch is <i>not</i> disposed
-	 *            by the transition.
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param duration
 	 *            the transition's duration in seconds
 	 * @param interpolation
@@ -51,10 +50,8 @@ public class BlendingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the batch used for rendering the transition. If it is used
-	 *            outside of the transitions, don't forget to set the projection
-	 *            matrix before using it again! The batch is <i>not</i> disposed
-	 *            by the transition.
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param duration
 	 *            the transition's duration in seconds
 	 */

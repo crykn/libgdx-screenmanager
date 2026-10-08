@@ -26,8 +26,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.damios.guacamole.Preconditions;
 
 /**
- * The base class for all transitions using a {@link SpriteBatch}. Can be
- * reused.
+ * The base class for all transitions using a {@link SpriteBatch}. Transitions
+ * of this type can generally be reused.
+ * <p>
+ * The batch used for rendering the transition should have a suitable blending
+ * mode set (e.g.,
+ * {@code GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA})
+ * if one intends on rendering transparent stuff during the transition. If it is
+ * used outside of the transitions, don't forget to set the projection matrix
+ * before using it again! The batch is <i>not</i> disposed by the transition.
  * 
  * @author damios
  */

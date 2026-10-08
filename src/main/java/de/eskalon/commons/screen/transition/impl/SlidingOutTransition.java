@@ -20,6 +20,7 @@ import org.jspecify.annotations.Nullable;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
+import de.eskalon.commons.screen.transition.BatchTransition;
 import de.eskalon.commons.screen.transition.SlidingTransition;
 
 /**
@@ -34,8 +35,8 @@ public class SlidingOutTransition extends SlidingTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param dir
 	 *            the direction the last screen should slide to
 	 * @param duration
@@ -50,8 +51,8 @@ public class SlidingOutTransition extends SlidingTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param dir
 	 *            the direction the last screen should slide to
 	 * @param duration

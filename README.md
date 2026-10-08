@@ -27,7 +27,7 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 	public final void create() {
 		super.create();
 
-		// Do some basic stuff
+		// Create batch
 		this.batch = new SpriteBatch();
 
 		// Push the first screen using a blending transition

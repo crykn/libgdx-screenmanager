@@ -38,8 +38,8 @@ public class PushTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration
@@ -58,8 +58,8 @@ public class PushTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param dir
 	 *            the direction of the push
 	 * @param duration

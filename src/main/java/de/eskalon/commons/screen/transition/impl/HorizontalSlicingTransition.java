@@ -39,8 +39,8 @@ public class HorizontalSlicingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration
@@ -60,8 +60,8 @@ public class HorizontalSlicingTransition extends BatchTransition {
 
 	/**
 	 * @param batch
-	 *            the sprite batch used to render; is <i>not</i> disposed by the
-	 *            transition
+	 *            the batch used for rendering the transition; see
+	 *            {@link BatchTransition} for more information
 	 * @param sliceCount
 	 *            the count of slices used; has to be at least {@code 2}
 	 * @param duration
