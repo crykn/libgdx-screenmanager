@@ -1,7 +1,6 @@
 package com.mygame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 
@@ -21,11 +20,6 @@ public class MyGdxGame extends ManagedGame<ManagedScreen, ScreenTransition> {
 
 		// Create batch
 		this.batch = new SpriteBatch();
-		this.batch.setBlendFunctionSeparate(GL20.GL_SRC_ALPHA,
-				GL20.GL_ONE_MINUS_SRC_ALPHA, GL20.GL_ONE,
-				GL20.GL_ONE_MINUS_SRC_ALPHA); // this allows rendering
-												// transparent textures during
-												// transitions
 
 		// Enable automatic disposing
 		this.screenManager.setAutoDispose(true, true);
